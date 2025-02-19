@@ -111,4 +111,5 @@ List any related projects and how they influence or integrate with this project.
 
 9-2 Resources
 Include any additional resources, such as research papers or technical articles.
+
 Activity Streams 2.0: https://www.w3.org/TR/activitystreams-core/
