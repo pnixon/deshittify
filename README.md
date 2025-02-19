@@ -31,14 +31,17 @@ Do you want to share something with the internet? Then this is for you.
 ### 3 Requirements
 
 3-1 Functional Requirements
+
 3-1-1 File format
 Options are Json, yaml, or some proprietary file format.
 
 Base required fields for each type of media will be different but all items need a guid.
+
 3-1-2 Search
 We can handle this in a few ways
 Webring style
 Web crawler style
+
 3-1-3 Discoverability
 Items should have a list of tags used to enhance discoverability.
 
@@ -56,10 +59,13 @@ Does not require proprietary clients but allows people to create and require the
 None. that’s the beauty
 
 4-2 Component Design
+
 4-2-1 client
 Everyone who wants to use this protocol
+
 4-2-2 server
 everyone can host their own server node
+
 4-3 Data Model
 Outline the data structures and database schema.
 
