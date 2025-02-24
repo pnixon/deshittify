@@ -1,0 +1,33 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "summary": "Utify Main Feed Example",
+  "type": "Collection",
+  "id": "https://utify.com/feed",
+  "totalItems": 2,
+  "items": [
+    {
+      "type": "Note",
+      "id": "https://utify.com/feed/second-post",
+      "name": "Second Post",
+      "content": "The order of posts should be the last one pops up first.",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://utify.com/feed/first-post",
+      "name": "First Post",
+      "content": "The first post should appear last.",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    }
+  ]
+}
