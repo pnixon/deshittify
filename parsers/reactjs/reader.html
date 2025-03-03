@@ -3,20 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ansybl Feed Viewer</title>
+    <title>Subspace</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .post { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-        .input-container { margin-bottom: 15px; }
-        img { max-width: 100%; height: auto; border-radius: 5px; margin-top: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .navbar {
+            background-color: #1f1f1f;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .post {
+            border: 1px solid #333;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+        }
+        .input-container {
+            margin-bottom: 15px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 4px;
+        }
+        input {
+            width: 80%;
+            background-color: #333;
+            color: #fff;
+        }
+        button {
+            background-color: #6200ea;
+            color: white;
+            cursor: pointer;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div class="navbar">Subspace</div>
+    <div id="root" class="container"></div>
     <script type="text/babel">
         function FeedViewer() {
             const [feed, setFeed] = React.useState(null);
@@ -44,7 +95,7 @@
                             const json = JSON.parse(e.target.result);
                             setFeed(json);
                         } catch (error) {
-                            setError("Invalid JSON file");
+                            setError("Invalid Ansybl file");
                         }
                     };
                     reader.readAsText(file);
@@ -68,6 +119,7 @@
                             accept=".ansybl" 
                             onChange={handleFileChange} 
                         />
+                        <button>Load Local File</button>
                     </div>
                     
                     {error && <div style={{ color: 'red' }}>{error}</div>}
