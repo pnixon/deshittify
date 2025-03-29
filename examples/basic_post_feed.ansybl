@@ -3,8 +3,169 @@
   "summary": "Utify Main Feed Example",
   "type": "Collection",
   "id": "https://utify.com/feed",
-  "totalItems": 2,
+  "totalItems": 9,
   "items": [
+    {
+      "summary": "Text and Video",
+      "type": "Collection",
+      "id": "https://utify.com/feed/text-and-video",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Note",
+          "content": "This post has a video."
+        },
+        {
+          "type": "Video",
+          "name": "Miss Muffy and the Muff Mob: Ep 1",
+          "url": "https://www.youtube.com/watch?v=fZhw-9c1tho",
+          "duration": "PT4M"
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
+    {
+      "type": "Video",
+      "id": "https://utify.com/feed/video-post",
+      "name": "Video Post",
+      "url": "https://www.youtube.com/watch?v=TDoG477aUvo",
+      "duration": "PT4M",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
+    {
+      "summary": "List of Images",
+      "type": "Collection",
+      "id": "https://utify.com/feed/list-of-images",
+      "totalItems": 4,
+      "items": [
+        {
+          "type": "Image",
+          "url": [
+            {
+              "type": "Link",
+              "href": "https://i.imgur.com/VJkCkaX.jpeg",
+              "mediaType": "image/jpeg"
+            }
+          ]
+        },
+        {
+          "type": "Image",
+          "url": [
+            {
+              "type": "Link",
+              "href": "https://i.imgur.com/sZJYqDq.jpeg",
+              "mediaType": "image/jpeg"
+            }
+          ]
+        },
+        {
+          "type": "Image",
+          "url": [
+            {
+              "type": "Link",
+              "href": "https://i.imgur.com/Kd4f6KW.jpeg",
+              "mediaType": "image/jpeg"
+            }
+          ]
+        },
+        {
+          "type": "Image",
+          "url": [
+            {
+              "type": "Link",
+              "href": "https://i.imgur.com/Ts69pJi.png",
+              "mediaType": "image/png"
+            }
+          ]
+        },
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Image",
+      "type": "Collection",
+      "id": "https://utify.com/feed/text-and-image",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Note",
+          "content": "This post has an image."
+        },
+        {
+          "type": "Image",
+          "url": [
+            {
+              "type": "Link",
+              "href": "https://i.imgur.com/6sTGJ9C.jpeg",
+              "mediaType": "image/jpeg"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
+    {
+      "type": "Image",
+      "id": "https://utify.com/feed/image-post",
+      "name": "Image Post",
+      "url": [
+        {
+          "type": "Link",
+          "href": "https://i.imgur.com/zFKZKwy.jpeg",
+          "mediaType": "image/jpeg"
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://utify.com/feed/text-with-link-post",
+      "name": "Text With Link Post",
+      "content": "This post has a [link](https://www.devpirates.com) in it.",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://utify.com/feed/third-post",
+      "name": "Text With Link Post",
+      "content": "Matt posts his third post in third person.",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
     {
       "type": "Note",
       "id": "https://utify.com/feed/second-post",
