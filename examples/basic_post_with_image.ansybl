@@ -1,0 +1,35 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "summary": "Ansybl Image Feed Example",
+  "type": "Collection",
+  "id": "https://example.com/feed",
+  "totalItems": 2,
+  "items": [
+    {
+      "type": "Image",
+      "id": "https://example.com/feed/futuristic-cityscape",
+      "name": "Futuristic Cityscape",
+      "content": "A breathtaking view of a futuristic city at sunset, with neon lights and flying cars.",
+      "url": "https://files.oaiusercontent.com/file-FeEuMjt5v9fiZFY8QQYjWg?se=2025-03-03T00%3A30%3A04Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D56631729-bb12-4f13-85fa-8ee2654be17e.webp&sig=dDP8qX7HyijOpRiLw2majAxGEV5EcKiriqkl7AkOeGA%3D",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "AI Artist"
+        }
+      ]
+    },
+    {
+      "type": "Image",
+      "id": "https://example.com/feed/mountain-landscape",
+      "name": "Mountain Landscape",
+      "content": "A serene mountain landscape with a crystal-clear lake and snow-capped peaks.",
+      "url": "https://files.oaiusercontent.com/file-YKgY5znfQ73Jk4k4phvkGg?se=2025-03-03T00%3A30%3A35Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D90c0268c-65cf-401f-9461-de1fe132246d.webp&sig=d3Uqv1rR27LIWBp1vT4gwDiYSP3C%2B4RNPS7KtJ/4npA%3D",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "AI Artist"
+        }
+      ]
+    }
+  ]
+}
