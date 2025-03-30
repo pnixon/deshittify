@@ -3,12 +3,92 @@
   "summary": "Utify Main Feed Example",
   "type": "Collection",
   "id": "https://utify.com/feed",
-  "totalItems": 9,
+  "totalItems": 12,
   "items": [
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/episode-1-passenger-by-chris-banyas",
+      "name": "episode - 1 - Passenger, by Chris Banyas",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Note",
+          "mediaType": "text/markdown",
+          "content": "#Passenger by Christopher Banyas\nThe first story in the anthology. Narrated by Pete Nixon. Enjoy the gorry horror of Chris's story, and the ghastly view into the mind of a mentally unstable main character. Thanks to Davin Creed for producing the music for the intro and also the soundtrack for Passenger. Thanks to Heather Nixon who wrote and produced the outro music."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://us-east-1.console.aws.amazon.com/s3/object/GEAH?region=us-east-1&bucketType=general&prefix=2013-10-13_geah_-_episode_-_1.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT22M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Chris Banyas"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
+    {
+      "type": "Audio",
+      "id": "https://utify.com/feed/episode-12-temple-of-ruin-by-peter-nixon",
+      "name": "Episode - 12 - Temple Of Ruin, by Peter Nixon",
+      "url":
+      {
+        "type": "Link",
+        "href": "https://us-east-1.console.aws.amazon.com/s3/object/GEAH?region=us-east-1&bucketType=general&prefix=2014-03-16_episode_-_12_-_temple_of_ruin.mp3",
+        "mediaType": "audio/mp3"
+      },
+      "duration": "PT22M",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Pete Nixon"
+        }
+      ]
+    },
+    {
+      "type": "Article",
+      "id": "https://utify.com/feed/article-example",
+      "name": "Article Example",
+      "mediaType": "text/markdown",
+      "content": "# The Title of the Article\nThere are a lot of things to cover in this article.\n1. How long this article is.\n2. How long it should be.\nBut I don't have time to get into it.\n## In this section I'll write a bunch of text that doesn't mean aything but fills space. It's like, there's a lot of dumb text to make and I'm the one to make it. And I'll keep coming up with dumb text to write and you can't stop me. No one can stop me. Only I can stop myself.",
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon"
+        }
+      ]
+    },
     {
       "summary": "Text and Video",
       "type": "Collection",
       "id": "https://utify.com/feed/text-and-video",
+      "name": "Text and Video",
       "totalItems": 2,
       "items": [
         {
@@ -46,6 +126,7 @@
       "summary": "List of Images",
       "type": "Collection",
       "id": "https://utify.com/feed/list-of-images",
+      "name": "List of Images",
       "totalItems": 4,
       "items": [
         {
@@ -87,7 +168,7 @@
               "mediaType": "image/png"
             }
           ]
-        },
+        }
       ],
       "attributedTo": [
         {
@@ -100,6 +181,7 @@
       "summary": "Text and Image",
       "type": "Collection",
       "id": "https://utify.com/feed/text-and-image",
+      "name": "Text and Image",
       "totalItems": 2,
       "items": [
         {
@@ -146,6 +228,7 @@
       "type": "Note",
       "id": "https://utify.com/feed/text-with-link-post",
       "name": "Text With Link Post",
+      "mediaType": "text/markdown",
       "content": "This post has a [link](https://www.devpirates.com) in it.",
       "attributedTo": [
         {
