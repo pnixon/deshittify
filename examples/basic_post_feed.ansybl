@@ -13,9 +13,9 @@
       "totalItems": 2,
       "items": [
         {
-          "type": "Note",
+          "type": "Article",
           "mediaType": "text/markdown",
-          "content": "#Passenger by Christopher Banyas\nThe first story in the anthology. Narrated by Pete Nixon. Enjoy the gorry horror of Chris's story, and the ghastly view into the mind of a mentally unstable main character. Thanks to Davin Creed for producing the music for the intro and also the soundtrack for Passenger. Thanks to Heather Nixon who wrote and produced the outro music."
+          "content": "#Passenger by Christopher Banyas\nThe first story in the anthology. Narrated by **Pete Nixon**. Enjoy the gorry horror of Chris's story, and the ghastly view into the mind of a mentally unstable main character. Thanks to **Davin Creed** for producing the music for the intro and also the soundtrack for Passenger. Thanks to **Heather Nixon** who wrote and produced the outro music."
         },
         {
           "type": "Audio",
