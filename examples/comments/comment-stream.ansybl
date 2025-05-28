@@ -1,0 +1,340 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "summary": "Comments and Replies for Sarah's Tech Blog",
+  "type": "Collection", 
+  "id": "https://sarahstech.blog/comments/stream",
+  "totalItems": 18,
+  "items": [
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/ai-ethics-comment-1",
+      "published": "2025-05-25T11:30:00Z",
+      "content": "Great article, Sarah! I particularly appreciate your point about transparency vs. competition. We're seeing this tension play out in real-time with companies like OpenAI and Google. The challenge is that the incentive structures currently reward secrecy over openness. How do we change that?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://mastodon.social/@alexdev",
+        "name": "Alex Rodriguez", 
+        "preferredUsername": "alexdev",
+        "summary": "Senior ML Engineer at DataCorp"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/ai-ethics-2025",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://sarahstech.blog/author/sarah",
+          "name": "@sarahc"
+        }
+      ]
+    },
+    {
+      "type": "Note", 
+      "id": "https://sarahstech.blog/comments/ai-ethics-reply-1",
+      "published": "2025-05-25T12:15:00Z",
+      "content": "@alexdev That's exactly the crux of it! I think we need regulatory frameworks that incentivize transparency without completely killing competitive advantage. Maybe something like mandatory algorithmic impact assessments for systems above certain thresholds, similar to environmental impact studies. What do you think about the EU's approach with the AI Act?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "inReplyTo": "https://sarahstech.blog/comments/ai-ethics-comment-1",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention", 
+          "href": "https://mastodon.social/@alexdev",
+          "name": "@alexdev"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/ai-ethics-comment-2", 
+      "published": "2025-05-25T14:22:00Z",
+      "content": "The EU AI Act is definitely a step in the right direction, though I worry about the compliance burden on smaller companies. We don't want to create a world where only big tech can afford to build AI systems. Maybe tiered requirements based on company size and system impact?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://twitter.com/priyatech",
+        "name": "Priya Patel",
+        "preferredUsername": "priyatech",
+        "summary": "AI startup founder, formerly at Google Research"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/ai-ethics-2025",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/remote-work-comment-1",
+      "published": "2025-05-20T15:45:00Z", 
+      "content": "This hits so close to home. I've been remote for 3 years and definitely fell into the 'always on' trap. What finally helped me was physically closing my laptop at 6 PM and putting it in another room. Sounds simple but it was a game changer for creating that mental boundary.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://linkedin.com/in/mikejohnson", 
+        "name": "Mike Johnson",
+        "preferredUsername": "mikej",
+        "summary": "Product Manager at RemoteFirst Inc"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/remote-work-productivity",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/remote-work-reply-1",
+      "published": "2025-05-20T16:30:00Z",
+      "content": "@mikej That's such a great tip! The physical ritual of 'closing work' is so important. I've started doing something similar - I have a specific playlist I play while shutting down for the day. It signals to my brain that work is over. These small rituals can have such a big psychological impact.",
+      "attributedTo": {
+        "type": "Person", 
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "inReplyTo": "https://sarahstech.blog/comments/remote-work-comment-1",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://linkedin.com/in/mikejohnson",
+          "name": "@mikej"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/remote-work-comment-2",
+      "published": "2025-05-20T18:10:00Z",
+      "content": "The burnout stats are alarming but not surprising. I think part of the problem is that managers haven't adapted their expectations to remote work. They're measuring presence instead of output, which leads to performative 'always online' behavior. We need better management training for remote teams.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://hachyderm.io/@teamlead_sara",
+        "name": "Sara Kim",
+        "preferredUsername": "teamlead_sara", 
+        "summary": "Engineering Manager, remote work advocate"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/remote-work-productivity",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/conference-comment-1",
+      "published": "2025-05-18T10:30:00Z",
+      "content": "Congrats on the speaking slot! Your work on AI ethics frameworks has been so valuable to our team. Will the workshop materials be available online afterward for those who can't attend in person?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://github.com/devloper_raj",
+        "name": "Raj Singh", 
+        "preferredUsername": "devloper_raj",
+        "summary": "Senior Software Engineer"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/quick-update-conference",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/conference-reply-1", 
+      "published": "2025-05-18T11:00:00Z",
+      "content": "@devloper_raj Thanks! Yes, I'm planning to make the workshop materials available online. I'll probably do a follow-up blog post with the key frameworks and tools we cover. The goal is to make this stuff as accessible as possible, not just for conference attendees.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "inReplyTo": "https://sarahstech.blog/comments/conference-comment-1",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://github.com/devloper_raj", 
+          "name": "@devloper_raj"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/accessibility-comment-1",
+      "published": "2025-05-15T17:30:00Z",
+      "content": "Thank you for writing about this! As someone who uses a screen reader daily, I can't tell you how frustrating it is when developers treat accessibility as an afterthought. The 'beyond compliance' point is so important - WCAG is a floor, not a ceiling. Real accessibility means thinking about the user experience holistically.",
+      "attributedTo": {
+        "type": "Person", 
+        "id": "https://mastodon.social/@a11y_advocate",
+        "name": "Jordan Martinez",
+        "preferredUsername": "a11y_advocate",
+        "summary": "Accessibility consultant and screen reader user"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/web-accessibility-2025",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/accessibility-reply-1",
+      "published": "2025-05-15T18:15:00Z", 
+      "content": "@a11y_advocate Exactly! Your perspective is so valuable here. I'd love to hear more about the specific pain points you encounter most frequently. Are there particular patterns or mistakes that developers keep making that would be easy to avoid with better awareness?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "inReplyTo": "https://sarahstech.blog/comments/accessibility-comment-1",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://mastodon.social/@a11y_advocate",
+          "name": "@a11y_advocate"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/accessibility-comment-2",
+      "published": "2025-05-15T19:45:00Z",
+      "content": "@sarahc The biggest one is probably custom components that look like standard UI elements but don't behave like them. A div that looks like a button but isn't keyboard accessible, for example. Also, developers who rely only on automated testing tools and never actually try using their app with a screen reader.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://mastodon.social/@a11y_advocate", 
+        "name": "Jordan Martinez",
+        "preferredUsername": "a11y_advocate"
+      },
+      "inReplyTo": "https://sarahstech.blog/comments/accessibility-reply-1",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://sarahstech.blog/author/sarah",
+          "name": "@sarahc"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/accessibility-comment-3",
+      "published": "2025-05-16T09:20:00Z",
+      "content": "This conversation is gold! @a11y_advocate, would you be interested in doing a guest post about common accessibility mistakes from a user's perspective? I think hearing directly from people who use assistive technologies would be incredibly valuable for developers.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah", 
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/web-accessibility-2025",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://mastodon.social/@a11y_advocate",
+          "name": "@a11y_advocate"
+        }
+      ]
+    },
+    {
+      "type": "Note", 
+      "id": "https://sarahstech.blog/comments/opensource-comment-1",
+      "published": "2025-05-10T12:45:00Z",
+      "content": "This resonates so deeply. I maintain a library with 2M+ downloads per month and make maybe $200/month from sponsors. Meanwhile, Fortune 500 companies build their entire infrastructure on it. The disconnect between value created and compensation received is staggering.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://github.com/maintainer_alex",
+        "name": "Alex Thompson",
+        "preferredUsername": "maintainer_alex",
+        "summary": "Open source maintainer, burned out but still going"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/open-source-sustainability",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/opensource-reply-1",
+      "published": "2025-05-10T13:30:00Z",
+      "content": "@maintainer_alex This is exactly what I'm talking about. 2M+ downloads should translate to sustainable funding. Have you tried reaching out directly to some of the larger companies using your library? Sometimes they don't even realize they're depending on unfunded projects. Worth a shot, and the worst they can say is no.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen", 
+        "preferredUsername": "sarahc"
+      },
+      "inReplyTo": "https://sarahstech.blog/comments/opensource-comment-1",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://github.com/maintainer_alex",
+          "name": "@maintainer_alex"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/opensource-comment-2",
+      "published": "2025-05-10T15:20:00Z",
+      "content": "From a corporate perspective, I can say that most companies genuinely don't think about the sustainability of their open source dependencies. It's not malicious - it's just not on anyone's radar. We're working on changing that at our company by creating a dedicated budget for open source sponsorship.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://linkedin.com/in/corpcto",
+        "name": "David Park", 
+        "preferredUsername": "corpcto",
+        "summary": "CTO at TechCorp, open source advocate"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/open-source-sustainability",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/opensource-reply-2",
+      "published": "2025-05-10T16:00:00Z",
+      "content": "@corpcto That's fantastic! Would you be willing to share how you're structuring that budget? I think other CTOs would benefit from a concrete example of how to implement this kind of program. Maybe we could do a case study blog post about it?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "inReplyTo": "https://sarahstech.blog/comments/opensource-comment-2", 
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://linkedin.com/in/corpcto",
+          "name": "@corpcto"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/comments/opensource-comment-3",
+      "published": "2025-05-11T08:30:00Z",
+      "content": "One thing that's helped me as a maintainer is being very explicit about what I will and won't do. I created a 'contribution guidelines' that includes emotional boundaries, not just technical ones. It's helped filter out some of the more demanding requests and set expectations upfront.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://fosstodon.org/@healthy_maintainer",
+        "name": "Lisa Wang",
+        "preferredUsername": "healthy_maintainer",
+        "summary": "Open source maintainer with boundaries"
+      },
+      "inReplyTo": "https://sarahstech.blog/posts/open-source-sustainability",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"]
+    },
+    {
+      "type": "Note", 
+      "id": "https://sarahstech.blog/comments/opensource-reply-3",
+      "published": "2025-05-11T09:15:00Z",
+      "content": "@healthy_maintainer That's brilliant! Setting emotional boundaries is just as important as technical ones. Do you have a template or example you'd be willing to share? I bet other maintainers would find that incredibly helpful. Burnout prevention starts with clear expectations.",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "inReplyTo": "https://sarahstech.blog/comments/opensource-comment-3",
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "https://fosstodon.org/@healthy_maintainer",
+          "name": "@healthy_maintainer"
+        }
+      ]
+    }
+  ]
+}

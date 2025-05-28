@@ -1,0 +1,154 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "summary": "Sarah's Tech Blog - Latest Posts",
+  "type": "Collection",
+  "id": "https://sarahstech.blog/stream",
+  "totalItems": 5,
+  "items": [
+    {
+      "type": "Article",
+      "id": "https://sarahstech.blog/posts/ai-ethics-2025",
+      "name": "AI Ethics in 2025: Where We Stand",
+      "published": "2025-05-25T10:00:00Z",
+      "mediaType": "text/markdown",
+      "content": "# AI Ethics in 2025: Where We Stand\n\nAs we navigate through 2025, the landscape of AI ethics has evolved dramatically. The conversations that began in research labs are now boardroom discussions, regulatory frameworks, and everyday considerations for developers.\n\n## The Current State\n\nMajor tech companies have implemented AI ethics boards, governments have passed comprehensive AI legislation, and developers are increasingly considering the societal impact of their work. But are we moving fast enough?\n\n## Key Challenges\n\n1. **Bias in Training Data** - Despite our best efforts, algorithmic bias remains a persistent challenge\n2. **Transparency vs. Competition** - How much should companies reveal about their AI systems?\n3. **Global Coordination** - Different countries are taking vastly different approaches\n\n## Looking Forward\n\nThe next year will be crucial for establishing international standards and ensuring AI benefits everyone, not just those with access to the latest technology.\n\nWhat are your thoughts on the current state of AI ethics? Are we doing enough?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc",
+        "summary": "AI researcher and tech ethics advocate"
+      },
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Hashtag",
+          "name": "#AIEthics"
+        },
+        {
+          "type": "Hashtag", 
+          "name": "#Technology"
+        },
+        {
+          "type": "Hashtag",
+          "name": "#Ethics"
+        }
+      ]
+    },
+    {
+      "type": "Article", 
+      "id": "https://sarahstech.blog/posts/remote-work-productivity",
+      "name": "The Remote Work Productivity Paradox",
+      "published": "2025-05-20T14:30:00Z",
+      "mediaType": "text/markdown",
+      "content": "# The Remote Work Productivity Paradox\n\nFive years into the remote work revolution, we're seeing some unexpected trends. While many companies report higher productivity metrics, employee burnout rates have also increased significantly.\n\n## The Numbers Don't Lie\n\nRecent studies show:\n- 73% increase in reported productivity\n- 45% increase in reported burnout\n- 60% of workers putting in longer hours than pre-2020\n\n## What's Really Happening?\n\nThe lines between work and life have blurred beyond recognition. We're more productive in terms of output, but at what cost?\n\n### The Always-On Culture\n\nWithout physical boundaries, many remote workers find themselves checking emails at 10 PM or joining calls during what used to be family time.\n\n### Solutions That Actually Work\n\n1. **Strict Digital Boundaries** - Set specific hours for work communication\n2. **Dedicated Workspace** - Even if it's just a corner of your bedroom\n3. **Regular Check-ins** - Not just about work, but about well-being\n\nHow do you maintain work-life balance while working remotely?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah", 
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Hashtag",
+          "name": "#RemoteWork"
+        },
+        {
+          "type": "Hashtag",
+          "name": "#Productivity" 
+        },
+        {
+          "type": "Hashtag",
+          "name": "#WorkLifeBalance"
+        }
+      ]
+    },
+    {
+      "type": "Note",
+      "id": "https://sarahstech.blog/posts/quick-update-conference",
+      "name": "Quick Update: Speaking at TechConf 2025",
+      "published": "2025-05-18T09:15:00Z",
+      "content": "Excited to announce I'll be speaking at TechConf 2025 next month! My talk will be on \"Building Ethical AI Systems from Day One\" - covering practical frameworks that teams can implement immediately.\n\nIf you're attending, come say hi! I'll also be hosting a workshop on AI bias detection tools.\n\n#TechConf2025 #AIEthics #Speaking",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen", 
+        "preferredUsername": "sarahc"
+      },
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Hashtag",
+          "name": "#TechConf2025"
+        },
+        {
+          "type": "Hashtag",
+          "name": "#AIEthics"
+        },
+        {
+          "type": "Hashtag",
+          "name": "#Speaking"
+        }
+      ]
+    },
+    {
+      "type": "Article",
+      "id": "https://sarahstech.blog/posts/web-accessibility-2025",
+      "name": "Web Accessibility in 2025: Progress and Persistent Gaps",
+      "published": "2025-05-15T16:45:00Z", 
+      "mediaType": "text/markdown",
+      "content": "# Web Accessibility in 2025: Progress and Persistent Gaps\n\nThe web accessibility landscape has seen significant improvements over the past few years, but we still have a long way to go. Let's examine where we are and what still needs work.\n\n## The Good News\n\n- Major frameworks now include accessibility features by default\n- Browser support for ARIA has improved dramatically\n- More companies are hiring dedicated accessibility experts\n- Legal compliance has driven widespread adoption of basic standards\n\n## The Persistent Challenges\n\n### Beyond Compliance\n\nMost organizations focus on meeting WCAG AA requirements, but true accessibility goes beyond checkbox compliance. It's about creating genuinely usable experiences for everyone.\n\n### The AI Double-Edged Sword\n\nAI tools can help generate alt text and improve navigation, but they can also create new barriers when not implemented thoughtfully.\n\n## What Developers Can Do Today\n\n1. **Test with actual assistive technologies** - Not just automated tools\n2. **Include users with disabilities in your design process** - From day one, not as an afterthought\n3. **Consider cognitive accessibility** - Not just screen readers\n4. **Make accessibility part of your definition of done** - Not a separate phase\n\n## Resources\n\n- [WebAIM's accessibility evaluation tools](https://webaim.org/)\n- [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)\n- [Inclusive Design Principles](https://inclusivedesignprinciples.org/)\n\nAccessibility isn't just the right thing to do - it makes our products better for everyone. What accessibility challenges are you facing in your projects?",
+      "attributedTo": {
+        "type": "Person",
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Hashtag", 
+          "name": "#Accessibility"
+        },
+        {
+          "type": "Hashtag",
+          "name": "#WebDev"
+        },
+        {
+          "type": "Hashtag",
+          "name": "#InclusiveDesign"
+        }
+      ]
+    },
+    {
+      "type": "Article",
+      "id": "https://sarahstech.blog/posts/open-source-sustainability",
+      "name": "The Open Source Sustainability Crisis", 
+      "published": "2025-05-10T11:20:00Z",
+      "mediaType": "text/markdown",
+      "content": "# The Open Source Sustainability Crisis\n\nOpen source software powers the modern internet, but the maintainers behind these critical projects are burning out at an alarming rate. It's time we had an honest conversation about sustainability.\n\n## The Scale of the Problem\n\nConsider that:\n- 96% of applications contain open source components\n- Many critical libraries are maintained by a single person\n- Most maintainers receive no compensation for their work\n- Corporate users rarely contribute back to projects they depend on\n\n## Real Stories from the Trenches\n\nI've spoken with dozens of open source maintainers over the past year. The stories are remarkably consistent:\n\n*\"I spend 20+ hours a week on this project that millions of people use, and I can't even afford to work on it full-time.\"*\n\n*\"The constant pressure to fix bugs and add features, combined with entitled users demanding instant responses, has made this a source of stress rather than joy.\"*\n\n## Sustainable Solutions\n\n### For Companies\n- **Pay for what you use** - If your business depends on open source, budget for it\n- **Contribute more than code** - Documentation, testing, and community management matter too\n- **Sponsor maintainers** - GitHub Sponsors and similar platforms make this easy\n\n### For Individual Developers\n- **Be respectful in issue reports** - Maintainers are humans, not customer service bots\n- **Contribute what you can** - Even small PRs help\n- **Consider maintenance burden** - Before requesting features, think about ongoing complexity\n\n### For Maintainers\n- **Set boundaries** - You don't owe anyone your nights and weekends\n- **Ask for help** - Both technical and financial\n- **It's okay to say no** - To features, to users, to unreasonable demands\n\n## Moving Forward\n\nThe open source ecosystem won't survive on good will alone. We need systemic changes in how we value and support the infrastructure that powers our digital world.\n\nWhat's your experience with open source sustainability? Are you a maintainer struggling with these issues, or a user looking to give back?",
+      "attributedTo": {
+        "type": "Person", 
+        "id": "https://sarahstech.blog/author/sarah",
+        "name": "Sarah Chen",
+        "preferredUsername": "sarahc"
+      },
+      "to": ["https://www.w3.org/ns/activitystreams#Public"],
+      "tag": [
+        {
+          "type": "Hashtag",
+          "name": "#OpenSource"
+        },
+        {
+          "type": "Hashtag", 
+          "name": "#Sustainability"
+        },
+        {
+          "type": "Hashtag",
+          "name": "#Developer"
+        }
+      ]
+    }
+  ]
+}
