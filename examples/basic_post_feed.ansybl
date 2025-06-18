@@ -15,7 +15,13 @@
         {
           "type": "Article",
           "mediaType": "text/markdown",
-          "content": "#Passenger by Christopher Banyas\nThe first story in the anthology. Narrated by **Pete Nixon**. Enjoy the gorry horror of Chris's story, and the ghastly view into the mind of a mentally unstable main character. Thanks to **Davin Creed** for producing the music for the intro and also the soundtrack for Passenger. Thanks to **Heather Nixon** who wrote and produced the outro music."
+          "content": "#Passenger by Christopher Banyas\nThe first story in the anthology. Narrated by **Pete Nixon**. Enjoy the gorry horror of Chris's story, and the ghastly view into the mind of a mentally unstable main character. Thanks to **Davin Creed** for producing the music for the intro and also the soundtrack for Passenger. Thanks to **Heather Nixon** who wrote and produced the outro music.",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            }
+          ]
         },
         {
           "type": "Audio",
@@ -25,28 +31,22 @@
             "href": "https://us-east-1.console.aws.amazon.com/s3/object/GEAH?region=us-east-1&bucketType=general&prefix=2013-10-13_geah_-_episode_-_1.mp3",
             "mediaType": "audio/mp3"
           },
-          "duration": "PT22M",
-          "attributedTo": [
-            {
-              "type": "Person",
-              "name": "Chris Banyas"
-            },
-            {
-              "type": "Person",
-              "name": "Pete Nixon"
-            },
-            {
-              "type": "Person",
-              "name": "Heather Nixon"
-            },
-            {
-              "type": "Person",
-              "name": "Matt Nixon"
-            }
-          ]
+          "duration": "PT22M"
         }
       ],
       "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Chris Banyas"
+        },
+        {
+          "type": "Person",
+          "name": "Pete Nixon"
+        },
+        {
+          "type": "Person",
+          "name": "Heather Nixon"
+        },
         {
           "type": "Person",
           "name": "Matt Nixon"

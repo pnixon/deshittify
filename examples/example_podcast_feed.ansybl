@@ -1,0 +1,577 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "summary": "Utify Podcast Feed Example",
+  "type": "Collection",
+  "id": "https://utify.com/example_podcast_feed",
+  "totalItems": 12,
+  "items": [
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-12-temple-of-ruin-by-peter-nixon",
+      "name": "Episode - 12 - Temple Of Ruin, by Peter Nixon",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Temple Of Ruin, by Peter Nixon\nA story of an archaeological dig that goes bad and only letters are left to show for it.\nNarrated and written by **Peter Nixon**. Intro music by **Davin Creed**, Story music by **Peter Nixon**, outro music by **Heather Nixon**."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2014-03-16_episode_-_12_-_temple_of_ruin.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT25M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-11-tell-tale-hat-by-henry-gaudet",
+      "name": "Episode - 11 - Tell-Tale Hat, By Henry Gaudet",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Tell-Tale Hat, By Henry Gaudet\nWhen riding the 32-a one non-descript day, the twiceling goes on a quest to rid the world of evil-eyed coots! Read and written by **Henry Gaudet**. Thanks to **Davin Creed**, and **Heather Nixon** for the music."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2014-03-02_episode_-_11_-_tell-tale_hat.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT14M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Henry Gaudet"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-10-beast-in-the-jungle-of-nam-by-davin-creed",
+      "name": "Episode - 10 - Beast In The Jungle Of Nam, by Davin Creed",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Beast In The Jungle Of Nam, by Davin Creed\nThe first story in the anthology. In the Nam jungle, the horrors of war are not the only thing to fear. A crazy man with a flame thrower really brings out the worst. And a babbling, nearly incoherent, man who speaks in rhyme is the only survivor of the attack."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2014-02-16_episode_-_10_-_beast_in_the_jungle_of_nam.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT12M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-9-dreadful-hunches-by-simon-rook",
+      "name": "Episode - 9 - Dreadful Hunches, by Simon Rook",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Today's story is by Simon Rook\n a Marine Corps Veteran and author. Oora!\nIt is narrated by **Henry Gaudet**, the music for today's story is by **Davin Creed**, who also did the music for the intro. **Heather Nixon** did the  outro music, and I (**Pete Nixon**) spoke into a microphone."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2014-02-02_episode_-_9_-_dreadful_hunches.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT13M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Simon Rook"
+            },
+            {
+              "type": "Person",
+              "name": "Henry Gaudet"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-8-oh-the-people-by-aaron-lee",
+      "name": "Episode - 8 - Oh the people, by Aaron Lee",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Oh the People You'll Kill, written by Aaron Lee\nRead by your humble host, **Pete Nixon**. The music for today's story is by **Davin Creed**, who also did the music the intro. **Heather Nixon** did the outro music, and I (**Pete Nixon**) spoke into a microphone."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2014-01-19_geah_-_08_-_oh_the_people_.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT19M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Aaron Lee"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-7-pox-in-knox-by-henry-gaudet",
+      "name": "Episode - 7 - Pox in Knox, by Henry Gaudet",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Pox in Knox, written by Henry Gaudet\nRead by **Jack and Henry Gaudet**. The music for today's story is by **Davin Creed**,   who also did the music the intro. **Heather Nixon** did the outro music, and I (**Pete Nixon**) spoke into a microphone."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2014-01-05_geah_-_episode_-_7_-_pox_in_knox.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT10M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Henry Gaudet"
+            },
+            {
+              "type": "Person",
+              "name": "Jack Gaudet"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-6-morton-hears-a-cthulhu-part-3-by-davin-creed",
+      "name": "Episode - 6 - Morton Hears a Cthulhu (part 3), By Davin Creed",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#A continuation of the story \"Morton Hears a Cthulhu" by Davin Creed\n**Davin Creed** who also did the music for the story and the intro. **Heather Nixon** did the outro music, and I (**Pete Nixon**) spoke into a microphone before and after the story. But more importantly, you listened."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2013-12-22_geah_-_episode_-_6.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT21M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-5-morton-hears-a-cthulhu-part-2-by-davin-creed",
+      "name": "Episode - 5 - Morton Hears a Cthulhu (part 2), By Davin Creed",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#A continuation of the story \"Morton Hears a Cthulhu" by Davin Creed\n**Davin Creed** who also did the music for the story and the intro. **Heather Nixon** did the outro music, and I (**Pete Nixon**) spoke into a microphone before and after the story. But more importantly, you listened."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2013-12-08_geah_-_episode_-_5.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT19M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-4-morton-hears-a-cthulhu-by-davin-creed",
+      "name": "Episode - 4 - Morton Hears a Cthulhu, By Davin Creed",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Green Eggs and Horror Episode 4 - Morton Hears a Cthulhu\nDo you ever hear voices that aren't there? Things that may or may not be real and no other person can corroborate? Yeah, Morton does too. Thanks to **Davin Creed** for narrating his own story and producing the music. And thanks to **Heather Nixon** for the outro music."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2013-11-24_geah_-_episode_-_4.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT18M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            }            
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-3-zooks-pow-by-billy-vincent",
+      "name": "Episode - 3 - Zooks P.O.W., by Billy Vincent",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Green Eggs and Horror episode 3 Zooks P.O.W. by Billy Vincent\nNarrated by **Davin Creed**.\nThis story of intrigue will leave you butter-side upside-down. Thanks to **Davin Creed** for narrating this story, producing the music for the intro, and the soundtrack for Zooks P.O.W.\nThanks to **Heather Nixon** who wrote and produced the outro music."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2013-11-10_geah_-_episode_-_3.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT22M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Billy Vincent"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-2-pale-green-pants-by-michael-strickland",
+      "name": "Episode - 2 - Pale Green Pants, by Michael Strickland",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Green Eggs and Horror episode 2 Pale Green Pants, by Michael Strickland\nNarrated by **Henry Gaudet**.\nMichael Strickland's story of isolation, fear, and loss will bring out the child in you, and slap it in the face. Thanks to **Henry Gaudet** for narrating this story. Thanks to **Davin Creed** for producing the music for the intro and also the soundtrack for Pale Green Pants. Thanks to **Heather Nixon** who wrote and produced the outro music."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2013-10-27_geah_-_episode_-_2.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT28M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Michael Strickland"
+            },
+            {
+              "type": "Person",
+              "name": "Henry Gaudet"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    },
+    {
+      "summary": "Text and Audio",
+      "type": "Collection",
+      "id": "https://utify.com/example_podcast_feed/episode-1-passenger-by-chris-banyas",
+      "name": "Episode - 1 - Passenger, by Chris Banyas",
+      "totalItems": 2,
+      "items": [
+        {
+          "type": "Article",
+          "mediaType": "text/markdown",
+          "content": "#Green Eggs and Horor Episode 1 Passenger by Christopher Banyas\nThe first story in the anthology.\nNarrated by **Pete Nixon**.\nEnjoy the gorry horror of Chris's story, and the ghastly view into the mind of a mentally unstable main character. Thanks to **Davin Creed** for producing the music for the intro and also the soundtrack for Passenger. Thanks to **Heather Nixon** who wrote and produced the outro music."
+        },
+        {
+          "type": "Audio",
+          "url":
+          {
+            "type": "Link",
+            "href": "https://s3.amazonaws.com/GEAH/2013-10-13_geah_-_episode_-_1.mp3",
+            "mediaType": "audio/mp3"
+          },
+          "duration": "PT22M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Chris Banyas"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon/Davin Creed"
+            }
+          ]
+        }
+      ],
+      "attributedTo": [
+        {
+          "type": "Person",
+          "name": "Matt Nixon/Davin Creed"
+        }
+      ]
+    }
+  ]
+}
