@@ -1,0 +1,101 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #0d1117;
+    color: #e6edf3;
+    line-height: 1.6;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #1f2328 0%, #0d1117 100%);
+    padding: 20px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+    border-bottom: 2px solid #21262d;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #161b22;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.input-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex: 1;
+    min-width: 300px;
+    padding: 12px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    background-color: #0d1117;
+    color: #e6edf3;
+    font-size: 14px;
+}
+
+input[type="file"] {
+    padding: 8px;
+    background-color: #21262d;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+}
+
+button {
+    background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+    color: white;
+    cursor: pointer;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #2ea043 0%, #238636 100%);
+    transform: translateY(-1px);
+}
+
+.error {
+    color: #f85149;
+    background-color: rgba(248, 81, 73, 0.1);
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid rgba(248, 81, 73, 0.3);
+    margin: 15px 0;
+}
+
+.loaded-streams-info {
+    background-color: rgba(88, 166, 255, 0.1);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+    .input-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    input[type="text"] {
+        min-width: 200px;
+    }
+}
