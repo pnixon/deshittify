@@ -28,10 +28,28 @@
           "url":
           {
             "type": "Link",
-            "href": "https://us-east-1.console.aws.amazon.com/s3/object/GEAH?region=us-east-1&bucketType=general&prefix=2013-10-13_geah_-_episode_-_1.mp3",
+            "href": "https://s3.amazonaws.com/GEAH/2013-10-13_geah_-_episode_-_1.mp3",
             "mediaType": "audio/mp3"
           },
-          "duration": "PT22M"
+          "duration": "PT22M",
+          "attributedTo": [
+            {
+              "type": "Person",
+              "name": "Chris Banyas"
+            },
+            {
+              "type": "Person",
+              "name": "Pete Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Heather Nixon"
+            },
+            {
+              "type": "Person",
+              "name": "Matt Nixon"
+            }
+          ]
         }
       ],
       "attributedTo": [
@@ -60,7 +78,7 @@
       "url":
       {
         "type": "Link",
-        "href": "https://us-east-1.console.aws.amazon.com/s3/object/GEAH?region=us-east-1&bucketType=general&prefix=2014-03-16_episode_-_12_-_temple_of_ruin.mp3",
+        "href": "https://s3.amazonaws.com/GEAH/2014-03-16_episode_-_12_-_temple_of_ruin.mp3",
         "mediaType": "audio/mp3"
       },
       "duration": "PT22M",

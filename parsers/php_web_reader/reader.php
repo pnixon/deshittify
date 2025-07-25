@@ -149,20 +149,28 @@ function render_item($item) {
 
 // Handle media url(s) in various structures
 function get_media_url($item) {
-    if (isset($item['url'])) {
-        if (is_string($item['url'])) return $item['url'];
-        if (is_array($item['url'])) {
-            // Array of links
-            foreach ($item['url'] as $u) {
-                if (is_array($u) && isset($u['href'])) return $u['href'];
-                if (is_string($u)) return $u;
-            }
-            // Object (e.g., 'type'=>'Link')
-            if (isset($item['url']['href'])) return $item['url']['href'];
-        }
-        // Object with href (not array)
-        if (isset($item['url']['href'])) return $item['url']['href'];
+    if (!isset($item['url'])) {
+        return null;
     }
+
+    $url = $item['url'];
+
+    // If it's a string, return as-is
+    if (is_string($url)) return $url;
+
+    // If it's an associative array with 'href'
+    if (is_array($url) && isset($url['href'])) {
+        return $url['href'];
+    }
+
+    // If it's a numerically-indexed array (list of links/objects)
+    if (is_array($url) && array_keys($url) === range(0, count($url) - 1)) {
+        foreach ($url as $u) {
+            if (is_array($u) && isset($u['href'])) return $u['href'];
+            if (is_string($u)) return $u;
+        }
+    }
+
     return null;
 }
 
