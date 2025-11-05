@@ -35,16 +35,16 @@ const PORT = process.env.PORT || 3000;
 
 // Security middleware
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrcAttr: ["'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"]
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrcAttr: ["'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'"]
+        }
     }
-  }
 }));
 
 app.use(cors());
@@ -52,8 +52,8 @@ app.use(compression());
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
 });
 app.use('/api/', limiter);
 
@@ -71,14 +71,14 @@ const parser = new AnsyblParser();
 
 // Sample data and configuration
 let siteConfig = {
-  title: 'Ansybl Example Site',
-  description: 'A demonstration of the Ansybl social syndication protocol with live commenting',
-  baseUrl: 'https://example.com',
-  author: {
-    name: 'Demo Author',
-    url: 'https://example.com/author',
-    avatar: 'https://example.com/avatar.jpg'
-  }
+    title: 'Ansybl Example Site',
+    description: 'A demonstration of the Ansybl social syndication protocol with live commenting',
+    baseUrl: 'https://example.com',
+    author: {
+        name: 'Demo Author',
+        url: 'https://example.com/author',
+        avatar: 'https://example.com/avatar.jpg'
+    }
 };
 
 // Comments storage - in production, use a database
@@ -91,12 +91,12 @@ let interactionIdCounter = 1;
 
 // Sample posts data with enhanced features
 let posts = [
-  {
-    id: 'post-1',
-    uuid: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
-    title: 'Welcome to Ansybl',
-    content_text: 'This is an example post demonstrating the Ansybl protocol. Ansybl enables decentralized social syndication with cryptographic signatures.',
-    content_markdown: `# Welcome to Ansybl
+    {
+        id: 'post-1',
+        uuid: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+        title: 'Welcome to Ansybl',
+        content_text: 'This is an example post demonstrating the Ansybl protocol. Ansybl enables decentralized social syndication with cryptographic signatures.',
+        content_markdown: `# Welcome to Ansybl
 
 This is an example post demonstrating the **Ansybl protocol**. Ansybl enables:
 
@@ -108,25 +108,25 @@ This is an example post demonstrating the **Ansybl protocol**. Ansybl enables:
 > "The future of social media is decentralized, secure, and user-controlled."
 
 Learn more about the protocol at [ansybl.org](https://ansybl.org).`,
-    content_html: null, // Will be generated from markdown
-    summary: 'An introduction to the Ansybl protocol and its benefits for decentralized social media.',
-    datePublished: '2025-11-04T10:00:00Z',
-    dateModified: null,
-    tags: ['ansybl', 'demo', 'welcome'],
-    author: siteConfig.author,
-    attachments: [],
-    interactions: {
-      replies_count: 0,
-      likes_count: 0,
-      shares_count: 0
-    }
-  },
-  {
-    id: 'post-2',
-    uuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-    title: 'Understanding Cryptographic Signatures',
-    content_text: 'Every item in an Ansybl feed is cryptographically signed using Ed25519, ensuring authenticity and preventing tampering.',
-    content_markdown: `## Cryptographic Signatures in Ansybl
+        content_html: null, // Will be generated from markdown
+        summary: 'An introduction to the Ansybl protocol and its benefits for decentralized social media.',
+        datePublished: '2025-11-04T10:00:00Z',
+        dateModified: null,
+        tags: ['ansybl', 'demo', 'welcome'],
+        author: siteConfig.author,
+        attachments: [],
+        interactions: {
+            replies_count: 0,
+            likes_count: 0,
+            shares_count: 0
+        }
+    },
+    {
+        id: 'post-2',
+        uuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        title: 'Understanding Cryptographic Signatures',
+        content_text: 'Every item in an Ansybl feed is cryptographically signed using Ed25519, ensuring authenticity and preventing tampering.',
+        content_markdown: `## Cryptographic Signatures in Ansybl
 
 Every item in an Ansybl feed is **cryptographically signed** using \`Ed25519\`, ensuring:
 
@@ -146,25 +146,25 @@ const isValid = await verifySignature(content, signature, publicKey);
 \`\`\`
 
 This ensures trust in a decentralized environment without central authorities.`,
-    content_html: null,
-    summary: 'How Ed25519 cryptographic signatures ensure security and trust in Ansybl feeds.',
-    datePublished: '2025-11-04T11:30:00Z',
-    dateModified: null,
-    tags: ['cryptography', 'security', 'ed25519'],
-    author: siteConfig.author,
-    attachments: [],
-    interactions: {
-      replies_count: 0,
-      likes_count: 0,
-      shares_count: 0
-    }
-  },
-  {
-    id: 'post-3',
-    uuid: 'b2c3d4e5-f6g7-8901-bcde-f23456789012',
-    title: 'Decentralized Social Media',
-    content_text: 'Ansybl promotes a decentralized approach to social media, where users control their own data and can syndicate content across platforms.',
-    content_markdown: `## The Future is Decentralized
+        content_html: null,
+        summary: 'How Ed25519 cryptographic signatures ensure security and trust in Ansybl feeds.',
+        datePublished: '2025-11-04T11:30:00Z',
+        dateModified: null,
+        tags: ['cryptography', 'security', 'ed25519'],
+        author: siteConfig.author,
+        attachments: [],
+        interactions: {
+            replies_count: 0,
+            likes_count: 0,
+            shares_count: 0
+        }
+    },
+    {
+        id: 'post-3',
+        uuid: 'b2c3d4e5-f6g7-8901-bcde-f23456789012',
+        title: 'Decentralized Social Media',
+        content_text: 'Ansybl promotes a decentralized approach to social media, where users control their own data and can syndicate content across platforms.',
+        content_markdown: `## The Future is Decentralized
 
 Ansybl promotes a **decentralized approach** to social media, where:
 
@@ -184,28 +184,28 @@ Instead of storing everything on one platform, Ansybl feeds can be:
 This creates a truly open social web where users, not platforms, are in control.
 
 *Join the decentralized social media revolution!*`,
-    content_html: null,
-    summary: 'Exploring how Ansybl enables user-controlled, decentralized social media.',
-    datePublished: '2025-11-04T14:15:00Z',
-    dateModified: null,
-    tags: ['decentralization', 'social-media', 'data-ownership'],
-    author: siteConfig.author,
-    attachments: [],
-    interactions: {
-      replies_count: 0,
-      likes_count: 0,
-      shares_count: 0
+        content_html: null,
+        summary: 'Exploring how Ansybl enables user-controlled, decentralized social media.',
+        datePublished: '2025-11-04T14:15:00Z',
+        dateModified: null,
+        tags: ['decentralization', 'social-media', 'data-ownership'],
+        author: siteConfig.author,
+        attachments: [],
+        interactions: {
+            replies_count: 0,
+            likes_count: 0,
+            shares_count: 0
+        }
     }
-  }
 ];
 
 // Initialize interactions for existing posts
 posts.forEach(post => {
-  interactions[post.id] = {
-    likes: [],
-    shares: [],
-    replies: []
-  };
+    interactions[post.id] = {
+        likes: [],
+        shares: [],
+        replies: []
+    };
 });
 
 // Generate key pair for signing (in production, this should be persistent)
@@ -213,418 +213,418 @@ let keyPair = null;
 
 // Utility functions
 function processMarkdownContent(post) {
-  if (post.content_markdown && !post.content_html) {
-    // Configure marked for security
-    marked.setOptions({
-      breaks: true,
-      gfm: true,
-      sanitize: false // We'll use DOMPurify instead
-    });
-    
-    // Convert markdown to HTML and sanitize
-    const rawHtml = marked(post.content_markdown);
-    post.content_html = purify.sanitize(rawHtml);
-  }
-  return post;
+    if (post.content_markdown && !post.content_html) {
+        // Configure marked for security
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            sanitize: false // We'll use DOMPurify instead
+        });
+
+        // Convert markdown to HTML and sanitize
+        const rawHtml = marked(post.content_markdown);
+        post.content_html = purify.sanitize(rawHtml);
+    }
+    return post;
 }
 
 function updateInteractionCounts(postId) {
-  const post = posts.find(p => p.id === postId);
-  if (post && interactions[postId]) {
-    post.interactions.likes_count = interactions[postId].likes.length;
-    post.interactions.shares_count = interactions[postId].shares.length;
-    post.interactions.replies_count = interactions[postId].replies.length;
-  }
+    const post = posts.find(p => p.id === postId);
+    if (post && interactions[postId]) {
+        post.interactions.likes_count = interactions[postId].likes.length;
+        post.interactions.shares_count = interactions[postId].shares.length;
+        post.interactions.replies_count = interactions[postId].replies.length;
+    }
 }
 
 function generateContentSummary(content, maxLength = 200) {
-  if (!content) return '';
-  const plainText = content.replace(/<[^>]*>/g, '').replace(/[#*_`]/g, '');
-  return plainText.length > maxLength 
-    ? plainText.substring(0, maxLength).trim() + '...'
-    : plainText;
+    if (!content) return '';
+    const plainText = content.replace(/<[^>]*>/g, '').replace(/[#*_`]/g, '');
+    return plainText.length > maxLength
+        ? plainText.substring(0, maxLength).trim() + '...'
+        : plainText;
 }
 
 async function initializeKeys() {
-  try {
-    // In production, load from secure storage
-    keyPair = await generateKeyPair();
-    siteConfig.author.public_key = keyPair.publicKey;
-    console.log('✅ Key pair generated for signing');
-  } catch (error) {
-    console.error('❌ Failed to generate key pair:', error);
-    process.exit(1);
-  }
+    try {
+        // In production, load from secure storage
+        keyPair = await generateKeyPair();
+        siteConfig.author.public_key = keyPair.publicKey;
+        console.log('✅ Key pair generated for signing');
+    } catch (error) {
+        console.error('❌ Failed to generate key pair:', error);
+        process.exit(1);
+    }
 }
 
 // Routes
 
 // Home page
 app.get('/', (_, res) => {
-  res.send(generateHomePage());
+    res.send(generateHomePage());
 });
 
 // Individual post pages
 app.get('/post/:id', (req, res) => {
-  const post = posts.find(p => p.id === req.params.id);
-  if (!post) {
-    return res.status(404).send(generate404Page());
-  }
-  res.send(generatePostPage(post));
+    const post = posts.find(p => p.id === req.params.id);
+    if (!post) {
+        return res.status(404).send(generate404Page());
+    }
+    res.send(generatePostPage(post));
 });
 
 // Ansybl feed endpoint
 app.get('/feed.ansybl', async (_, res) => {
-  try {
-    const feed = await generateAnsyblFeed();
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.json(feed);
-  } catch (error) {
-    console.error('Error generating feed:', error);
-    res.status(500).json({ error: 'Failed to generate feed' });
-  }
+    try {
+        const feed = await generateAnsyblFeed();
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.json(feed);
+    } catch (error) {
+        console.error('Error generating feed:', error);
+        res.status(500).json({ error: 'Failed to generate feed' });
+    }
 });
 
 // API endpoints
 
 // Validate Ansybl document
 app.post('/api/validate', (req, res) => {
-  try {
-    console.log('📝 Validation request received');
-    const result = validator.validateDocument(req.body);
-    console.log('✅ Validation completed:', result.valid ? 'VALID' : 'INVALID');
-    res.json(result);
-  } catch (error) {
-    console.error('❌ Validation error:', error.message);
-    res.status(400).json({
-      valid: false,
-      errors: [{
-        code: 'VALIDATION_ERROR',
-        message: error.message
-      }]
-    });
-  }
+    try {
+        console.log('📝 Validation request received');
+        const result = validator.validateDocument(req.body);
+        console.log('✅ Validation completed:', result.valid ? 'VALID' : 'INVALID');
+        res.json(result);
+    } catch (error) {
+        console.error('❌ Validation error:', error.message);
+        res.status(400).json({
+            valid: false,
+            errors: [{
+                code: 'VALIDATION_ERROR',
+                message: error.message
+            }]
+        });
+    }
 });
 
 // Parse Ansybl document
 app.post('/api/parse', async (req, res) => {
-  try {
-    console.log('🔍 Parse request received, verify signatures:', req.query.verify === 'true');
-    const options = {
-      verifySignatures: req.query.verify === 'true',
-      preserveExtensions: req.query.extensions === 'true'
-    };
-    
-    const result = await parser.parse(req.body, options);
-    console.log('✅ Parse completed:', result.success ? 'SUCCESS' : 'FAILED');
-    res.json(result);
-  } catch (error) {
-    console.error('❌ Parse error:', error.message);
-    res.status(400).json({
-      success: false,
-      errors: [{
-        code: 'PARSE_ERROR',
-        message: error.message
-      }]
-    });
-  }
+    try {
+        console.log('🔍 Parse request received, verify signatures:', req.query.verify === 'true');
+        const options = {
+            verifySignatures: req.query.verify === 'true',
+            preserveExtensions: req.query.extensions === 'true'
+        };
+
+        const result = await parser.parse(req.body, options);
+        console.log('✅ Parse completed:', result.success ? 'SUCCESS' : 'FAILED');
+        res.json(result);
+    } catch (error) {
+        console.error('❌ Parse error:', error.message);
+        res.status(400).json({
+            success: false,
+            errors: [{
+                code: 'PARSE_ERROR',
+                message: error.message
+            }]
+        });
+    }
 });
 
 // Get feed metadata
 app.get('/api/feed/info', (_, res) => {
-  res.json({
-    title: siteConfig.title,
-    description: siteConfig.description,
-    author: siteConfig.author,
-    feedUrl: `${siteConfig.baseUrl}/feed.ansybl`,
-    itemCount: posts.length + comments.length,
-    lastUpdated: posts.length > 0 ? posts[0].datePublished : new Date().toISOString()
-  });
+    res.json({
+        title: siteConfig.title,
+        description: siteConfig.description,
+        author: siteConfig.author,
+        feedUrl: `${siteConfig.baseUrl}/feed.ansybl`,
+        itemCount: posts.length + comments.length,
+        lastUpdated: posts.length > 0 ? posts[0].datePublished : new Date().toISOString()
+    });
 });
 
 // Comments API endpoints
 
 // Get comments for a post
 app.get('/api/posts/:postId/comments', (req, res) => {
-  const postComments = comments.filter(c => c.postId === req.params.postId);
-  res.json(postComments);
+    const postComments = comments.filter(c => c.postId === req.params.postId);
+    res.json(postComments);
 });
 
 // Add a comment to a post
 app.post('/api/posts/:postId/comments', async (req, res) => {
-  try {
-    const { author, content } = req.body;
-    const postId = req.params.postId;
-    
-    // Validate input
-    if (!author || !content || !author.name || !content.trim()) {
-      return res.status(400).json({
-        error: 'Missing required fields: author.name and content are required'
-      });
+    try {
+        const { author, content } = req.body;
+        const postId = req.params.postId;
+
+        // Validate input
+        if (!author || !content || !author.name || !content.trim()) {
+            return res.status(400).json({
+                error: 'Missing required fields: author.name and content are required'
+            });
+        }
+
+        // Check if post exists
+        const post = posts.find(p => p.id === postId);
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        // Create comment
+        const comment = {
+            id: `comment-${commentIdCounter++}`,
+            postId: postId,
+            author: {
+                name: author.name,
+                url: author.url || null,
+                avatar: author.avatar || null
+            },
+            content: content.trim(),
+            contentHtml: `<p>${content.trim().replace(/\n/g, '<br>')}</p>`,
+            datePublished: new Date().toISOString(),
+            inReplyTo: `${siteConfig.baseUrl}/post/${postId}`
+        };
+
+        comments.unshift(comment); // Add to beginning for chronological order
+
+        console.log(`💬 New comment added to ${postId} by ${author.name}`);
+
+        res.status(201).json({
+            success: true,
+            comment: comment,
+            message: 'Comment added successfully and will appear in the Ansybl feed'
+        });
+
+    } catch (error) {
+        console.error('❌ Comment creation error:', error.message);
+        res.status(500).json({
+            error: 'Failed to create comment',
+            message: error.message
+        });
     }
-    
-    // Check if post exists
-    const post = posts.find(p => p.id === postId);
-    if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
-    }
-    
-    // Create comment
-    const comment = {
-      id: `comment-${commentIdCounter++}`,
-      postId: postId,
-      author: {
-        name: author.name,
-        url: author.url || null,
-        avatar: author.avatar || null
-      },
-      content: content.trim(),
-      contentHtml: `<p>${content.trim().replace(/\n/g, '<br>')}</p>`,
-      datePublished: new Date().toISOString(),
-      inReplyTo: `${siteConfig.baseUrl}/post/${postId}`
-    };
-    
-    comments.unshift(comment); // Add to beginning for chronological order
-    
-    console.log(`💬 New comment added to ${postId} by ${author.name}`);
-    
-    res.status(201).json({
-      success: true,
-      comment: comment,
-      message: 'Comment added successfully and will appear in the Ansybl feed'
-    });
-    
-  } catch (error) {
-    console.error('❌ Comment creation error:', error.message);
-    res.status(500).json({
-      error: 'Failed to create comment',
-      message: error.message
-    });
-  }
 });
 
 // Get all comments (for feed generation)
 app.get('/api/comments', (_, res) => {
-  res.json(comments);
+    res.json(comments);
 });
 
 // Interaction API endpoints
 
 // Like/unlike a post
 app.post('/api/posts/:postId/like', (req, res) => {
-  try {
-    const { postId } = req.params;
-    const { userId, userName } = req.body;
-    
-    if (!userId || !userName) {
-      return res.status(400).json({ error: 'userId and userName are required' });
+    try {
+        const { postId } = req.params;
+        const { userId, userName } = req.body;
+
+        if (!userId || !userName) {
+            return res.status(400).json({ error: 'userId and userName are required' });
+        }
+
+        // Check if post exists
+        const post = posts.find(p => p.id === postId);
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        // Initialize interactions if not exists
+        if (!interactions[postId]) {
+            interactions[postId] = { likes: [], shares: [], replies: [] };
+        }
+
+        const userLike = interactions[postId].likes.find(like => like.userId === userId);
+
+        if (userLike) {
+            // Unlike - remove existing like
+            interactions[postId].likes = interactions[postId].likes.filter(like => like.userId !== userId);
+            updateInteractionCounts(postId);
+
+            console.log(`👎 ${userName} unliked ${postId}`);
+            res.json({
+                success: true,
+                action: 'unliked',
+                likesCount: interactions[postId].likes.length
+            });
+        } else {
+            // Like - add new like
+            interactions[postId].likes.push({
+                userId,
+                userName,
+                timestamp: new Date().toISOString()
+            });
+            updateInteractionCounts(postId);
+
+            console.log(`👍 ${userName} liked ${postId}`);
+            res.json({
+                success: true,
+                action: 'liked',
+                likesCount: interactions[postId].likes.length
+            });
+        }
+
+    } catch (error) {
+        console.error('❌ Like error:', error.message);
+        res.status(500).json({ error: 'Failed to process like' });
     }
-    
-    // Check if post exists
-    const post = posts.find(p => p.id === postId);
-    if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
-    }
-    
-    // Initialize interactions if not exists
-    if (!interactions[postId]) {
-      interactions[postId] = { likes: [], shares: [], replies: [] };
-    }
-    
-    const userLike = interactions[postId].likes.find(like => like.userId === userId);
-    
-    if (userLike) {
-      // Unlike - remove existing like
-      interactions[postId].likes = interactions[postId].likes.filter(like => like.userId !== userId);
-      updateInteractionCounts(postId);
-      
-      console.log(`👎 ${userName} unliked ${postId}`);
-      res.json({
-        success: true,
-        action: 'unliked',
-        likesCount: interactions[postId].likes.length
-      });
-    } else {
-      // Like - add new like
-      interactions[postId].likes.push({
-        userId,
-        userName,
-        timestamp: new Date().toISOString()
-      });
-      updateInteractionCounts(postId);
-      
-      console.log(`👍 ${userName} liked ${postId}`);
-      res.json({
-        success: true,
-        action: 'liked',
-        likesCount: interactions[postId].likes.length
-      });
-    }
-    
-  } catch (error) {
-    console.error('❌ Like error:', error.message);
-    res.status(500).json({ error: 'Failed to process like' });
-  }
 });
 
 // Share a post
 app.post('/api/posts/:postId/share', (req, res) => {
-  try {
-    const { postId } = req.params;
-    const { userId, userName, message } = req.body;
-    
-    if (!userId || !userName) {
-      return res.status(400).json({ error: 'userId and userName are required' });
+    try {
+        const { postId } = req.params;
+        const { userId, userName, message } = req.body;
+
+        if (!userId || !userName) {
+            return res.status(400).json({ error: 'userId and userName are required' });
+        }
+
+        // Check if post exists
+        const post = posts.find(p => p.id === postId);
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        // Initialize interactions if not exists
+        if (!interactions[postId]) {
+            interactions[postId] = { likes: [], shares: [], replies: [] };
+        }
+
+        // Add share
+        const shareId = `share-${interactionIdCounter++}`;
+        interactions[postId].shares.push({
+            id: shareId,
+            userId,
+            userName,
+            message: message || null,
+            timestamp: new Date().toISOString()
+        });
+        updateInteractionCounts(postId);
+
+        console.log(`🔄 ${userName} shared ${postId}`);
+        res.json({
+            success: true,
+            shareId: shareId,
+            sharesCount: interactions[postId].shares.length
+        });
+
+    } catch (error) {
+        console.error('❌ Share error:', error.message);
+        res.status(500).json({ error: 'Failed to process share' });
     }
-    
-    // Check if post exists
-    const post = posts.find(p => p.id === postId);
-    if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
-    }
-    
-    // Initialize interactions if not exists
-    if (!interactions[postId]) {
-      interactions[postId] = { likes: [], shares: [], replies: [] };
-    }
-    
-    // Add share
-    const shareId = `share-${interactionIdCounter++}`;
-    interactions[postId].shares.push({
-      id: shareId,
-      userId,
-      userName,
-      message: message || null,
-      timestamp: new Date().toISOString()
-    });
-    updateInteractionCounts(postId);
-    
-    console.log(`🔄 ${userName} shared ${postId}`);
-    res.json({
-      success: true,
-      shareId: shareId,
-      sharesCount: interactions[postId].shares.length
-    });
-    
-  } catch (error) {
-    console.error('❌ Share error:', error.message);
-    res.status(500).json({ error: 'Failed to process share' });
-  }
 });
 
 // Get interactions for a post
 app.get('/api/posts/:postId/interactions', (req, res) => {
-  const { postId } = req.params;
-  const postInteractions = interactions[postId] || { likes: [], shares: [], replies: [] };
-  
-  res.json({
-    postId,
-    likes: postInteractions.likes,
-    shares: postInteractions.shares,
-    replies: postInteractions.replies,
-    counts: {
-      likes: postInteractions.likes.length,
-      shares: postInteractions.shares.length,
-      replies: postInteractions.replies.length
-    }
-  });
+    const { postId } = req.params;
+    const postInteractions = interactions[postId] || { likes: [], shares: [], replies: [] };
+
+    res.json({
+        postId,
+        likes: postInteractions.likes,
+        shares: postInteractions.shares,
+        replies: postInteractions.replies,
+        counts: {
+            likes: postInteractions.likes.length,
+            shares: postInteractions.shares.length,
+            replies: postInteractions.replies.length
+        }
+    });
 });
 
 // Generate Ansybl feed
 async function generateAnsyblFeed() {
-  const feedMetadata = {
-    title: siteConfig.title,
-    description: siteConfig.description,
-    home_page_url: siteConfig.baseUrl,
-    feed_url: `${siteConfig.baseUrl}/feed.ansybl`,
-    icon: `${siteConfig.baseUrl}/favicon.ico`,
-    language: 'en',
-    author: siteConfig.author
-  };
-
-  // Process markdown content for all posts
-  posts.forEach(processMarkdownContent);
-  
-  // Combine posts and comments into feed items
-  const postItems = posts.map(post => {
-    const item = {
-      id: `${siteConfig.baseUrl}/post/${post.id}`,
-      url: `${siteConfig.baseUrl}/post/${post.id}`,
-      title: post.title,
-      date_published: post.datePublished,
-      author: post.author
+    const feedMetadata = {
+        title: siteConfig.title,
+        description: siteConfig.description,
+        home_page_url: siteConfig.baseUrl,
+        feed_url: `${siteConfig.baseUrl}/feed.ansybl`,
+        icon: `${siteConfig.baseUrl}/favicon.ico`,
+        language: 'en',
+        author: siteConfig.author
     };
-    
-    // Add optional UUID
-    if (post.uuid) item.uuid = post.uuid;
-    
-    // Add content in available formats
-    if (post.content_text) item.content_text = post.content_text;
-    if (post.content_html) item.content_html = post.content_html;
-    if (post.content_markdown) item.content_markdown = post.content_markdown;
-    
-    // Add summary
-    if (post.summary) {
-      item.summary = post.summary;
-    } else if (post.content_text) {
-      item.summary = generateContentSummary(post.content_text);
-    }
-    
-    // Add modification date if exists
-    if (post.dateModified) item.date_modified = post.dateModified;
-    
-    // Add tags
-    if (post.tags && post.tags.length > 0) item.tags = post.tags;
-    
-    // Add attachments if any
-    if (post.attachments && post.attachments.length > 0) item.attachments = post.attachments;
-    
-    // Add interactions
-    if (post.interactions) {
-      item.interactions = {
-        replies_count: post.interactions.replies_count,
-        likes_count: post.interactions.likes_count,
-        shares_count: post.interactions.shares_count
-      };
-      
-      // Add interaction URLs
-      item.interactions.replies_url = `${siteConfig.baseUrl}/api/posts/${post.id}/comments`;
-      item.interactions.likes_url = `${siteConfig.baseUrl}/api/posts/${post.id}/interactions`;
-      item.interactions.shares_url = `${siteConfig.baseUrl}/api/posts/${post.id}/interactions`;
-    }
-    
-    return item;
-  });
 
-  const commentItems = comments.map(comment => ({
-    id: `${siteConfig.baseUrl}/comment/${comment.id}`,
-    url: `${siteConfig.baseUrl}/post/${comment.postId}#${comment.id}`,
-    title: `Comment on "${posts.find(p => p.id === comment.postId)?.title || 'Unknown Post'}"`,
-    content_text: comment.content,
-    content_html: comment.contentHtml,
-    date_published: comment.datePublished,
-    tags: ['comment'],
-    author: comment.author,
-    in_reply_to: comment.inReplyTo
-  }));
+    // Process markdown content for all posts
+    posts.forEach(processMarkdownContent);
 
-  // Combine and sort by date (newest first)
-  const allItems = [...postItems, ...commentItems].sort((a, b) => 
-    new Date(b.date_published) - new Date(a.date_published)
-  );
+    // Combine posts and comments into feed items
+    const postItems = posts.map(post => {
+        const item = {
+            id: `${siteConfig.baseUrl}/post/${post.id}`,
+            url: `${siteConfig.baseUrl}/post/${post.id}`,
+            title: post.title,
+            date_published: post.datePublished,
+            author: post.author
+        };
 
-  return await generator.createCompleteFeed(feedMetadata, allItems, keyPair.privateKey);
+        // Add optional UUID
+        if (post.uuid) item.uuid = post.uuid;
+
+        // Add content in available formats
+        if (post.content_text) item.content_text = post.content_text;
+        if (post.content_html) item.content_html = post.content_html;
+        if (post.content_markdown) item.content_markdown = post.content_markdown;
+
+        // Add summary
+        if (post.summary) {
+            item.summary = post.summary;
+        } else if (post.content_text) {
+            item.summary = generateContentSummary(post.content_text);
+        }
+
+        // Add modification date if exists
+        if (post.dateModified) item.date_modified = post.dateModified;
+
+        // Add tags
+        if (post.tags && post.tags.length > 0) item.tags = post.tags;
+
+        // Add attachments if any
+        if (post.attachments && post.attachments.length > 0) item.attachments = post.attachments;
+
+        // Add interactions
+        if (post.interactions) {
+            item.interactions = {
+                replies_count: post.interactions.replies_count,
+                likes_count: post.interactions.likes_count,
+                shares_count: post.interactions.shares_count
+            };
+
+            // Add interaction URLs
+            item.interactions.replies_url = `${siteConfig.baseUrl}/api/posts/${post.id}/comments`;
+            item.interactions.likes_url = `${siteConfig.baseUrl}/api/posts/${post.id}/interactions`;
+            item.interactions.shares_url = `${siteConfig.baseUrl}/api/posts/${post.id}/interactions`;
+        }
+
+        return item;
+    });
+
+    const commentItems = comments.map(comment => ({
+        id: `${siteConfig.baseUrl}/comment/${comment.id}`,
+        url: `${siteConfig.baseUrl}/post/${comment.postId}#${comment.id}`,
+        title: `Comment on "${posts.find(p => p.id === comment.postId)?.title || 'Unknown Post'}"`,
+        content_text: comment.content,
+        content_html: comment.contentHtml,
+        date_published: comment.datePublished,
+        tags: ['comment'],
+        author: comment.author,
+        in_reply_to: comment.inReplyTo
+    }));
+
+    // Combine and sort by date (newest first)
+    const allItems = [...postItems, ...commentItems].sort((a, b) =>
+        new Date(b.date_published) - new Date(a.date_published)
+    );
+
+    return await generator.createCompleteFeed(feedMetadata, allItems, keyPair.privateKey);
 }
 
 // HTML page generators
 function generateHomePage() {
-  const postsHtml = posts.map(post => {
-    // Process markdown for preview
-    const processedPost = processMarkdownContent({...post});
-    const previewText = post.summary || generateContentSummary(post.content_text || '', 200);
-    
-    return `
+    const postsHtml = posts.map(post => {
+        // Process markdown for preview
+        const processedPost = processMarkdownContent({ ...post });
+        const previewText = post.summary || generateContentSummary(post.content_text || '', 200);
+
+        return `
     <article class="post-preview">
       <h2><a href="/post/${post.id}">${post.title}</a></h2>
       <div class="post-meta">
@@ -643,9 +643,9 @@ function generateHomePage() {
       <a href="/post/${post.id}" class="read-more">Read more →</a>
     </article>
   `;
-  }).join('');
+    }).join('');
 
-  return generatePageTemplate('Home', `
+    return generatePageTemplate('Home', `
     <header class="site-header">
       <h1>${siteConfig.title}</h1>
       <p class="site-description">${siteConfig.description}</p>
@@ -711,10 +711,10 @@ function generateHomePage() {
 }
 
 function generatePostPage(post) {
-  // Process markdown content
-  const processedPost = processMarkdownContent({...post});
-  
-  return generatePageTemplate(post.title, `
+    // Process markdown content
+    const processedPost = processMarkdownContent({ ...post });
+
+    return generatePageTemplate(post.title, `
     <nav class="breadcrumb">
       <a href="/">← Back to Home</a>
     </nav>
@@ -974,7 +974,7 @@ function generatePostPage(post) {
                 \${comment.contentHtml}
               </div>
               <div class="comment-meta">
-                <small>Ansybl ID: <code>\${siteConfig.baseUrl}/comment/\${comment.id}</code></small>
+                <small>Ansybl ID: <code>${siteConfig.baseUrl}/comment/\${comment.id}</code></small>
               </div>
             </div>
           \`).join('');
@@ -1048,7 +1048,7 @@ function generatePostPage(post) {
 }
 
 function generate404Page() {
-  return generatePageTemplate('Page Not Found', `
+    return generatePageTemplate('Page Not Found', `
     <div class="error-page">
       <h1>404 - Page Not Found</h1>
       <p>The page you're looking for doesn't exist.</p>
@@ -1058,7 +1058,7 @@ function generate404Page() {
 }
 
 function generatePageTemplate(title, content) {
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -2017,16 +2017,16 @@ function generatePageTemplate(title, content) {
 
 // Start server
 async function startServer() {
-  await initializeKeys();
-  
-  app.listen(PORT, () => {
-    console.log(`🚀 Ansybl Example Website running on http://localhost:${PORT}`);
-    console.log(`📡 Feed available at: http://localhost:${PORT}/feed.ansybl`);
-    console.log(`🔧 API endpoints:`);
-    console.log(`   POST /api/validate - Validate Ansybl documents`);
-    console.log(`   POST /api/parse - Parse Ansybl documents`);
-    console.log(`   GET /api/feed/info - Get feed metadata`);
-  });
+    await initializeKeys();
+
+    app.listen(PORT, () => {
+        console.log(`🚀 Ansybl Example Website running on http://localhost:${PORT}`);
+        console.log(`📡 Feed available at: http://localhost:${PORT}/feed.ansybl`);
+        console.log(`🔧 API endpoints:`);
+        console.log(`   POST /api/validate - Validate Ansybl documents`);
+        console.log(`   POST /api/parse - Parse Ansybl documents`);
+        console.log(`   GET /api/feed/info - Get feed metadata`);
+    });
 }
 
 startServer().catch(console.error);
