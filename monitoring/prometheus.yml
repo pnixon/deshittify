@@ -1,0 +1,96 @@
+# Prometheus configuration for Ansybl Protocol monitoring
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'ansybl-monitor'
+
+rule_files:
+  - "rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  # Ansybl feed services
+  - job_name: 'ansybl-feeds'
+    static_configs:
+      - targets: ['localhost:3000']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    
+  # ActivityPub bridge
+  - job_name: 'ansybl-activitypub-bridge'
+    static_configs:
+      - targets: ['localhost:3001']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    
+  # RSS/JSON Feed bridge
+  - job_name: 'ansybl-rss-bridge'
+    static_configs:
+      - targets: ['localhost:3002']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    
+  # Webring registry
+  - job_name: 'ansybl-webring'
+    static_configs:
+      - targets: ['localhost:3003']
+    metrics_path: '/metrics'
+    scrape_interval: 60s
+    
+  # Dashboard and monitoring
+  - job_name: 'ansybl-dashboard'
+    static_configs:
+      - targets: ['localhost:3005']
+    metrics_path: '/api/metrics'
+    params:
+      format: ['prometheus']
+    scrape_interval: 30s
+    
+  # Node.js application metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+    scrape_interval: 15s
+    
+  # PostgreSQL metrics (if using database)
+  - job_name: 'postgres-exporter'
+    static_configs:
+      - targets: ['localhost:9187']
+    scrape_interval: 30s
+    
+  # Redis metrics (if using Redis)
+  - job_name: 'redis-exporter'
+    static_configs:
+      - targets: ['localhost:9121']
+    scrape_interval: 30s
+    
+  # Nginx metrics
+  - job_name: 'nginx-exporter'
+    static_configs:
+      - targets: ['localhost:9113']
+    scrape_interval: 30s
+
+  # External feed monitoring
+  - job_name: 'ansybl-feed-health'
+    static_configs:
+      - targets: 
+        - 'example.com'
+        - 'another-feed.com'
+    metrics_path: '/feed.ansybl'
+    params:
+      module: [http_2xx]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: localhost:9115  # Blackbox exporter

@@ -1,0 +1,134 @@
+# Prometheus alerting rules for Ansybl Protocol
+
+groups:
+  - name: ansybl.rules
+    rules:
+      # High error rate
+      - alert: AnsyblHighErrorRate
+        expr: rate(ansybl_errors_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected in Ansybl service"
+          description: "Error rate is {{ $value }} errors per second for {{ $labels.instance }}"
+
+      # Feed parsing failures
+      - alert: AnsyblParsingFailures
+        expr: rate(ansybl_parsing_performance_count{status="error"}[5m]) > 0.05
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High feed parsing failure rate"
+          description: "Feed parsing failure rate is {{ $value }} failures per second"
+
+      # Signature verification failures
+      - alert: AnsyblSignatureFailures
+        expr: rate(ansybl_signature_verification_count{success="false"}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High signature verification failure rate"
+          description: "Signature verification failure rate is {{ $value }} failures per second"
+
+      # High memory usage
+      - alert: AnsyblHighMemoryUsage
+        expr: ansybl_memory_usage_bytes / ansybl_memory_limit_bytes > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage in Ansybl service"
+          description: "Memory usage is {{ $value | humanizePercentage }} for {{ $labels.instance }}"
+
+      # Service down
+      - alert: AnsyblServiceDown
+        expr: up{job=~"ansybl-.*"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Ansybl service is down"
+          description: "Service {{ $labels.job }} on {{ $labels.instance }} is down"
+
+      # High response time
+      - alert: AnsyblHighResponseTime
+        expr: histogram_quantile(0.95, rate(ansybl_request_duration_seconds_bucket[5m])) > 2
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time in Ansybl service"
+          description: "95th percentile response time is {{ $value }}s for {{ $labels.instance }}"
+
+      # Bridge service failures
+      - alert: AnsyblBridgeFailures
+        expr: rate(ansybl_bridge_usage_count{success="false"}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High bridge service failure rate"
+          description: "Bridge {{ $labels.bridge_type }} failure rate is {{ $value }} failures per second"
+
+      # Health check failures
+      - alert: AnsyblHealthCheckFailed
+        expr: ansybl_health_check == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Ansybl health check failed"
+          description: "Health check {{ $labels.check }} failed for {{ $labels.instance }}"
+
+      # Low feed access rate (potential issue)
+      - alert: AnsyblLowFeedAccess
+        expr: rate(ansybl_feed_access_total[1h]) < 0.01
+        for: 10m
+        labels:
+          severity: info
+        annotations:
+          summary: "Low feed access rate"
+          description: "Feed access rate is {{ $value }} accesses per second, which may indicate an issue"
+
+      # Database connection issues
+      - alert: AnsyblDatabaseConnectionFailed
+        expr: ansybl_database_connection_errors_total > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database connection failed"
+          description: "Database connection errors detected for {{ $labels.instance }}"
+
+  - name: ansybl.performance
+    rules:
+      # Feed parsing performance
+      - record: ansybl:parsing_duration_seconds:rate5m
+        expr: rate(ansybl_parsing_performance_duration_ms[5m]) / 1000
+
+      - record: ansybl:parsing_success_rate:rate5m
+        expr: rate(ansybl_parsing_performance_count{status="success"}[5m]) / rate(ansybl_parsing_performance_count[5m])
+
+      # Signature verification performance
+      - record: ansybl:signature_verification_duration_seconds:rate5m
+        expr: rate(ansybl_signature_verification_duration_ms[5m]) / 1000
+
+      - record: ansybl:signature_verification_success_rate:rate5m
+        expr: rate(ansybl_signature_verification_count{success="true"}[5m]) / rate(ansybl_signature_verification_count[5m])
+
+      # Bridge service performance
+      - record: ansybl:bridge_success_rate:rate5m
+        expr: rate(ansybl_bridge_usage_count{success="true"}[5m]) / rate(ansybl_bridge_usage_count[5m])
+
+      # Overall system health score
+      - record: ansybl:health_score
+        expr: |
+          (
+            ansybl:parsing_success_rate:rate5m * 0.3 +
+            ansybl:signature_verification_success_rate:rate5m * 0.3 +
+            ansybl:bridge_success_rate:rate5m * 0.2 +
+            (1 - (rate(ansybl_errors_total[5m]) / 10)) * 0.2
+          )

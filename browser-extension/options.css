@@ -1,0 +1,538 @@
+/* options.css - Styles for the options page */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: #f6f8fa;
+  color: #24292f;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: #24292f;
+  color: white;
+  padding: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.logo h1 {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.logo p {
+  margin: 0;
+  color: #8b949e;
+  font-size: 14px;
+}
+
+/* Navigation */
+.nav-tabs {
+  display: flex;
+  background: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  padding: 16px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #656d76;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.nav-tab:hover {
+  color: #24292f;
+  background: #f3f4f6;
+}
+
+.nav-tab.active {
+  color: #0969da;
+  border-bottom-color: #0969da;
+  background: white;
+}
+
+/* Main content */
+.main-content {
+  padding: 32px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Settings sections */
+.settings-section {
+  margin-bottom: 48px;
+}
+
+.settings-section h2 {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #24292f;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.section-description {
+  color: #656d76;
+  margin: 0 0 24px 0;
+}
+
+/* Setting items */
+.setting-item {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f6f8fa;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.setting-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.setting-label-text {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #24292f;
+}
+
+.setting-description {
+  color: #656d76;
+  font-size: 14px;
+  margin: 0;
+  margin-left: 28px;
+}
+
+/* Custom checkbox */
+.setting-label input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d0d7de;
+  border-radius: 3px;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.setting-label input[type="checkbox"]:checked + .checkmark {
+  background: #0969da;
+  border-color: #0969da;
+}
+
+.setting-label input[type="checkbox"]:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Input fields */
+.setting-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+}
+
+.setting-input:focus {
+  outline: none;
+  border-color: #0969da;
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+}
+
+/* Buttons */
+.btn {
+  background: #0969da;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background: #0550ae;
+}
+
+.btn.secondary {
+  background: #f6f8fa;
+  color: #24292f;
+  border: 1px solid #d0d7de;
+}
+
+.btn.secondary:hover {
+  background: #f3f4f6;
+}
+
+.btn.danger {
+  background: #cf222e;
+}
+
+.btn.danger:hover {
+  background: #a40e26;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-item {
+  background: #f6f8fa;
+  padding: 16px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: 600;
+  color: #0969da;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #656d76;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Search bar */
+.search-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.tag-select {
+  padding: 8px 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  min-width: 120px;
+}
+
+/* Subscriptions list */
+.subscriptions-list {
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.subscription-item {
+  padding: 16px;
+  border-bottom: 1px solid #f6f8fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.subscription-item:last-child {
+  border-bottom: none;
+}
+
+.subscription-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.subscription-title {
+  font-weight: 600;
+  color: #24292f;
+  margin: 0 0 4px 0;
+  word-break: break-word;
+}
+
+.subscription-url {
+  font-size: 12px;
+  color: #656d76;
+  word-break: break-all;
+  margin: 0 0 4px 0;
+}
+
+.subscription-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #656d76;
+}
+
+.subscription-tag {
+  background: #f6f8fa;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.subscription-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.subscription-btn {
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  color: #24292f;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.subscription-btn:hover {
+  background: #f3f4f6;
+}
+
+.subscription-btn.danger {
+  color: #cf222e;
+  border-color: #cf222e;
+}
+
+.subscription-btn.danger:hover {
+  background: #ffebe9;
+}
+
+/* Pattern management */
+.pattern-list {
+  margin-bottom: 16px;
+}
+
+.pattern-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f6f8fa;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.pattern-text {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 13px;
+  color: #24292f;
+}
+
+.add-pattern {
+  display: flex;
+  gap: 8px;
+}
+
+.pattern-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+/* About content */
+.about-content h3 {
+  margin: 24px 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #24292f;
+}
+
+.about-content ul {
+  margin: 0 0 16px 0;
+  padding-left: 20px;
+}
+
+.about-content li {
+  margin-bottom: 4px;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.link-item {
+  display: block;
+  padding: 12px;
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #24292f;
+  transition: all 0.2s;
+}
+
+.link-item:hover {
+  background: #f3f4f6;
+  border-color: #0969da;
+}
+
+/* Privacy info */
+.privacy-info h3 {
+  margin: 24px 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #24292f;
+}
+
+.privacy-info ul {
+  margin: 0 0 16px 0;
+  padding-left: 20px;
+}
+
+.privacy-info li {
+  margin-bottom: 8px;
+}
+
+.privacy-info strong {
+  color: #24292f;
+}
+
+/* Empty states */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #656d76;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px 0;
+  color: #24292f;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    margin: 0;
+  }
+  
+  .main-content {
+    padding: 16px;
+  }
+  
+  .nav-tabs {
+    overflow-x: auto;
+  }
+  
+  .nav-tab {
+    white-space: nowrap;
+    padding: 12px 16px;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  
+  .search-bar {
+    flex-direction: column;
+  }
+  
+  .subscription-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .subscription-actions {
+    justify-content: flex-end;
+  }
+  
+  .links-grid {
+    grid-template-columns: 1fr;
+  }
+}

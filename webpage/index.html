@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ansybl Streams Webpage</title>
+    <title>Ansybl Reader - Universal Social Feed Reader</title>
     <!-- External Dependencies -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/ajv@8/dist/ajv.bundle.js"></script>
     <!-- Local Styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="navbar">Ansybl Streams Webpage</div>
-    <div id="root" class="container"></div>
+    <div id="root"></div>
     <!-- Utilities -->
     <script type="text/babel" src="utils/ansyblParser.js"></script>
-    <script type="text/babel" src="utils/mergeUtils.js"></script>
-    <script type="text/babel" src="utils/renderUtils.js"></script>
+    <script type="text/babel" src="utils/feedValidator.js"></script>
+    <script type="text/babel" src="utils/subscriptionManager.js"></script>
+    <script type="text/babel" src="utils/interactionHandler.js"></script>
     <!-- Components -->
-    <script type="text/babel" src="components/FileLoader.js"></script>
-    <script type="text/babel" src="components/StreamDashboard.js"></script>
-    <script type="text/babel" src="components/CarouselViewer.js"></script>
-    <script type="text/babel" src="components/PostFeed.js"></script>
-    <script type="text/babel" src="components/CommentsSection.js"></script>
-    <script type="text/babel" src="components/PodcastPlayer.js"></script>
-    <script type="text/babel" src="components/StreamInfoPanel.js"></script>
+    <script type="text/babel" src="components/Header.js"></script>
+    <script type="text/babel" src="components/Sidebar.js"></script>
+    <script type="text/babel" src="components/FeedReader.js"></script>
+    <script type="text/babel" src="components/FeedItem.js"></script>
+    <script type="text/babel" src="components/SubscriptionManager.js"></script>
+    <script type="text/babel" src="components/InteractionPanel.js"></script>
+    <script type="text/babel" src="components/AddFeedModal.js"></script>
     <!-- Main App -->
     <script type="text/babel" src="app.js"></script>
 </body>

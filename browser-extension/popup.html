@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ansybl Feed Discoverer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <div class="logo">
+        <img src="icons/icon-32.png" alt="Ansybl" class="logo-icon">
+        <h1>Ansybl Feeds</h1>
+      </div>
+      <button id="options-btn" class="icon-btn" title="Options">⚙️</button>
+    </header>
+
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <span>Scanning for feeds...</span>
+    </div>
+
+    <div id="no-feeds" class="empty-state" style="display: none;">
+      <div class="empty-icon">📡</div>
+      <h3>No Ansybl feeds found</h3>
+      <p>This page doesn't appear to have any Ansybl feeds.</p>
+      <div class="suggestions">
+        <h4>Suggestions:</h4>
+        <ul>
+          <li>Look for feed links in the page footer</li>
+          <li>Check the site's main page</li>
+          <li>Try common feed URLs like /feed.ansybl</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="feeds-list" class="feeds-list" style="display: none;">
+      <div class="section-header">
+        <h3>Discovered Feeds</h3>
+        <span id="feed-count" class="count-badge">0</span>
+      </div>
+      <div id="feeds-container"></div>
+    </div>
+
+    <div id="subscriptions-section" class="subscriptions-section" style="display: none;">
+      <div class="section-header">
+        <h3>Your Subscriptions</h3>
+        <span id="subscription-count" class="count-badge">0</span>
+      </div>
+      <div id="subscriptions-container"></div>
+      <div class="section-actions">
+        <button id="manage-subscriptions" class="secondary-btn">Manage All</button>
+        <button id="export-subscriptions" class="secondary-btn">Export</button>
+      </div>
+    </div>
+
+    <footer class="popup-footer">
+      <div class="footer-links">
+        <a href="#" id="about-link">About Ansybl</a>
+        <a href="#" id="help-link">Help</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

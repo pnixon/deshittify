@@ -1,0 +1,240 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ansybl-feed
+  namespace: ansybl
+  labels:
+    app: ansybl-feed
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ansybl-feed
+  template:
+    metadata:
+      labels:
+        app: ansybl-feed
+    spec:
+      containers:
+      - name: ansybl-feed
+        image: ansybl/feed:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ansybl-keys
+              key: public-key
+        - name: PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ansybl-keys
+              key: private-key
+        envFrom:
+        - configMapRef:
+            name: ansybl-config
+        volumeMounts:
+        - name: content
+          mountPath: /app/content
+          readOnly: true
+        - name: logs
+          mountPath: /app/logs
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: content
+        configMap:
+          name: ansybl-content
+      - name: logs
+        emptyDir: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: activitypub-bridge
+  namespace: ansybl
+  labels:
+    app: activitypub-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: activitypub-bridge
+  template:
+    metadata:
+      labels:
+        app: activitypub-bridge
+    spec:
+      containers:
+      - name: activitypub-bridge
+        image: ansybl/activitypub-bridge:latest
+        ports:
+        - containerPort: 3001
+        env:
+        - name: PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ansybl-keys
+              key: public-key
+        - name: PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ansybl-keys
+              key: private-key
+        envFrom:
+        - configMapRef:
+            name: ansybl-config
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rss-bridge
+  namespace: ansybl
+  labels:
+    app: rss-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rss-bridge
+  template:
+    metadata:
+      labels:
+        app: rss-bridge
+    spec:
+      containers:
+      - name: rss-bridge
+        image: ansybl/rss-bridge:latest
+        ports:
+        - containerPort: 3002
+        envFrom:
+        - configMapRef:
+            name: ansybl-config
+        volumeMounts:
+        - name: cache
+          mountPath: /app/cache
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3002
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: cache
+        emptyDir: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: ansybl
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        - name: ssl-certs
+          mountPath: /etc/nginx/ssl
+          readOnly: true
+        - name: static-content
+          mountPath: /var/www/html
+          readOnly: true
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+      - name: ssl-certs
+        secret:
+          secretName: ansybl-tls
+      - name: static-content
+        configMap:
+          name: ansybl-static-content

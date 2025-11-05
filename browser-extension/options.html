@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ansybl Feed Discoverer - Options</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <img src="icons/icon-48.png" alt="Ansybl" class="logo-icon">
+        <div>
+          <h1>Ansybl Feed Discoverer</h1>
+          <p>Discover and manage Ansybl feeds across the web</p>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="general">General</button>
+      <button class="nav-tab" data-tab="subscriptions">Subscriptions</button>
+      <button class="nav-tab" data-tab="discovery">Discovery</button>
+      <button class="nav-tab" data-tab="about">About</button>
+    </nav>
+
+    <main class="main-content">
+      <!-- General Settings -->
+      <div id="general-tab" class="tab-content active">
+        <section class="settings-section">
+          <h2>General Settings</h2>
+          
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="auto-discover" checked>
+              <span class="checkmark"></span>
+              Automatically discover feeds on page load
+            </label>
+            <p class="setting-description">
+              Scan pages for Ansybl feeds when you visit them
+            </p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="show-indicators" checked>
+              <span class="checkmark"></span>
+              Show feed indicators on pages
+            </label>
+            <p class="setting-description">
+              Display a small indicator when feeds are found on a page
+            </p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="validate-feeds" checked>
+              <span class="checkmark"></span>
+              Validate feeds before subscribing
+            </label>
+            <p class="setting-description">
+              Check that feeds are valid Ansybl documents before adding them
+            </p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="sync-subscriptions" checked>
+              <span class="checkmark"></span>
+              Sync subscriptions across devices
+            </label>
+            <p class="setting-description">
+              Keep your subscriptions synchronized across all your devices
+            </p>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h2>Reader Integration</h2>
+          
+          <div class="setting-item">
+            <label for="reader-url" class="setting-label-text">Default Ansybl Reader</label>
+            <input type="url" id="reader-url" class="setting-input" 
+                   placeholder="https://reader.ansybl.org" 
+                   value="">
+            <p class="setting-description">
+              URL of your preferred Ansybl reader application
+            </p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="open-in-reader">
+              <span class="checkmark"></span>
+              Open feeds in reader instead of raw JSON
+            </label>
+            <p class="setting-description">
+              When clicking feed links, open them in your reader app
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Subscriptions Management -->
+      <div id="subscriptions-tab" class="tab-content">
+        <section class="settings-section">
+          <div class="section-header">
+            <h2>Your Subscriptions</h2>
+            <div class="section-actions">
+              <button id="import-btn" class="btn secondary">Import</button>
+              <button id="export-btn" class="btn secondary">Export</button>
+              <button id="clear-all-btn" class="btn danger">Clear All</button>
+            </div>
+          </div>
+
+          <div id="subscriptions-stats" class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number" id="total-subscriptions">0</div>
+              <div class="stat-label">Total Subscriptions</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" id="active-subscriptions">0</div>
+              <div class="stat-label">Active</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" id="subscription-tags">0</div>
+              <div class="stat-label">Tags</div>
+            </div>
+          </div>
+
+          <div class="search-bar">
+            <input type="text" id="subscription-search" placeholder="Search subscriptions..." class="search-input">
+            <select id="tag-filter" class="tag-select">
+              <option value="">All tags</option>
+            </select>
+          </div>
+
+          <div id="subscriptions-list" class="subscriptions-list">
+            <!-- Subscriptions will be loaded here -->
+          </div>
+        </section>
+      </div>
+
+      <!-- Discovery Settings -->
+      <div id="discovery-tab" class="tab-content">
+        <section class="settings-section">
+          <h2>Feed Discovery</h2>
+          
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="discover-link-tags" checked>
+              <span class="checkmark"></span>
+              Scan HTML link tags
+            </label>
+            <p class="setting-description">
+              Look for feeds referenced in &lt;link&gt; tags in page headers
+            </p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="discover-meta-tags" checked>
+              <span class="checkmark"></span>
+              Scan meta tags
+            </label>
+            <p class="setting-description">
+              Look for feed URLs in meta tags and structured data
+            </p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="discover-content" checked>
+              <span class="checkmark"></span>
+              Scan page content
+            </label>
+            <p class="setting-description">
+              Search for Ansybl feed URLs mentioned in page text
+            </p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="suggest-common-paths" checked>
+              <span class="checkmark"></span>
+              Suggest common feed paths
+            </label>
+            <p class="setting-description">
+              Suggest checking common locations like /feed.ansybl
+            </p>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h2>Custom Feed Patterns</h2>
+          <p class="section-description">
+            Add custom URL patterns to help discover feeds on specific sites
+          </p>
+          
+          <div class="pattern-list" id="custom-patterns">
+            <!-- Custom patterns will be loaded here -->
+          </div>
+          
+          <div class="add-pattern">
+            <input type="text" id="new-pattern" placeholder="e.g., https://example.com/feeds/*.ansybl" class="pattern-input">
+            <button id="add-pattern-btn" class="btn">Add Pattern</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- About -->
+      <div id="about-tab" class="tab-content">
+        <section class="settings-section">
+          <h2>About Ansybl</h2>
+          
+          <div class="about-content">
+            <p>
+              Ansybl is a universal social syndication protocol that enables content creators 
+              to publish once and reach audiences across multiple decentralized platforms 
+              while maintaining content ownership and cryptographic verification.
+            </p>
+            
+            <h3>Key Features</h3>
+            <ul>
+              <li>JSON-based format for simplicity</li>
+              <li>ed25519 signatures for content authenticity</li>
+              <li>Cross-protocol compatibility (ActivityPub, AT Protocol, RSS)</li>
+              <li>Self-hosting friendly</li>
+              <li>Decentralized discovery</li>
+            </ul>
+
+            <h3>Extension Version</h3>
+            <p>Version 1.0.0</p>
+
+            <h3>Links</h3>
+            <div class="links-grid">
+              <a href="https://ansybl.org" target="_blank" class="link-item">
+                🌐 Official Website
+              </a>
+              <a href="https://github.com/ansybl/protocol" target="_blank" class="link-item">
+                📚 Protocol Specification
+              </a>
+              <a href="https://github.com/ansybl/browser-extension" target="_blank" class="link-item">
+                🔧 Extension Source Code
+              </a>
+              <a href="https://ansybl.org/help" target="_blank" class="link-item">
+                ❓ Help & Documentation
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h2>Privacy & Data</h2>
+          
+          <div class="privacy-info">
+            <h3>What data does this extension collect?</h3>
+            <ul>
+              <li><strong>Feed subscriptions:</strong> Stored locally and optionally synced via Chrome sync</li>
+              <li><strong>Discovery settings:</strong> Your preferences for how feeds are discovered</li>
+              <li><strong>No tracking:</strong> This extension does not track your browsing or send data to third parties</li>
+            </ul>
+
+            <h3>Permissions</h3>
+            <ul>
+              <li><strong>Active Tab:</strong> To scan the current page for feeds</li>
+              <li><strong>Storage:</strong> To save your subscriptions and settings</li>
+              <li><strong>Host Permissions:</strong> To validate feeds and check URLs</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <input type="file" id="import-file" accept=".json" style="display: none;">
+  <script src="options.js"></script>
+</body>
+</html>

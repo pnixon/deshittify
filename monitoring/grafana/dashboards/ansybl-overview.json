@@ -1,0 +1,200 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Ansybl Protocol Overview",
+    "tags": ["ansybl", "protocol", "monitoring"],
+    "style": "dark",
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "System Health",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ansybl:health_score",
+            "legendFormat": "Health Score"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 1,
+            "unit": "percentunit",
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 0.7},
+                {"color": "green", "value": 0.9}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Feed Access Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(ansybl_feed_access_total[5m])",
+            "legendFormat": "Accesses/sec"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Accesses per second",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 9, "x": 6, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Active Services",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "count(up{job=~\"ansybl-.*\"} == 1)",
+            "legendFormat": "Active"
+          },
+          {
+            "expr": "count(up{job=~\"ansybl-.*\"} == 0)",
+            "legendFormat": "Down"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 3, "x": 15, "y": 0}
+      },
+      {
+        "id": 4,
+        "title": "Parsing Performance",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(ansybl_parsing_performance_duration_ms_bucket[5m]))",
+            "legendFormat": "95th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(ansybl_parsing_performance_duration_ms_bucket[5m]))",
+            "legendFormat": "50th percentile"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Duration (ms)",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 9, "x": 0, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "Success Rates",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "ansybl:parsing_success_rate:rate5m",
+            "legendFormat": "Parsing"
+          },
+          {
+            "expr": "ansybl:signature_verification_success_rate:rate5m",
+            "legendFormat": "Signature Verification"
+          },
+          {
+            "expr": "ansybl:bridge_success_rate:rate5m",
+            "legendFormat": "Bridge Services"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Success Rate",
+            "min": 0,
+            "max": 1,
+            "unit": "percentunit"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 9, "x": 9, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "Memory Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "ansybl_memory_usage_bytes",
+            "legendFormat": "{{ instance }}"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Memory (bytes)",
+            "min": 0,
+            "unit": "bytes"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 16}
+      },
+      {
+        "id": 7,
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(ansybl_errors_total[5m])",
+            "legendFormat": "Errors/sec"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Errors per second",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 16}
+      },
+      {
+        "id": 8,
+        "title": "Bridge Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(ansybl_bridge_usage_count[5m])",
+            "legendFormat": "{{ bridge_type }}"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Conversions per second",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 16}
+      },
+      {
+        "id": 9,
+        "title": "Top Feeds by Access",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "topk(10, rate(ansybl_feed_access_total[1h]))",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
+      },
+      {
+        "id": 10,
+        "title": "Recent Alerts",
+        "type": "alertlist",
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 24}
+      }
+    ]
+  }
+}

@@ -1,0 +1,245 @@
+version: '3.8'
+
+services:
+  # Main Ansybl feed service
+  ansybl-feed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ansybl-feed
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - FEED_TITLE=${FEED_TITLE:-My Ansybl Feed}
+      - FEED_URL=${FEED_URL:-https://localhost/feed.ansybl}
+      - HOME_PAGE_URL=${HOME_PAGE_URL:-https://localhost}
+      - AUTHOR_NAME=${AUTHOR_NAME:-Feed Author}
+      - PUBLIC_KEY_FILE=/run/secrets/public_key
+      - PRIVATE_KEY_FILE=/run/secrets/private_key
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    secrets:
+      - public_key
+      - private_key
+    volumes:
+      - ./content:/app/content:ro
+      - feed_data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Nginx reverse proxy and static file server
+  nginx:
+    image: nginx:alpine
+    container_name: ansybl-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./static:/var/www/html:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - ansybl-feed
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ActivityPub bridge service
+  activitypub-bridge:
+    build:
+      context: ./bridges/activitypub
+      dockerfile: Dockerfile
+    container_name: ansybl-activitypub-bridge
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - BRIDGE_DOMAIN=${BRIDGE_DOMAIN:-bridge.localhost}
+      - RATE_LIMIT_WINDOW=900000
+      - RATE_LIMIT_MAX=100
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    secrets:
+      - public_key
+      - private_key
+    volumes:
+      - ./logs/activitypub:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # RSS/JSON Feed bridge service
+  rss-bridge:
+    build:
+      context: ./bridges/rss
+      dockerfile: Dockerfile
+    container_name: ansybl-rss-bridge
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - CACHE_TTL=300
+    volumes:
+      - ./logs/rss:/app/logs
+      - bridge_cache:/app/cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Webring registry service (optional)
+  webring-registry:
+    build:
+      context: ./services/webring
+      dockerfile: Dockerfile
+    container_name: ansybl-webring
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://ansybl:${DB_PASSWORD}@postgres:5432/ansybl_webring
+      - HEALTH_CHECK_INTERVAL=3600000  # 1 hour
+    depends_on:
+      - postgres
+    volumes:
+      - ./logs/webring:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL database for webring registry
+  postgres:
+    image: postgres:15-alpine
+    container_name: ansybl-postgres
+    environment:
+      - POSTGRES_DB=ansybl_webring
+      - POSTGRES_USER=ansybl
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ansybl"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis for caching and rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: ansybl-redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Monitoring with Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ansybl-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+
+  # Grafana for monitoring dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ansybl-grafana
+    ports:
+      - "3004:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # Log aggregation with Loki
+  loki:
+    image: grafana/loki:latest
+    container_name: ansybl-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./monitoring/loki.yml:/etc/loki/local-config.yaml:ro
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+
+  # Log shipping with Promtail
+  promtail:
+    image: grafana/promtail:latest
+    container_name: ansybl-promtail
+    volumes:
+      - ./monitoring/promtail.yml:/etc/promtail/config.yml:ro
+      - ./logs:/var/log/ansybl:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+secrets:
+  public_key:
+    file: ./keys/public.key
+  private_key:
+    file: ./keys/private.key
+
+volumes:
+  feed_data:
+    driver: local
+  bridge_cache:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  loki_data:
+    driver: local
+
+networks:
+  default:
+    name: ansybl-network
+    driver: bridge

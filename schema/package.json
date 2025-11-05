@@ -1,0 +1,29 @@
+{
+  "name": "ansybl-schema",
+  "version": "1.0.0",
+  "description": "JSON Schema and validation utilities for Ansybl protocol",
+  "type": "module",
+  "main": "validator.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:watch": "node --test --watch test/*.test.js"
+  },
+  "dependencies": {
+    "@noble/ed25519": "^2.0.0",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": [
+    "ansybl",
+    "json-schema",
+    "validation",
+    "social-media",
+    "decentralized"
+  ],
+  "author": "Ansybl Protocol Contributors",
+  "license": "MIT"
+}

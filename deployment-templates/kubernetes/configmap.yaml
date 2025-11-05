@@ -1,0 +1,166 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ansybl-config
+  namespace: ansybl
+data:
+  FEED_TITLE: "My Ansybl Feed"
+  HOME_PAGE_URL: "https://example.com"
+  FEED_URL: "https://example.com/feed.ansybl"
+  AUTHOR_NAME: "Feed Author"
+  NODE_ENV: "production"
+  LOG_LEVEL: "info"
+  RATE_LIMIT_WINDOW: "900000"
+  RATE_LIMIT_MAX: "100"
+  CACHE_TTL: "300"
+  HEALTH_CHECK_INTERVAL: "3600000"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: ansybl
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes auto;
+    error_log /var/log/nginx/error.log warn;
+    pid /var/run/nginx.pid;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log /var/log/nginx/access.log main;
+
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+
+        # Gzip compression
+        gzip on;
+        gzip_vary on;
+        gzip_min_length 1000;
+        gzip_types
+            application/json
+            application/javascript
+            application/xml+rss
+            application/atom+xml
+            image/svg+xml
+            text/plain
+            text/css
+            text/js
+            text/xml
+            text/javascript;
+
+        # Rate limiting
+        limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+        limit_req_zone $binary_remote_addr zone=feed:10m rate=1r/s;
+
+        # Upstream services
+        upstream ansybl-feed {
+            server ansybl-feed-service:3000;
+        }
+
+        upstream activitypub-bridge {
+            server activitypub-bridge-service:3001;
+        }
+
+        upstream rss-bridge {
+            server rss-bridge-service:3002;
+        }
+
+        server {
+            listen 80;
+            server_name _;
+            return 301 https://$host$request_uri;
+        }
+
+        server {
+            listen 443 ssl http2;
+            server_name example.com;
+
+            ssl_certificate /etc/nginx/ssl/tls.crt;
+            ssl_certificate_key /etc/nginx/ssl/tls.key;
+            ssl_protocols TLSv1.2 TLSv1.3;
+            ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384;
+            ssl_prefer_server_ciphers off;
+
+            # Security headers
+            add_header Strict-Transport-Security "max-age=63072000" always;
+            add_header X-Content-Type-Options nosniff;
+            add_header X-Frame-Options DENY;
+            add_header X-XSS-Protection "1; mode=block";
+
+            # Ansybl feed endpoint
+            location ~ \.ansybl$ {
+                limit_req zone=feed burst=5 nodelay;
+                
+                add_header Content-Type "application/json; charset=utf-8";
+                add_header Access-Control-Allow-Origin "*";
+                add_header Cache-Control "public, max-age=300";
+                
+                proxy_pass http://ansybl-feed;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
+            # API endpoints
+            location /api/ {
+                limit_req zone=api burst=20 nodelay;
+                
+                proxy_pass http://ansybl-feed;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
+            # Bridge endpoints
+            location /bridge/activitypub/ {
+                limit_req zone=api burst=10 nodelay;
+                
+                proxy_pass http://activitypub-bridge/;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
+            location /bridge/rss/ {
+                limit_req zone=api burst=10 nodelay;
+                
+                proxy_pass http://rss-bridge/;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
+            # Static files
+            location / {
+                root /var/www/html;
+                try_files $uri $uri/ =404;
+            }
+
+            # Health check
+            location /health {
+                access_log off;
+                return 200 "healthy\n";
+                add_header Content-Type text/plain;
+            }
+        }
+    }

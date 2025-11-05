@@ -1,0 +1,82 @@
+{
+  "version": "https://ansybl.org/version/1.0",
+  "title": "Alice's Tech Blog",
+  "home_page_url": "https://alice.example.com",
+  "feed_url": "https://alice.example.com/feed.ansybl",
+  "description": "Thoughts on technology, programming, and the decentralized web",
+  "icon": "https://alice.example.com/icon.png",
+  "language": "en-US",
+  "author": {
+    "name": "Alice Johnson",
+    "url": "https://alice.example.com",
+    "avatar": "https://alice.example.com/avatar.jpg",
+    "public_key": "ed25519:AAAC4NiQqKqBdgYkCdoO21cjWFPluCcHK2aXgwf9fAG2Ag=="
+  },
+  "items": [
+    {
+      "id": "https://alice.example.com/posts/2025-11-04-ansybl-introduction",
+      "uuid": "550e8400-e29b-41d4-a716-446655440001",
+      "url": "https://alice.example.com/posts/2025-11-04-ansybl-introduction",
+      "title": "Introducing the Ansybl Protocol",
+      "content_text": "Today I'm excited to share the Ansybl protocol - a new approach to social syndication that bridges the gap between different decentralized platforms.\n\nThe key innovation is using cryptographic signatures to ensure content authenticity while maintaining compatibility with existing protocols like ActivityPub and RSS.\n\nKey features:\n- JSON-based format for simplicity\n- ed25519 signatures for security\n- Cross-protocol compatibility\n- Self-hosting friendly\n\nI believe this could be the missing piece for truly interoperable social media.",
+      "content_html": "<p>Today I'm excited to share the Ansybl protocol - a new approach to social syndication that bridges the gap between different decentralized platforms.</p><p>The key innovation is using cryptographic signatures to ensure content authenticity while maintaining compatibility with existing protocols like ActivityPub and RSS.</p><p><strong>Key features:</strong></p><ul><li>JSON-based format for simplicity</li><li>ed25519 signatures for security</li><li>Cross-protocol compatibility</li><li>Self-hosting friendly</li></ul><p>I believe this could be the missing piece for truly interoperable social media.</p>",
+      "summary": "Introducing a new protocol for universal social syndication",
+      "date_published": "2025-11-04T10:00:00Z",
+      "date_modified": "2025-11-04T10:30:00Z",
+      "tags": ["ansybl", "decentralization", "social-media", "protocols"],
+      "attachments": [],
+      "interactions": {
+        "replies_count": 3,
+        "likes_count": 12,
+        "shares_count": 5
+      },
+      "signature": "ed25519:signature_hash_here_item_1"
+    },
+    {
+      "id": "https://alice.example.com/posts/2025-11-03-web-standards",
+      "uuid": "550e8400-e29b-41d4-a716-446655440002",
+      "url": "https://alice.example.com/posts/2025-11-03-web-standards",
+      "title": "The Importance of Web Standards",
+      "content_text": "Web standards are the foundation of an interoperable internet. Without them, we'd have a fragmented ecosystem where different platforms can't communicate.\n\nThis is exactly what we're seeing in social media today - each platform is an island. ActivityPub was a step in the right direction, but we need something simpler and more universal.\n\nThat's why I'm working on Ansybl - to create a bridge between all these platforms while maintaining the security and authenticity that users deserve.",
+      "content_html": "<p>Web standards are the foundation of an interoperable internet. Without them, we'd have a fragmented ecosystem where different platforms can't communicate.</p><p>This is exactly what we're seeing in social media today - each platform is an island. ActivityPub was a step in the right direction, but we need something simpler and more universal.</p><p>That's why I'm working on Ansybl - to create a bridge between all these platforms while maintaining the security and authenticity that users deserve.</p>",
+      "summary": "Why web standards matter for social media interoperability",
+      "date_published": "2025-11-03T14:30:00Z",
+      "tags": ["web-standards", "interoperability", "social-media"],
+      "attachments": [
+        {
+          "url": "https://alice.example.com/images/web-standards-diagram.png",
+          "mime_type": "image/png",
+          "title": "Web Standards Interoperability Diagram",
+          "width": 800,
+          "height": 600,
+          "alt_text": "Diagram showing how web standards enable interoperability between different platforms"
+        }
+      ],
+      "interactions": {
+        "replies_count": 7,
+        "likes_count": 18,
+        "shares_count": 9
+      },
+      "signature": "ed25519:signature_hash_here_item_2"
+    },
+    {
+      "id": "https://alice.example.com/posts/2025-11-02-cryptographic-identity",
+      "uuid": "550e8400-e29b-41d4-a716-446655440003",
+      "url": "https://alice.example.com/posts/2025-11-02-cryptographic-identity",
+      "title": "Cryptographic Identity in Social Media",
+      "content_text": "One of the biggest problems with current social media is identity verification. How do you know a post really came from who it claims to be from?\n\nTraditional platforms solve this with centralized verification (blue checkmarks), but this doesn't work in a decentralized world.\n\nCryptographic signatures provide a better solution. Every post can be signed with the author's private key, and anyone can verify it using their public key.\n\nThis is built into Ansybl from the ground up - every feed and every item is cryptographically signed.",
+      "content_html": "<p>One of the biggest problems with current social media is identity verification. How do you know a post really came from who it claims to be from?</p><p>Traditional platforms solve this with centralized verification (blue checkmarks), but this doesn't work in a decentralized world.</p><p>Cryptographic signatures provide a better solution. Every post can be signed with the author's private key, and anyone can verify it using their public key.</p><p>This is built into Ansybl from the ground up - every feed and every item is cryptographically signed.</p>",
+      "summary": "How cryptographic signatures solve identity verification in decentralized social media",
+      "date_published": "2025-11-02T09:15:00Z",
+      "tags": ["cryptography", "identity", "security", "decentralization"],
+      "attachments": [],
+      "interactions": {
+        "replies_count": 15,
+        "likes_count": 24,
+        "shares_count": 11
+      },
+      "signature": "ed25519:signature_hash_here_item_3"
+    }
+  ],
+  "signature": "ed25519:feed_signature_hash_here"
+}

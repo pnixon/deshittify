@@ -1,0 +1,111 @@
+{
+  "version": "https://ansybl.org/version/1.0",
+  "title": "Creative Corner",
+  "home_page_url": "https://creative.example.com",
+  "feed_url": "https://creative.example.com/feed.ansybl",
+  "description": "Art, photography, and multimedia content",
+  "icon": "https://creative.example.com/icon.png",
+  "language": "en-US",
+  "author": {
+    "name": "Creative Studio",
+    "url": "https://creative.example.com",
+    "avatar": "https://creative.example.com/avatar.jpg",
+    "public_key": "ed25519:BBBC4NiQqKqBdgYkCdoO21cjWFPluCcHK2aXgwf9fAG2Bg=="
+  },
+  "items": [
+    {
+      "id": "https://creative.example.com/posts/2025-11-04-sunset-photography",
+      "uuid": "550e8400-e29b-41d4-a716-446655440010",
+      "url": "https://creative.example.com/posts/2025-11-04-sunset-photography",
+      "title": "Golden Hour Magic",
+      "content_text": "Captured this stunning sunset from the rooftop yesterday. The way the light painted the clouds was absolutely magical.\n\nCamera settings:\n- ISO 100\n- f/8\n- 1/125s\n- 85mm lens\n\nSometimes the best shots happen when you least expect them.",
+      "content_html": "<p>Captured this stunning sunset from the rooftop yesterday. The way the light painted the clouds was absolutely magical.</p><p><strong>Camera settings:</strong></p><ul><li>ISO 100</li><li>f/8</li><li>1/125s</li><li>85mm lens</li></ul><p>Sometimes the best shots happen when you least expect them.</p>",
+      "summary": "A beautiful sunset photograph with technical details",
+      "date_published": "2025-11-04T18:30:00Z",
+      "tags": ["photography", "sunset", "golden-hour", "landscape"],
+      "attachments": [
+        {
+          "url": "https://creative.example.com/images/sunset-2025-11-04.jpg",
+          "mime_type": "image/jpeg",
+          "title": "Golden Hour Sunset",
+          "width": 1920,
+          "height": 1080,
+          "size_in_bytes": 2048576,
+          "alt_text": "A dramatic sunset with golden clouds over a city skyline",
+          "blurhash": "L9A0$j00Rj%M~qj[j[fQ%MfQfQfQ"
+        }
+      ],
+      "interactions": {
+        "replies_count": 8,
+        "likes_count": 45,
+        "shares_count": 12
+      },
+      "signature": "ed25519:signature_hash_here_multimedia_1"
+    },
+    {
+      "id": "https://creative.example.com/posts/2025-11-03-time-lapse-video",
+      "uuid": "550e8400-e29b-41d4-a716-446655440011",
+      "url": "https://creative.example.com/posts/2025-11-03-time-lapse-video",
+      "title": "City Life Time-lapse",
+      "content_text": "Spent 6 hours capturing the rhythm of city life from dawn to dusk. Compressed into 2 minutes of pure urban poetry.\n\nThis project taught me so much about patience and planning. Every frame tells a story of people going about their daily lives.\n\nShot with a DSLR on a sturdy tripod, taking a photo every 10 seconds for 6 hours straight.",
+      "content_html": "<p>Spent 6 hours capturing the rhythm of city life from dawn to dusk. Compressed into 2 minutes of pure urban poetry.</p><p>This project taught me so much about patience and planning. Every frame tells a story of people going about their daily lives.</p><p>Shot with a DSLR on a sturdy tripod, taking a photo every 10 seconds for 6 hours straight.</p>",
+      "summary": "A time-lapse video capturing 6 hours of city life",
+      "date_published": "2025-11-03T20:00:00Z",
+      "tags": ["video", "time-lapse", "city", "urban", "photography"],
+      "attachments": [
+        {
+          "url": "https://creative.example.com/videos/city-timelapse-2025-11-03.mp4",
+          "mime_type": "video/mp4",
+          "title": "City Life Time-lapse",
+          "duration_in_seconds": 120,
+          "width": 1920,
+          "height": 1080,
+          "size_in_bytes": 52428800,
+          "alt_text": "Time-lapse video showing city streets from dawn to dusk with people and traffic moving rapidly"
+        },
+        {
+          "url": "https://creative.example.com/images/city-timelapse-thumbnail.jpg",
+          "mime_type": "image/jpeg",
+          "title": "Video Thumbnail",
+          "width": 1920,
+          "height": 1080,
+          "alt_text": "Thumbnail showing busy city street during golden hour"
+        }
+      ],
+      "interactions": {
+        "replies_count": 12,
+        "likes_count": 67,
+        "shares_count": 23
+      },
+      "signature": "ed25519:signature_hash_here_multimedia_2"
+    },
+    {
+      "id": "https://creative.example.com/posts/2025-11-02-podcast-episode",
+      "uuid": "550e8400-e29b-41d4-a716-446655440012",
+      "url": "https://creative.example.com/posts/2025-11-02-podcast-episode",
+      "title": "Creative Process Podcast - Episode 12",
+      "content_text": "In this episode, I sit down with photographer Maria Santos to discuss her journey from amateur to professional photographer.\n\nWe cover:\n- Finding your unique style\n- Building a portfolio\n- Working with clients\n- The business side of creative work\n- Dealing with creative blocks\n\nMaria shares some incredible insights about the importance of persistence and continuous learning in creative fields.",
+      "content_html": "<p>In this episode, I sit down with photographer Maria Santos to discuss her journey from amateur to professional photographer.</p><p><strong>We cover:</strong></p><ul><li>Finding your unique style</li><li>Building a portfolio</li><li>Working with clients</li><li>The business side of creative work</li><li>Dealing with creative blocks</li></ul><p>Maria shares some incredible insights about the importance of persistence and continuous learning in creative fields.</p>",
+      "summary": "Interview with photographer Maria Santos about her creative journey",
+      "date_published": "2025-11-02T12:00:00Z",
+      "tags": ["podcast", "interview", "photography", "creative-process", "business"],
+      "attachments": [
+        {
+          "url": "https://creative.example.com/audio/creative-process-ep12.mp3",
+          "mime_type": "audio/mpeg",
+          "title": "Creative Process Podcast - Episode 12",
+          "duration_in_seconds": 2847,
+          "size_in_bytes": 68428800,
+          "alt_text": "Audio interview with photographer Maria Santos about her creative journey"
+        }
+      ],
+      "interactions": {
+        "replies_count": 5,
+        "likes_count": 28,
+        "shares_count": 15
+      },
+      "signature": "ed25519:signature_hash_here_multimedia_3"
+    }
+  ],
+  "signature": "ed25519:feed_signature_hash_here_multimedia"
+}
