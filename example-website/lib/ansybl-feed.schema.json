@@ -1,0 +1,329 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ansybl.org/schema/feed/1.0",
+  "title": "Ansybl Feed Document",
+  "description": "JSON Schema for Ansybl social syndication protocol feed documents",
+  "type": "object",
+  "required": [
+    "version",
+    "title",
+    "home_page_url",
+    "feed_url",
+    "author",
+    "items"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^https://ansybl\\.org/version/\\d+\\.\\d+$",
+      "description": "Protocol version URL"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Feed title"
+    },
+    "home_page_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://",
+      "description": "Home page URL (HTTPS required)"
+    },
+    "feed_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://",
+      "description": "Feed URL (HTTPS required)"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Feed description"
+    },
+    "icon": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://",
+      "description": "Feed icon URL (HTTPS required)"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Language code (ISO 639-1 with optional region)"
+    },
+    "author": {
+      "$ref": "#/definitions/author"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/item"
+      },
+      "description": "Array of content items"
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^ed25519:[A-Za-z0-9+/]+=*$",
+      "description": "Feed-level ed25519 signature"
+    }
+  },
+  "patternProperties": {
+    "^_[a-zA-Z][a-zA-Z0-9_]*$": {
+      "description": "Extension fields must start with underscore"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "author": {
+      "type": "object",
+      "required": ["name", "public_key"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Author name"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "Author URL (HTTPS required)"
+        },
+        "avatar": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "Author avatar URL (HTTPS required)"
+        },
+        "public_key": {
+          "type": "string",
+          "pattern": "^ed25519:[A-Za-z0-9+/]+=*$",
+          "description": "Author's ed25519 public key"
+        }
+      },
+      "patternProperties": {
+        "^_[a-zA-Z][a-zA-Z0-9_]*$": {
+          "description": "Extension fields must start with underscore"
+        }
+      },
+      "additionalProperties": false
+    },
+    "item": {
+      "type": "object",
+      "required": [
+        "id",
+        "url",
+        "date_published",
+        "signature"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "Unique item identifier (HTTPS required)"
+        },
+        "uuid": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Optional UUID for item"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "Item URL (HTTPS required)"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Item title"
+        },
+        "content_text": {
+          "type": "string",
+          "description": "Plain text content"
+        },
+        "content_html": {
+          "type": "string",
+          "description": "HTML content"
+        },
+        "content_markdown": {
+          "type": "string",
+          "description": "Markdown content"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Item summary"
+        },
+        "date_published": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Publication date in ISO 8601 format"
+        },
+        "date_modified": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Modification date in ISO 8601 format"
+        },
+        "author": {
+          "$ref": "#/definitions/author",
+          "description": "Item-specific author (optional override)"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]+$",
+            "maxLength": 50
+          },
+          "maxItems": 20,
+          "uniqueItems": true,
+          "description": "Content tags"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/attachment"
+          },
+          "description": "Media attachments"
+        },
+        "in_reply_to": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "URL of item being replied to"
+        },
+        "interactions": {
+          "$ref": "#/definitions/interactions"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^ed25519:[A-Za-z0-9+/]+=*$",
+          "description": "Item-level ed25519 signature"
+        }
+      },
+      "anyOf": [
+        { "required": ["content_text"] },
+        { "required": ["content_html"] },
+        { "required": ["content_markdown"] }
+      ],
+      "patternProperties": {
+        "^_[a-zA-Z][a-zA-Z0-9_]*$": {
+          "description": "Extension fields must start with underscore"
+        }
+      },
+      "additionalProperties": false
+    },
+    "attachment": {
+      "type": "object",
+      "required": ["url", "mime_type"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "Attachment URL (HTTPS required)"
+        },
+        "mime_type": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9!#\\$&\\-\\^_]*\\/[a-zA-Z0-9][a-zA-Z0-9!#\\$&\\-\\^_]*$",
+          "description": "MIME type"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Attachment title"
+        },
+        "size_in_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "File size in bytes"
+        },
+        "duration_in_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Duration for audio/video"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Image/video width"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Image/video height"
+        },
+        "alt_text": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Alternative text for accessibility"
+        },
+        "blurhash": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9#$%*+,-.:;=?@\\[\\]^_{|}~]+$",
+          "description": "BlurHash for progressive loading"
+        },
+        "data_uri": {
+          "type": "string",
+          "pattern": "^data:[a-zA-Z0-9][a-zA-Z0-9!#\\$&\\-\\^_]*\\/[a-zA-Z0-9][a-zA-Z0-9!#\\$&\\-\\^_]*;base64,",
+          "description": "Optional embedded data URI"
+        }
+      },
+      "patternProperties": {
+        "^_[a-zA-Z][a-zA-Z0-9_]*$": {
+          "description": "Extension fields must start with underscore"
+        }
+      },
+      "additionalProperties": false
+    },
+    "interactions": {
+      "type": "object",
+      "required": ["replies_count", "likes_count", "shares_count"],
+      "properties": {
+        "replies_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of replies"
+        },
+        "likes_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of likes"
+        },
+        "shares_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of shares"
+        },
+        "replies_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "URL to replies endpoint"
+        },
+        "likes_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "URL to likes endpoint"
+        },
+        "shares_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "description": "URL to shares endpoint"
+        }
+      },
+      "patternProperties": {
+        "^_[a-zA-Z][a-zA-Z0-9_]*$": {
+          "description": "Extension fields must start with underscore"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

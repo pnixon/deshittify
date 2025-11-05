@@ -1,0 +1,39 @@
+{
+  "name": "ansybl-example-website",
+  "version": "1.0.0",
+  "description": "Example website implementing the Ansybl social syndication protocol",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build": "node build.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
+    "compression": "^1.7.4",
+    "marked": "^9.1.6",
+    "dompurify": "^3.0.5",
+    "jsdom": "^23.0.1",
+    "@noble/ed25519": "^2.0.0",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "ansybl",
+    "social-media",
+    "decentralized",
+    "syndication",
+    "web"
+  ],
+  "author": "Ansybl Example",
+  "license": "MIT"
+}
