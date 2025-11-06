@@ -8,6 +8,9 @@ import { CanonicalJSONSerializer } from './canonicalizer.js';
 import { AnsyblValidator } from './validator.js';
 import { MediaAttachmentHandler } from './media-handler.js';
 import { v4 as uuidv4 } from 'uuid';
+import { marked } from 'marked';
+import createDOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
 
 /**
  * Main generator class for creating Ansybl feed documents
@@ -16,6 +19,17 @@ export class AnsyblGenerator {
   constructor() {
     this.validator = new AnsyblValidator();
     this.mediaHandler = new MediaAttachmentHandler();
+    
+    // Initialize DOMPurify for HTML sanitization
+    const window = new JSDOM('').window;
+    this.DOMPurify = createDOMPurify(window);
+    
+    // Configure marked for markdown processing
+    marked.setOptions({
+      gfm: true,
+      breaks: true,
+      sanitize: false // We'll use DOMPurify instead
+    });
   }
 
   /**
@@ -46,6 +60,14 @@ export class AnsyblGenerator {
     if (metadata.author.url) feed.author.url = metadata.author.url;
     if (metadata.author.avatar) feed.author.avatar = metadata.author.avatar;
 
+    // Add extension fields to feed
+    this._processExtensionFields(feed, metadata);
+
+    // Add extension fields to author
+    if (metadata.author) {
+      this._processExtensionFields(feed.author, metadata.author);
+    }
+
     return feed;
   }
 
@@ -64,16 +86,24 @@ export class AnsyblGenerator {
       date_published: itemData.date_published || new Date().toISOString()
     };
 
+    // Add UUID if not provided
+    if (itemData.uuid) {
+      item.uuid = itemData.uuid;
+    } else {
+      item.uuid = uuidv4();
+    }
+
     // Add optional fields
-    if (itemData.uuid) item.uuid = itemData.uuid;
     if (itemData.title) item.title = itemData.title;
-    if (itemData.content_text) item.content_text = itemData.content_text;
-    if (itemData.content_html) item.content_html = itemData.content_html;
-    if (itemData.content_markdown) item.content_markdown = itemData.content_markdown;
     if (itemData.summary) item.summary = itemData.summary;
     if (itemData.date_modified) item.date_modified = itemData.date_modified;
-    if (itemData.tags && Array.isArray(itemData.tags)) item.tags = [...itemData.tags];
+    if (itemData.tags && Array.isArray(itemData.tags)) {
+      item.tags = this._processTags(itemData.tags);
+    }
     if (itemData.in_reply_to) item.in_reply_to = itemData.in_reply_to;
+
+    // Process content formats with comprehensive support
+    await this._processContentFormats(item, itemData);
 
     // Add item-specific author if provided
     if (itemData.author) {
@@ -101,6 +131,9 @@ export class AnsyblGenerator {
       if (itemData.interactions.likes_url) item.interactions.likes_url = itemData.interactions.likes_url;
       if (itemData.interactions.shares_url) item.interactions.shares_url = itemData.interactions.shares_url;
     }
+
+    // Add extension fields with validation
+    this._processExtensionFields(item, itemData);
 
     // Sign the item
     item.signature = await this.signItem(item, privateKey);
@@ -283,6 +316,122 @@ export class AnsyblGenerator {
       validateUrls: true,
       skipInvalid: false
     });
+  }
+
+  /**
+   * Process content formats with comprehensive support
+   * @private
+   */
+  async _processContentFormats(item, itemData) {
+    // Handle content_text
+    if (itemData.content_text) {
+      item.content_text = itemData.content_text;
+    }
+
+    // Handle content_markdown and convert to HTML
+    if (itemData.content_markdown) {
+      item.content_markdown = itemData.content_markdown;
+      
+      // Convert markdown to HTML if HTML not provided
+      if (!itemData.content_html) {
+        const rawHtml = marked(itemData.content_markdown);
+        item.content_html = this.DOMPurify.sanitize(rawHtml);
+      }
+      
+      // Generate text version if not provided
+      if (!itemData.content_text) {
+        item.content_text = this._stripHtml(item.content_html || rawHtml);
+      }
+    }
+
+    // Handle content_html
+    if (itemData.content_html) {
+      // Sanitize HTML content
+      item.content_html = this.DOMPurify.sanitize(itemData.content_html);
+      
+      // Generate text version if not provided
+      if (!itemData.content_text && !itemData.content_markdown) {
+        item.content_text = this._stripHtml(item.content_html);
+      }
+    }
+
+    // Auto-generate summary if not provided
+    if (!itemData.summary && item.content_text) {
+      item.summary = this._generateSummary(item.content_text);
+    }
+  }
+
+  /**
+   * Process and validate tags
+   * @private
+   */
+  _processTags(tags) {
+    return tags
+      .filter(tag => typeof tag === 'string' && tag.trim().length > 0)
+      .map(tag => tag.trim().toLowerCase())
+      .filter(tag => /^[a-zA-Z0-9_-]+$/.test(tag))
+      .slice(0, 20) // Limit to 20 tags as per schema
+      .filter((tag, index, arr) => arr.indexOf(tag) === index); // Remove duplicates
+  }
+
+  /**
+   * Process extension fields with underscore prefix validation
+   * @private
+   */
+  _processExtensionFields(item, itemData) {
+    for (const [key, value] of Object.entries(itemData)) {
+      if (key.startsWith('_')) {
+        // Validate extension field name format
+        if (!/^_[a-zA-Z][a-zA-Z0-9_]*$/.test(key)) {
+          throw new Error(`Invalid extension field name: ${key}. Must start with underscore followed by letter, then alphanumeric/underscore characters.`);
+        }
+        
+        // Add extension field
+        item[key] = value;
+      }
+    }
+  }
+
+  /**
+   * Strip HTML tags to create plain text
+   * @private
+   */
+  _stripHtml(html) {
+    if (!html) return '';
+    
+    // Use JSDOM to parse and extract text content
+    const dom = new JSDOM(html);
+    return dom.window.document.body.textContent || '';
+  }
+
+  /**
+   * Generate summary from content text
+   * @private
+   */
+  _generateSummary(text, maxLength = 200) {
+    if (!text || text.length <= maxLength) {
+      return text;
+    }
+    
+    // Find the last complete sentence within the limit
+    const truncated = text.substring(0, maxLength);
+    const lastSentence = truncated.lastIndexOf('.');
+    const lastExclamation = truncated.lastIndexOf('!');
+    const lastQuestion = truncated.lastIndexOf('?');
+    
+    const lastPunctuation = Math.max(lastSentence, lastExclamation, lastQuestion);
+    
+    if (lastPunctuation > maxLength * 0.5) {
+      return text.substring(0, lastPunctuation + 1);
+    }
+    
+    // If no good sentence break, find last word boundary
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > maxLength * 0.7) {
+      return text.substring(0, lastSpace) + '...';
+    }
+    
+    return truncated + '...';
   }
 }
 

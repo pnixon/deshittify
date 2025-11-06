@@ -1,0 +1,614 @@
+/**
+ * Responsive Design Enhancements for Ansybl
+ * Mobile-first approach with progressive enhancement
+ */
+
+/* Base Mobile Styles (320px and up) */
+@media screen and (min-width: 320px) {
+  .container {
+    padding: 15px;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+  
+  .site-header h1 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+  
+  .site-description {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  
+  .feed-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .feed-link,
+  .api-link {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile (375px and up) */
+@media screen and (min-width: 375px) {
+  .container {
+    padding: 20px;
+  }
+  
+  .site-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .feed-links {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* Large Mobile (425px and up) */
+@media screen and (min-width: 425px) {
+  .container {
+    max-width: 400px;
+    padding: 25px;
+  }
+  
+  .create-post-section {
+    padding: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-actions {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .submit-button,
+  .cancel-button {
+    flex: 1;
+    margin: 0 5px;
+  }
+}
+
+/* Tablet Portrait (768px and up) */
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 720px;
+    padding: 30px;
+  }
+  
+  .site-header {
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .site-info {
+    flex: 1;
+  }
+  
+  .feed-links {
+    flex-direction: row;
+    gap: 15px;
+    margin-left: 20px;
+  }
+  
+  .create-post-section {
+    padding: 25px;
+  }
+  
+  .form-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .form-group label {
+    min-width: 120px;
+    margin-bottom: 0;
+    padding-top: 10px;
+    text-align: right;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    flex: 1;
+  }
+  
+  .post-preview {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: start;
+  }
+  
+  .post-content-preview {
+    grid-column: 1;
+  }
+  
+  .post-meta-sidebar {
+    grid-column: 2;
+    min-width: 150px;
+  }
+  
+  .post-interactions-preview {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  /* Two-column layout for comments */
+  .comments-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+  }
+  
+  .comments-main {
+    grid-column: 1;
+  }
+  
+  .comments-sidebar {
+    grid-column: 2;
+  }
+}
+
+/* Tablet Landscape (1024px and up) */
+@media screen and (min-width: 1024px) {
+  .container {
+    max-width: 960px;
+    padding: 40px;
+  }
+  
+  .site-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .site-description {
+    font-size: 1.2rem;
+  }
+  
+  /* Three-column layout for main content */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 40px;
+  }
+  
+  .sidebar-left {
+    grid-column: 1;
+  }
+  
+  .main-content {
+    grid-column: 2;
+  }
+  
+  .sidebar-right {
+    grid-column: 3;
+  }
+  
+  .create-post-section {
+    grid-column: 1 / -1;
+    margin-bottom: 30px;
+  }
+  
+  /* Enhanced post layout */
+  .post-preview {
+    grid-template-columns: 1fr 200px;
+    gap: 30px;
+  }
+  
+  .post-attachments {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  
+  /* API demo in sidebar */
+  .api-demo {
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+  }
+}
+
+/* Desktop (1200px and up) */
+@media screen and (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+    padding: 50px;
+  }
+  
+  .main-layout {
+    grid-template-columns: 250px 1fr 300px;
+    gap: 50px;
+  }
+  
+  /* Enhanced content editor layout */
+  .content-editor {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+  }
+  
+  .editor-main {
+    grid-column: 1;
+  }
+  
+  .editor-sidebar {
+    grid-column: 2;
+  }
+  
+  .media-upload-area {
+    grid-column: 1 / -1;
+  }
+  
+  /* Multi-column post layout */
+  .posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+  }
+  
+  .post-preview {
+    grid-template-columns: 1fr;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Large Desktop (1440px and up) */
+@media screen and (min-width: 1440px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  .main-layout {
+    grid-template-columns: 300px 1fr 350px;
+  }
+  
+  .posts {
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  }
+}
+
+/* Ultra-wide (1920px and up) */
+@media screen and (min-width: 1920px) {
+  .container {
+    max-width: 1600px;
+  }
+  
+  .posts {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .interaction-btn,
+  .format-btn,
+  .mode-btn,
+  .action-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px;
+  }
+  
+  /* Improved spacing for touch */
+  .editor-toolbar {
+    padding: 15px;
+  }
+  
+  .markdown-toolbar,
+  .richtext-toolbar {
+    gap: 8px;
+    padding: 12px;
+  }
+  
+  /* Larger form controls */
+  input,
+  textarea,
+  select,
+  button {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Touch-friendly upload area */
+  .upload-zone {
+    padding: 30px;
+    min-height: 120px;
+  }
+  
+  /* Swipe gestures for navigation */
+  .posts {
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .post-preview {
+    scroll-snap-align: start;
+    flex: 0 0 300px;
+  }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Crisp borders and shadows */
+  .container,
+  .post-preview,
+  .content-editor,
+  .attachment-item {
+    border-width: 0.5px;
+  }
+  
+  /* Enhanced shadows */
+  .container {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-preview {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Remove parallax and auto-playing animations */
+  .notification,
+  .update-like,
+  .update-share,
+  .update-comment {
+    animation: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .container,
+  .post-preview,
+  .content-editor {
+    border: 2px solid;
+  }
+  
+  .interaction-btn,
+  .format-btn,
+  .mode-btn {
+    border: 2px solid;
+  }
+  
+  .interaction-btn:hover,
+  .format-btn:hover,
+  .mode-btn:hover {
+    background: ButtonHighlight;
+    color: ButtonText;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .container {
+    max-width: none;
+    padding: 0;
+    box-shadow: none;
+    background: white;
+  }
+  
+  .site-header,
+  .create-post-section,
+  .api-demo,
+  .interaction-buttons,
+  .editor-toolbar,
+  .connection-status,
+  .realtime-notifications {
+    display: none !important;
+  }
+  
+  .post-preview,
+  .post,
+  .comment {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: 20px;
+    padding: 15px;
+  }
+  
+  .post-content,
+  .comment-content {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+  
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #666;
+  }
+}
+
+/* Landscape Orientation on Mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .container {
+    padding: 10px;
+  }
+  
+  .site-header {
+    margin-bottom: 20px;
+  }
+  
+  .site-header h1 {
+    font-size: 1.25rem;
+  }
+  
+  .create-post-section {
+    padding: 15px;
+  }
+  
+  .content-editor {
+    min-height: 200px;
+  }
+  
+  .editor-textarea,
+  .editor-richtext {
+    min-height: 150px;
+  }
+}
+
+/* Focus and Interaction States for All Devices */
+@media (any-hover: hover) {
+  .interaction-btn:hover,
+  .format-btn:hover,
+  .mode-btn:hover,
+  .action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Accessibility: Respect user's font size preferences */
+@media screen {
+  html {
+    font-size: clamp(14px, 1rem, 18px);
+  }
+  
+  .container {
+    width: clamp(320px, 90vw, 1200px);
+  }
+}
+
+/* Container Queries (when supported) */
+@supports (container-type: inline-size) {
+  .post-preview {
+    container-type: inline-size;
+  }
+  
+  @container (min-width: 400px) {
+    .post-attachments {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @container (min-width: 600px) {
+    .post-attachments {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+/* Flexible Grid System */
+.grid {
+  display: grid;
+  gap: var(--grid-gap, 20px);
+}
+
+.grid-auto {
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-column-width, 300px), 1fr));
+}
+
+.grid-responsive {
+  grid-template-columns: repeat(var(--columns, 1), 1fr);
+}
+
+@media (min-width: 768px) {
+  .grid-responsive {
+    --columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive {
+    --columns: 3;
+  }
+}
+
+@media (min-width: 1440px) {
+  .grid-responsive {
+    --columns: 4;
+  }
+}
+
+/* Utility Classes for Responsive Design */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+  
+  .hide-tablet {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hide-tablet {
+    display: block;
+  }
+  
+  .hide-desktop {
+    display: none;
+  }
+}
+
+.show-mobile-only {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .show-mobile-only {
+    display: none;
+  }
+}
+
+/* Responsive Typography */
+.responsive-text {
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  line-height: 1.6;
+}
+
+.responsive-heading {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  line-height: 1.2;
+}
+
+/* Responsive Spacing */
+.responsive-padding {
+  padding: clamp(1rem, 4vw, 3rem);
+}
+
+.responsive-margin {
+  margin: clamp(0.5rem, 2vw, 2rem);
+}
