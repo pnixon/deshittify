@@ -15,6 +15,7 @@ export function generatePageTemplate(title, content) {
     <link rel="stylesheet" href="/css/content-editor.css">
     <link rel="stylesheet" href="/css/realtime.css">
     <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/advanced-ui.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -829,6 +830,7 @@ export function generatePageTemplate(title, content) {
     <script src="/js/content-editor.js"></script>
     <script src="/js/realtime.js"></script>
     <script src="/js/accessibility.js"></script>
+    <script src="/js/advanced-ui.js"></script>
 </body>
 </html>`;
 }

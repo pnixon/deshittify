@@ -484,6 +484,205 @@ app.get('/api/feed/info', (_, res) => {
     });
 });
 
+// Advanced search API
+app.post('/api/search', (req, res) => {
+    try {
+        const { 
+            query, 
+            tags, 
+            author, 
+            dateFrom, 
+            dateTo, 
+            contentType, 
+            sortBy = 'date', 
+            sortOrder = 'desc',
+            limit = 50,
+            offset = 0
+        } = req.body;
+
+        console.log('🔍 Advanced search request:', { query, tags, author, contentType });
+
+        let results = [];
+
+        // Combine posts and comments for search
+        const allContent = [
+            ...posts.map(post => ({
+                ...post,
+                type: 'post',
+                searchableText: [post.title, post.content_text, post.summary, ...(post.tags || [])].join(' ').toLowerCase()
+            })),
+            ...comments.map(comment => ({
+                ...comment,
+                type: 'comment',
+                title: `Comment on "${posts.find(p => p.id === comment.postId)?.title || 'Unknown Post'}"`,
+                searchableText: [comment.content, comment.author.name].join(' ').toLowerCase()
+            }))
+        ];
+
+        // Apply filters
+        results = allContent.filter(item => {
+            // Text search
+            if (query) {
+                const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 0);
+                const matches = searchTerms.filter(term => item.searchableText.includes(term));
+                if (matches.length === 0) return false;
+            }
+
+            // Tag filter
+            if (tags && tags.length > 0) {
+                const itemTags = item.tags || [];
+                const hasMatchingTag = tags.some(tag => itemTags.includes(tag));
+                if (!hasMatchingTag) return false;
+            }
+
+            // Author filter
+            if (author) {
+                const itemAuthor = item.author?.name || '';
+                if (!itemAuthor.toLowerCase().includes(author.toLowerCase())) return false;
+            }
+
+            // Date range filter
+            if (dateFrom || dateTo) {
+                const itemDate = new Date(item.datePublished);
+                if (dateFrom && itemDate < new Date(dateFrom)) return false;
+                if (dateTo && itemDate > new Date(dateTo)) return false;
+            }
+
+            // Content type filter
+            if (contentType && contentType !== 'all') {
+                if (contentType === 'posts' && item.type !== 'post') return false;
+                if (contentType === 'comments' && item.type !== 'comment') return false;
+                if (contentType === 'media' && (!item.attachments || item.attachments.length === 0)) return false;
+            }
+
+            return true;
+        });
+
+        // Sort results
+        results.sort((a, b) => {
+            let comparison = 0;
+            
+            switch (sortBy) {
+                case 'date':
+                    comparison = new Date(a.datePublished) - new Date(b.datePublished);
+                    break;
+                case 'title':
+                    comparison = (a.title || '').localeCompare(b.title || '');
+                    break;
+                case 'author':
+                    comparison = (a.author?.name || '').localeCompare(b.author?.name || '');
+                    break;
+                case 'interactions':
+                    const aInteractions = (a.interactions?.likes_count || 0) + (a.interactions?.shares_count || 0) + (a.interactions?.replies_count || 0);
+                    const bInteractions = (b.interactions?.likes_count || 0) + (b.interactions?.shares_count || 0) + (b.interactions?.replies_count || 0);
+                    comparison = aInteractions - bInteractions;
+                    break;
+            }
+            
+            return sortOrder === 'desc' ? -comparison : comparison;
+        });
+
+        // Apply pagination
+        const total = results.length;
+        const paginatedResults = results.slice(offset, offset + limit);
+
+        console.log(`✅ Search completed: ${total} results found`);
+
+        res.json({
+            success: true,
+            results: paginatedResults,
+            total,
+            offset,
+            limit,
+            hasMore: offset + limit < total,
+            query: {
+                query,
+                tags,
+                author,
+                dateFrom,
+                dateTo,
+                contentType,
+                sortBy,
+                sortOrder
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ Search error:', error.message);
+        res.status(500).json({
+            success: false,
+            error: 'Search failed',
+            message: error.message
+        });
+    }
+});
+
+// Get search suggestions
+app.get('/api/search/suggestions', (req, res) => {
+    try {
+        const { q: query, type = 'all' } = req.query;
+        
+        if (!query || query.length < 2) {
+            return res.json({ suggestions: [] });
+        }
+
+        const suggestions = new Set();
+        const queryLower = query.toLowerCase();
+
+        // Tag suggestions
+        if (type === 'all' || type === 'tags') {
+            posts.forEach(post => {
+                if (post.tags) {
+                    post.tags.forEach(tag => {
+                        if (tag.toLowerCase().includes(queryLower)) {
+                            suggestions.add(`tag:${tag}`);
+                        }
+                    });
+                }
+            });
+        }
+
+        // Author suggestions
+        if (type === 'all' || type === 'authors') {
+            const authors = new Set();
+            [...posts, ...comments].forEach(item => {
+                if (item.author?.name) {
+                    authors.add(item.author.name);
+                }
+            });
+            
+            authors.forEach(author => {
+                if (author.toLowerCase().includes(queryLower)) {
+                    suggestions.add(`author:${author}`);
+                }
+            });
+        }
+
+        // Title suggestions
+        if (type === 'all' || type === 'titles') {
+            posts.forEach(post => {
+                if (post.title.toLowerCase().includes(queryLower)) {
+                    suggestions.add(`title:${post.title}`);
+                }
+            });
+        }
+
+        const suggestionArray = Array.from(suggestions).slice(0, 10);
+
+        res.json({
+            suggestions: suggestionArray,
+            query
+        });
+
+    } catch (error) {
+        console.error('❌ Suggestions error:', error.message);
+        res.status(500).json({
+            suggestions: [],
+            error: error.message
+        });
+    }
+});
+
 // Comments API endpoints
 
 // Get comments for a post

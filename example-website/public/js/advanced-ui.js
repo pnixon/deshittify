@@ -26,6 +26,7 @@ class AnsyblAdvancedUI {
     this.createFilterInterface();
     this.createViewControls();
     this.createUserPreferences();
+    this.createFeedExplorer();
     this.setupKeyboardShortcuts();
     this.buildSearchIndex();
     this.applyPreferences();
@@ -254,6 +255,357 @@ class AnsyblAdvancedUI {
 
     this.setupFilterHandlers();
     this.populateFilterOptions();
+  }
+
+  populateFilterOptions() {
+    // Populate tag filters
+    const tagFilters = document.getElementById('tag-filters');
+    const authorFilters = document.getElementById('author-filters');
+    
+    if (tagFilters && authorFilters) {
+      const tags = new Set();
+      const authors = new Set();
+      
+      this.searchIndex.forEach(item => {
+        item.tags.forEach(tag => tags.add(tag));
+        if (item.author) authors.add(item.author);
+      });
+      
+      // Create tag filter buttons
+      tags.forEach(tag => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-tag';
+        btn.textContent = tag;
+        btn.addEventListener('click', () => this.toggleTagFilter(tag, btn));
+        tagFilters.appendChild(btn);
+      });
+      
+      // Create author filter buttons
+      authors.forEach(author => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-author';
+        btn.textContent = author;
+        btn.addEventListener('click', () => this.toggleAuthorFilter(author, btn));
+        authorFilters.appendChild(btn);
+      });
+    }
+  }
+
+  toggleTagFilter(tag, btn) {
+    if (this.filters.tags.has(tag)) {
+      this.filters.tags.delete(tag);
+      btn.classList.remove('active');
+    } else {
+      this.filters.tags.add(tag);
+      btn.classList.add('active');
+    }
+    this.applyFilters();
+    this.updateActiveFilters();
+  }
+
+  toggleAuthorFilter(author, btn) {
+    if (this.filters.authors.has(author)) {
+      this.filters.authors.delete(author);
+      btn.classList.remove('active');
+    } else {
+      this.filters.authors.add(author);
+      btn.classList.add('active');
+    }
+    this.applyFilters();
+    this.updateActiveFilters();
+  }
+
+  applyAdvancedFilters() {
+    const tags = document.getElementById('search-tags').value;
+    const author = document.getElementById('search-author').value;
+    const dateFrom = document.getElementById('search-date-from').value;
+    const dateTo = document.getElementById('search-date-to').value;
+    const contentType = document.getElementById('search-content-type').value;
+
+    // Clear existing filters
+    this.filters.tags.clear();
+    this.filters.authors.clear();
+
+    // Apply new filters
+    if (tags) {
+      tags.split(',').forEach(tag => {
+        const trimmedTag = tag.trim();
+        if (trimmedTag) this.filters.tags.add(trimmedTag);
+      });
+    }
+
+    if (author) {
+      this.filters.authors.add(author.trim());
+    }
+
+    this.filters.dateRange.start = dateFrom ? new Date(dateFrom) : null;
+    this.filters.dateRange.end = dateTo ? new Date(dateTo) : null;
+    this.filters.contentType = contentType;
+
+    this.applyFilters();
+    this.updateActiveFilters();
+  }
+
+  clearAllFilters() {
+    this.filters.tags.clear();
+    this.filters.authors.clear();
+    this.filters.dateRange.start = null;
+    this.filters.dateRange.end = null;
+    this.filters.contentType = 'all';
+    this.filters.hasAttachments = false;
+
+    // Clear UI
+    document.querySelectorAll('.filter-tag.active, .filter-author.active').forEach(btn => {
+      btn.classList.remove('active');
+    });
+
+    document.getElementById('search-tags').value = '';
+    document.getElementById('search-author').value = '';
+    document.getElementById('search-date-from').value = '';
+    document.getElementById('search-date-to').value = '';
+    document.getElementById('search-content-type').value = 'all';
+
+    this.applyFilters();
+    this.updateActiveFilters();
+  }
+
+  applyFilters() {
+    this.searchIndex.forEach(item => {
+      let visible = true;
+
+      // Tag filter
+      if (this.filters.tags.size > 0) {
+        const hasMatchingTag = item.tags.some(tag => this.filters.tags.has(tag));
+        if (!hasMatchingTag) visible = false;
+      }
+
+      // Author filter
+      if (this.filters.authors.size > 0) {
+        if (!this.filters.authors.has(item.author)) visible = false;
+      }
+
+      // Date range filter
+      if (this.filters.dateRange.start || this.filters.dateRange.end) {
+        const itemDate = new Date(item.date);
+        if (this.filters.dateRange.start && itemDate < this.filters.dateRange.start) visible = false;
+        if (this.filters.dateRange.end && itemDate > this.filters.dateRange.end) visible = false;
+      }
+
+      // Content type filter
+      if (this.filters.contentType !== 'all') {
+        if (this.filters.contentType === 'posts' && item.type !== 'post') visible = false;
+        if (this.filters.contentType === 'comments' && item.type !== 'comment') visible = false;
+        if (this.filters.contentType === 'media') {
+          const hasMedia = item.element.querySelector('img, video, audio, .attachment');
+          if (!hasMedia) visible = false;
+        }
+      }
+
+      item.element.style.display = visible ? 'block' : 'none';
+    });
+
+    this.applyView();
+  }
+
+  updateActiveFilters() {
+    const activeFiltersContainer = document.getElementById('active-filters');
+    if (!activeFiltersContainer) return;
+
+    activeFiltersContainer.innerHTML = '';
+
+    // Add tag filters
+    this.filters.tags.forEach(tag => {
+      const filter = document.createElement('div');
+      filter.className = 'active-filter';
+      filter.innerHTML = `
+        <span>Tag: ${tag}</span>
+        <span class="remove" onclick="ansyblAdvancedUI.removeTagFilter('${tag}')">&times;</span>
+      `;
+      activeFiltersContainer.appendChild(filter);
+    });
+
+    // Add author filters
+    this.filters.authors.forEach(author => {
+      const filter = document.createElement('div');
+      filter.className = 'active-filter';
+      filter.innerHTML = `
+        <span>Author: ${author}</span>
+        <span class="remove" onclick="ansyblAdvancedUI.removeAuthorFilter('${author}')">&times;</span>
+      `;
+      activeFiltersContainer.appendChild(filter);
+    });
+
+    // Add date range filter
+    if (this.filters.dateRange.start || this.filters.dateRange.end) {
+      const filter = document.createElement('div');
+      filter.className = 'active-filter';
+      const startStr = this.filters.dateRange.start ? this.filters.dateRange.start.toLocaleDateString() : 'Start';
+      const endStr = this.filters.dateRange.end ? this.filters.dateRange.end.toLocaleDateString() : 'End';
+      filter.innerHTML = `
+        <span>Date: ${startStr} - ${endStr}</span>
+        <span class="remove" onclick="ansyblAdvancedUI.removeDateFilter()">&times;</span>
+      `;
+      activeFiltersContainer.appendChild(filter);
+    }
+
+    // Add content type filter
+    if (this.filters.contentType !== 'all') {
+      const filter = document.createElement('div');
+      filter.className = 'active-filter';
+      filter.innerHTML = `
+        <span>Type: ${this.filters.contentType}</span>
+        <span class="remove" onclick="ansyblAdvancedUI.removeContentTypeFilter()">&times;</span>
+      `;
+      activeFiltersContainer.appendChild(filter);
+    }
+  }
+
+  removeTagFilter(tag) {
+    this.filters.tags.delete(tag);
+    const btn = Array.from(document.querySelectorAll('.filter-tag')).find(b => b.textContent === tag);
+    if (btn) btn.classList.remove('active');
+    this.applyFilters();
+    this.updateActiveFilters();
+  }
+
+  removeAuthorFilter(author) {
+    this.filters.authors.delete(author);
+    const btn = Array.from(document.querySelectorAll('.filter-author')).find(b => b.textContent === author);
+    if (btn) btn.classList.remove('active');
+    this.applyFilters();
+    this.updateActiveFilters();
+  }
+
+  removeDateFilter() {
+    this.filters.dateRange.start = null;
+    this.filters.dateRange.end = null;
+    document.getElementById('search-date-from').value = '';
+    document.getElementById('search-date-to').value = '';
+    this.applyFilters();
+    this.updateActiveFilters();
+  }
+
+  removeContentTypeFilter() {
+    this.filters.contentType = 'all';
+    document.getElementById('search-content-type').value = 'all';
+    const allRadio = document.querySelector('input[name="content-filter"][value="all"]');
+    if (allRadio) allRadio.checked = true;
+    this.applyFilters();
+    this.updateActiveFilters();
+  }
+
+  applySorting() {
+    const items = Array.from(this.searchIndex.values());
+    
+    items.sort((a, b) => {
+      let comparison = 0;
+      
+      switch (this.sortBy) {
+        case 'date':
+          comparison = new Date(a.date) - new Date(b.date);
+          break;
+        case 'title':
+          comparison = a.title.localeCompare(b.title);
+          break;
+        case 'author':
+          comparison = a.author.localeCompare(b.author);
+          break;
+        case 'interactions':
+          const aInteractions = this.getInteractionCount(a.element);
+          const bInteractions = this.getInteractionCount(b.element);
+          comparison = aInteractions - bInteractions;
+          break;
+      }
+      
+      return this.sortOrder === 'desc' ? -comparison : comparison;
+    });
+
+    // Reorder DOM elements
+    const container = document.querySelector('main .posts') || document.querySelector('main');
+    if (container) {
+      items.forEach(item => {
+        if (item.element.style.display !== 'none') {
+          container.appendChild(item.element);
+        }
+      });
+    }
+  }
+
+  getInteractionCount(element) {
+    const interactions = element.querySelectorAll('.interaction-count');
+    let total = 0;
+    interactions.forEach(interaction => {
+      const count = parseInt(interaction.textContent.match(/\d+/)?.[0] || '0');
+      total += count;
+    });
+    return total;
+  }
+
+  showSearchSuggestions(query) {
+    const suggestions = document.getElementById('search-suggestions');
+    if (!suggestions) return;
+
+    const terms = query.toLowerCase().split(' ').filter(term => term.length > 0);
+    const suggestionSet = new Set();
+
+    // Add tag suggestions
+    this.searchIndex.forEach(item => {
+      item.tags.forEach(tag => {
+        if (tag.toLowerCase().includes(terms[terms.length - 1])) {
+          suggestionSet.add(`Tag: ${tag}`);
+        }
+      });
+    });
+
+    // Add author suggestions
+    this.searchIndex.forEach(item => {
+      if (item.author.toLowerCase().includes(terms[terms.length - 1])) {
+        suggestionSet.add(`Author: ${item.author}`);
+      }
+    });
+
+    // Add title suggestions
+    this.searchIndex.forEach(item => {
+      const titleWords = item.title.toLowerCase().split(' ');
+      titleWords.forEach(word => {
+        if (word.includes(terms[terms.length - 1]) && word.length > 2) {
+          suggestionSet.add(`Title: ${item.title}`);
+        }
+      });
+    });
+
+    const suggestionArray = Array.from(suggestionSet).slice(0, 5);
+    
+    if (suggestionArray.length > 0) {
+      suggestions.innerHTML = suggestionArray.map(suggestion => 
+        `<div class="search-suggestion" onclick="ansyblAdvancedUI.applySuggestion('${suggestion}')">${suggestion}</div>`
+      ).join('');
+      suggestions.style.display = 'block';
+    } else {
+      suggestions.style.display = 'none';
+    }
+  }
+
+  applySuggestion(suggestion) {
+    const searchInput = document.getElementById('content-search');
+    const [type, value] = suggestion.split(': ');
+    
+    if (type === 'Tag') {
+      this.filters.tags.add(value);
+      const btn = Array.from(document.querySelectorAll('.filter-tag')).find(b => b.textContent === value);
+      if (btn) btn.classList.add('active');
+    } else if (type === 'Author') {
+      this.filters.authors.add(value);
+      const btn = Array.from(document.querySelectorAll('.filter-author')).find(b => b.textContent === value);
+      if (btn) btn.classList.add('active');
+    } else {
+      searchInput.value = value;
+      this.performSearch(value);
+    }
+
+    document.getElementById('search-suggestions').style.display = 'none';
+    this.applyFilters();
+    this.updateActiveFilters();
   }
 
   setupFilterHandlers() {
@@ -1116,6 +1468,470 @@ class AnsyblAdvancedUI {
         }, 1000);
       }
     });
+  }
+
+  // Feed exploration tools
+  createFeedExplorer() {
+    const explorerContainer = document.createElement('div');
+    explorerContainer.className = 'feed-explorer';
+    explorerContainer.innerHTML = `
+      <div class="explorer-header">
+        <h3>📊 Feed Explorer</h3>
+        <button class="explorer-toggle" aria-expanded="false" aria-controls="explorer-content">
+          <span class="icon">📈</span> Analytics
+        </button>
+      </div>
+      
+      <div class="explorer-content" id="explorer-content" style="display: none;">
+        <div class="explorer-tabs">
+          <button class="explorer-tab active" data-tab="analytics">Analytics</button>
+          <button class="explorer-tab" data-tab="timeline">Timeline</button>
+          <button class="explorer-tab" data-tab="network">Network</button>
+          <button class="explorer-tab" data-tab="trends">Trends</button>
+        </div>
+        
+        <div class="explorer-panels">
+          <div class="explorer-panel active" id="analytics-panel">
+            <div class="analytics-grid">
+              <div class="stat-card">
+                <h4>Total Posts</h4>
+                <div class="stat-value" id="total-posts">0</div>
+              </div>
+              <div class="stat-card">
+                <h4>Total Comments</h4>
+                <div class="stat-value" id="total-comments">0</div>
+              </div>
+              <div class="stat-card">
+                <h4>Total Interactions</h4>
+                <div class="stat-value" id="total-interactions">0</div>
+              </div>
+              <div class="stat-card">
+                <h4>Active Authors</h4>
+                <div class="stat-value" id="active-authors">0</div>
+              </div>
+            </div>
+            
+            <div class="analytics-charts">
+              <div class="chart-container">
+                <h4>Content Distribution</h4>
+                <div class="content-distribution" id="content-distribution"></div>
+              </div>
+              
+              <div class="chart-container">
+                <h4>Popular Tags</h4>
+                <div class="tag-cloud" id="tag-cloud"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="explorer-panel" id="timeline-panel">
+            <div class="timeline-controls">
+              <select id="timeline-period">
+                <option value="day">Last 24 Hours</option>
+                <option value="week">Last Week</option>
+                <option value="month">Last Month</option>
+                <option value="all">All Time</option>
+              </select>
+              <button class="refresh-timeline">Refresh</button>
+            </div>
+            <div class="timeline-chart" id="timeline-chart"></div>
+          </div>
+          
+          <div class="explorer-panel" id="network-panel">
+            <div class="network-info">
+              <p>Explore connections between authors, posts, and interactions.</p>
+            </div>
+            <div class="network-graph" id="network-graph"></div>
+          </div>
+          
+          <div class="explorer-panel" id="trends-panel">
+            <div class="trends-list" id="trends-list"></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Add to the page
+    const main = document.querySelector('main');
+    if (main) {
+      main.parentNode.insertBefore(explorerContainer, main.nextSibling);
+    }
+
+    this.setupFeedExplorerHandlers();
+    this.updateFeedAnalytics();
+  }
+
+  setupFeedExplorerHandlers() {
+    const explorerToggle = document.querySelector('.explorer-toggle');
+    const explorerContent = document.getElementById('explorer-content');
+    const explorerTabs = document.querySelectorAll('.explorer-tab');
+    const explorerPanels = document.querySelectorAll('.explorer-panel');
+
+    // Toggle explorer
+    explorerToggle.addEventListener('click', () => {
+      const isVisible = explorerContent.style.display !== 'none';
+      explorerContent.style.display = isVisible ? 'none' : 'block';
+      explorerToggle.setAttribute('aria-expanded', !isVisible);
+      
+      if (!isVisible) {
+        this.updateFeedAnalytics();
+      }
+    });
+
+    // Tab switching
+    explorerTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetPanel = tab.dataset.tab;
+        
+        // Update active tab
+        explorerTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update active panel
+        explorerPanels.forEach(p => p.classList.remove('active'));
+        document.getElementById(`${targetPanel}-panel`).classList.add('active');
+        
+        // Load panel content
+        this.loadExplorerPanel(targetPanel);
+      });
+    });
+
+    // Timeline controls
+    const timelinePeriod = document.getElementById('timeline-period');
+    const refreshTimeline = document.querySelector('.refresh-timeline');
+    
+    if (timelinePeriod) {
+      timelinePeriod.addEventListener('change', () => {
+        this.updateTimelineChart();
+      });
+    }
+    
+    if (refreshTimeline) {
+      refreshTimeline.addEventListener('click', () => {
+        this.updateTimelineChart();
+      });
+    }
+  }
+
+  updateFeedAnalytics() {
+    // Calculate basic statistics
+    const totalPosts = this.searchIndex.size;
+    const posts = Array.from(this.searchIndex.values()).filter(item => item.type === 'post');
+    const comments = Array.from(this.searchIndex.values()).filter(item => item.type === 'comment');
+    
+    let totalInteractions = 0;
+    const authors = new Set();
+    const tags = new Map();
+    
+    this.searchIndex.forEach(item => {
+      // Count interactions
+      const interactionElements = item.element.querySelectorAll('.interaction-count');
+      interactionElements.forEach(el => {
+        const count = parseInt(el.textContent.match(/\d+/)?.[0] || '0');
+        totalInteractions += count;
+      });
+      
+      // Collect authors
+      if (item.author) {
+        authors.add(item.author);
+      }
+      
+      // Collect tags
+      item.tags.forEach(tag => {
+        tags.set(tag, (tags.get(tag) || 0) + 1);
+      });
+    });
+
+    // Update statistics
+    document.getElementById('total-posts').textContent = posts.length;
+    document.getElementById('total-comments').textContent = comments.length;
+    document.getElementById('total-interactions').textContent = totalInteractions;
+    document.getElementById('active-authors').textContent = authors.size;
+
+    // Update content distribution
+    this.updateContentDistribution(posts.length, comments.length);
+    
+    // Update tag cloud
+    this.updateTagCloud(tags);
+  }
+
+  updateContentDistribution(postsCount, commentsCount) {
+    const container = document.getElementById('content-distribution');
+    if (!container) return;
+
+    const total = postsCount + commentsCount;
+    const postsPercent = total > 0 ? Math.round((postsCount / total) * 100) : 0;
+    const commentsPercent = total > 0 ? Math.round((commentsCount / total) * 100) : 0;
+
+    container.innerHTML = `
+      <div class="distribution-bar">
+        <div class="distribution-segment posts" style="width: ${postsPercent}%" title="Posts: ${postsCount} (${postsPercent}%)"></div>
+        <div class="distribution-segment comments" style="width: ${commentsPercent}%" title="Comments: ${commentsCount} (${commentsPercent}%)"></div>
+      </div>
+      <div class="distribution-legend">
+        <div class="legend-item">
+          <span class="legend-color posts"></span>
+          <span>Posts (${postsCount})</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color comments"></span>
+          <span>Comments (${commentsCount})</span>
+        </div>
+      </div>
+    `;
+  }
+
+  updateTagCloud(tags) {
+    const container = document.getElementById('tag-cloud');
+    if (!container) return;
+
+    const sortedTags = Array.from(tags.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 20);
+
+    if (sortedTags.length === 0) {
+      container.innerHTML = '<p class="no-data">No tags found</p>';
+      return;
+    }
+
+    const maxCount = sortedTags[0][1];
+    
+    container.innerHTML = sortedTags.map(([tag, count]) => {
+      const size = Math.max(12, Math.min(24, 12 + (count / maxCount) * 12));
+      return `
+        <span class="tag-cloud-item" 
+              style="font-size: ${size}px" 
+              title="${tag}: ${count} uses"
+              onclick="ansyblAdvancedUI.filterByTag('${tag}')">
+          ${tag}
+        </span>
+      `;
+    }).join(' ');
+  }
+
+  loadExplorerPanel(panelName) {
+    switch (panelName) {
+      case 'analytics':
+        this.updateFeedAnalytics();
+        break;
+      case 'timeline':
+        this.updateTimelineChart();
+        break;
+      case 'network':
+        this.updateNetworkGraph();
+        break;
+      case 'trends':
+        this.updateTrends();
+        break;
+    }
+  }
+
+  updateTimelineChart() {
+    const container = document.getElementById('timeline-chart');
+    const period = document.getElementById('timeline-period')?.value || 'week';
+    
+    if (!container) return;
+
+    // Group content by date
+    const dateGroups = new Map();
+    const now = new Date();
+    let startDate;
+
+    switch (period) {
+      case 'day':
+        startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        break;
+      case 'week':
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case 'month':
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      default:
+        startDate = new Date(0);
+    }
+
+    this.searchIndex.forEach(item => {
+      const itemDate = new Date(item.date);
+      if (itemDate >= startDate) {
+        const dateKey = itemDate.toDateString();
+        if (!dateGroups.has(dateKey)) {
+          dateGroups.set(dateKey, { posts: 0, comments: 0 });
+        }
+        const group = dateGroups.get(dateKey);
+        if (item.type === 'post') {
+          group.posts++;
+        } else {
+          group.comments++;
+        }
+      }
+    });
+
+    // Create simple timeline visualization
+    const sortedDates = Array.from(dateGroups.entries()).sort((a, b) => new Date(a[0]) - new Date(b[0]));
+    
+    if (sortedDates.length === 0) {
+      container.innerHTML = '<p class="no-data">No data for selected period</p>';
+      return;
+    }
+
+    const maxActivity = Math.max(...sortedDates.map(([_, data]) => data.posts + data.comments));
+
+    container.innerHTML = `
+      <div class="timeline-bars">
+        ${sortedDates.map(([date, data]) => {
+          const total = data.posts + data.comments;
+          const height = maxActivity > 0 ? (total / maxActivity) * 100 : 0;
+          return `
+            <div class="timeline-bar" style="height: ${height}%" title="${date}: ${total} items">
+              <div class="bar-posts" style="height: ${data.posts / total * 100}%"></div>
+              <div class="bar-comments" style="height: ${data.comments / total * 100}%"></div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <div class="timeline-labels">
+        ${sortedDates.map(([date]) => `
+          <div class="timeline-label">${new Date(date).toLocaleDateString()}</div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  updateNetworkGraph() {
+    const container = document.getElementById('network-graph');
+    if (!container) return;
+
+    // Simple network visualization showing author connections
+    const authors = new Map();
+    const connections = new Map();
+
+    this.searchIndex.forEach(item => {
+      const author = item.author;
+      if (!authors.has(author)) {
+        authors.set(author, { posts: 0, comments: 0 });
+      }
+      
+      const authorData = authors.get(author);
+      if (item.type === 'post') {
+        authorData.posts++;
+      } else {
+        authorData.comments++;
+      }
+    });
+
+    const authorArray = Array.from(authors.entries()).slice(0, 10);
+    
+    container.innerHTML = `
+      <div class="network-nodes">
+        ${authorArray.map(([author, data]) => {
+          const size = Math.max(20, Math.min(60, (data.posts + data.comments) * 5));
+          return `
+            <div class="network-node" 
+                 style="width: ${size}px; height: ${size}px"
+                 title="${author}: ${data.posts} posts, ${data.comments} comments">
+              <span class="node-label">${author.substring(0, 2)}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  updateTrends() {
+    const container = document.getElementById('trends-list');
+    if (!container) return;
+
+    // Calculate trending topics based on recent activity
+    const recentItems = Array.from(this.searchIndex.values())
+      .filter(item => {
+        const itemDate = new Date(item.date);
+        const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        return itemDate >= weekAgo;
+      });
+
+    const tagTrends = new Map();
+    const authorTrends = new Map();
+
+    recentItems.forEach(item => {
+      // Tag trends
+      item.tags.forEach(tag => {
+        tagTrends.set(tag, (tagTrends.get(tag) || 0) + 1);
+      });
+      
+      // Author trends
+      if (item.author) {
+        authorTrends.set(item.author, (authorTrends.get(item.author) || 0) + 1);
+      }
+    });
+
+    const topTags = Array.from(tagTrends.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    const topAuthors = Array.from(authorTrends.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    container.innerHTML = `
+      <div class="trends-section">
+        <h4>🔥 Trending Tags</h4>
+        <div class="trend-items">
+          ${topTags.map(([tag, count]) => `
+            <div class="trend-item" onclick="ansyblAdvancedUI.filterByTag('${tag}')">
+              <span class="trend-name">#${tag}</span>
+              <span class="trend-count">${count}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      
+      <div class="trends-section">
+        <h4>👥 Active Authors</h4>
+        <div class="trend-items">
+          ${topAuthors.map(([author, count]) => `
+            <div class="trend-item" onclick="ansyblAdvancedUI.filterByAuthor('${author}')">
+              <span class="trend-name">${author}</span>
+              <span class="trend-count">${count}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  filterByTag(tag) {
+    this.filters.tags.clear();
+    this.filters.tags.add(tag);
+    
+    const btn = Array.from(document.querySelectorAll('.filter-tag')).find(b => b.textContent === tag);
+    if (btn) {
+      document.querySelectorAll('.filter-tag.active').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    
+    this.applyFilters();
+    this.updateActiveFilters();
+    
+    // Scroll to content
+    document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  filterByAuthor(author) {
+    this.filters.authors.clear();
+    this.filters.authors.add(author);
+    
+    const btn = Array.from(document.querySelectorAll('.filter-author')).find(b => b.textContent === author);
+    if (btn) {
+      document.querySelectorAll('.filter-author.active').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    
+    this.applyFilters();
+    this.updateActiveFilters();
+    
+    // Scroll to content
+    document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
   }
 }
 
