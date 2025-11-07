@@ -1766,6 +1766,7 @@ function generatePageTemplate(title, content) {
     <title>${title} - ${siteConfig.title}</title>
     <link rel="alternate" type="application/json" title="Ansybl Feed" href="/feed.ansybl">
     <link rel="stylesheet" href="/css/realtime.css">
+    <link rel="stylesheet" href="/css/walkthrough.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -3374,6 +3375,9 @@ function generatePageTemplate(title, content) {
             }
         };
     </script>
+
+    <!-- Interactive Walkthrough -->
+    <script src="/js/walkthrough.js"></script>
 </body>
 </html>`;
 }
