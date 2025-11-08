@@ -1,0 +1,35 @@
+MIPMAP ICON PLACEHOLDER
+
+The following mipmap directories should be created with appropriate launcher icons:
+
+Required directories:
+- mipmap-hdpi/
+- mipmap-mdpi/
+- mipmap-xhdpi/
+- mipmap-xxhdpi/
+- mipmap-xxxhdpi/
+
+Required files in each directory:
+- ic_launcher.png (square icon)
+- ic_launcher_round.png (round icon for Android 7.1+)
+
+Icon sizes:
+- mdpi: 48x48 px
+- hdpi: 72x72 px
+- xhdpi: 96x96 px
+- xxhdpi: 144x144 px
+- xxxhdpi: 192x192 px
+
+To generate icons:
+1. Use Android Studio's Asset Studio (right-click res → New → Image Asset)
+2. Or use online tools like:
+   - https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html
+   - https://easyappicon.com/
+
+Recommended design:
+- Purple gradient background (#9C27B0 to #7B1FA2)
+- White "A" letter or Ansybl logo
+- Follow Material Design icon guidelines
+
+For now, the app will use the default Android launcher icon.
+To customize, create the mipmap directories and add your icon files.
