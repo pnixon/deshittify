@@ -119,3 +119,50 @@ List any related projects and how they influence or integrate with this project.
 Include any additional resources, such as research papers or technical articles.
 
 Activity Streams 2.0: https://www.w3.org/TR/activitystreams-core/
+
+## Repository Structure
+
+This repository is organized into the following main directories:
+
+### Core Components
+
+- **[schema/](./schema/)** - JSON Schema definition and validation utilities for Ansybl feeds
+- **[cli/](./cli/)** - Command-line interface tools
+- **[browser-extension/](./browser-extension/)** - Browser extension for Ansybl
+
+### Parsers & Readers
+
+- **[parsers/](./parsers/)** - Parser implementations for different platforms
+  - [reactjs/](./parsers/reactjs/) - React.js parser
+  - [php_web_reader/](./parsers/php_web_reader/) - PHP web reader
+  - [args/](./parsers/args/) - Argument parsing utilities
+- **[webpage/](./webpage/)** - Client-side web application for viewing Ansybl streams
+
+### Writers & Publishers
+
+- **[writers/](./writers/)** - Tools for creating and publishing Ansybl feeds
+  - [subspace-writer/](./writers/subspace-writer/) - Subspace integration
+
+### Examples & Documentation
+
+- **[examples/](./examples/)** - Sample Ansybl feed files demonstrating various features
+- **[docs/](./docs/)** - Comprehensive documentation
+  - [deployment-guide.md](./docs/deployment-guide.md) - Deployment instructions
+  - [troubleshooting.md](./docs/troubleshooting.md) - Common issues and solutions
+
+### Example Applications
+
+- **[example-website/](./example-website/)** - Example website implementation
+- **[android-example/](./android-example/)** - Android example application
+
+### Infrastructure
+
+- **[deployment-templates/](./deployment-templates/)** - Docker Compose and Kubernetes configurations
+- **[monitoring/](./monitoring/)** - Prometheus and Grafana monitoring setup
+
+## Quick Start
+
+1. Explore the [examples/](./examples/) to see sample Ansybl feeds
+2. Use the [schema/](./schema/) validator to validate your feeds
+3. Try a [parser](./parsers/) for your platform
+4. Check the [docs/](./docs/) for deployment and usage guides
