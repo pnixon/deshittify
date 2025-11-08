@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ansybl Example</string>
+
+    <!-- Menu items -->
+    <string name="menu_feed">Ansybl Feed</string>
+    <string name="menu_api">API Endpoints</string>
+    <string name="menu_bridges">Protocol Bridges</string>
+    <string name="menu_about">About</string>
+
+    <!-- Content descriptions -->
+    <string name="create_post">Create new post</string>
+    <string name="start_walkthrough">Start walkthrough</string>
+    <string name="like">Like</string>
+    <string name="share">Share</string>
+    <string name="comment">Comment</string>
+
+    <!-- Dialog inputs -->
+    <string name="post_title">Post Title</string>
+    <string name="post_content">Post Content</string>
+
+    <!-- CoordinatorLayout behavior -->
+    <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+</resources>
