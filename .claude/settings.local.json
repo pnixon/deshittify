@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --version:*)",
+      "Bash(start index.html)",
+      "Bash(npm install)",
+      "Bash(npm start)",
+      "Bash(start http://localhost:3000)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
