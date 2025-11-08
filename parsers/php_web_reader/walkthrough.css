@@ -1,0 +1,407 @@
+/**
+ * Walkthrough System Styles for Ansybl PHP Web Reader
+ * Interactive tour overlay and tooltip styling
+ */
+
+/* Overlay that covers the entire page */
+.walkthrough-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9998;
+  pointer-events: all;
+}
+
+/* Highlighted area cutout */
+.walkthrough-highlight {
+  position: absolute;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 123, 255, 0.5);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Tooltip container */
+.walkthrough-tooltip {
+  position: absolute;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  max-width: 400px;
+  min-width: 320px;
+  animation: tooltipFadeIn 0.3s ease;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Tooltip header */
+.walkthrough-tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 15px 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.walkthrough-tooltip-header h3 {
+  margin: 0;
+  font-size: 1.3em;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.walkthrough-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.walkthrough-close:hover {
+  background-color: #f8f9fa;
+  color: #dc3545;
+}
+
+/* Tooltip body */
+.walkthrough-tooltip-body {
+  padding: 20px;
+}
+
+.walkthrough-tooltip-body p {
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.6;
+  color: #495057;
+}
+
+/* Tooltip footer */
+.walkthrough-tooltip-footer {
+  padding: 15px 20px 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e9ecef;
+}
+
+.walkthrough-progress {
+  font-size: 0.85em;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.walkthrough-controls {
+  display: flex;
+  gap: 10px;
+}
+
+/* Walkthrough buttons */
+.walkthrough-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #007bff;
+  color: white;
+}
+
+.walkthrough-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.walkthrough-btn:active {
+  transform: translateY(0);
+}
+
+.walkthrough-btn-back {
+  background-color: #6c757d;
+}
+
+.walkthrough-btn-back:hover {
+  background-color: #5a6268;
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+.walkthrough-btn-next {
+  background-color: #007bff;
+}
+
+.walkthrough-btn-finish {
+  background-color: #28a745;
+}
+
+.walkthrough-btn-finish:hover {
+  background-color: #218838;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.walkthrough-btn-primary {
+  background-color: #007bff;
+}
+
+.walkthrough-btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Floating trigger button */
+.walkthrough-trigger-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 25px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  z-index: 9997;
+  transition: all 0.3s ease;
+  animation: pulseButton 2s infinite;
+}
+
+@keyframes pulseButton {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+  }
+}
+
+.walkthrough-trigger-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+  animation: none;
+}
+
+.walkthrough-trigger-btn:active {
+  transform: scale(1.02);
+}
+
+/* Completion message */
+.walkthrough-completion-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  z-index: 10001;
+  opacity: 0;
+  transition: all 0.3s ease;
+  max-width: 500px;
+  width: 90%;
+}
+
+.walkthrough-completion-message.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.walkthrough-completion-content {
+  padding: 40px;
+  text-align: center;
+}
+
+.walkthrough-completion-content h3 {
+  margin: 0 0 15px 0;
+  font-size: 2em;
+  color: #2c3e50;
+}
+
+.walkthrough-completion-content p {
+  margin: 0 0 25px 0;
+  font-size: 1.1em;
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+.walkthrough-completion-content .walkthrough-btn {
+  margin: 0 5px;
+  padding: 12px 24px;
+  font-size: 1em;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .walkthrough-tooltip {
+    max-width: 90vw;
+    min-width: 280px;
+    left: 5vw !important;
+    right: 5vw !important;
+    width: 90vw !important;
+  }
+
+  .walkthrough-tooltip-header h3 {
+    font-size: 1.1em;
+  }
+
+  .walkthrough-tooltip-body p {
+    font-size: 0.95em;
+  }
+
+  .walkthrough-tooltip-footer {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+
+  .walkthrough-controls {
+    justify-content: stretch;
+  }
+
+  .walkthrough-controls .walkthrough-btn {
+    flex: 1;
+  }
+
+  .walkthrough-trigger-btn {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    font-size: 0.9em;
+  }
+
+  .walkthrough-completion-content {
+    padding: 30px 20px;
+  }
+
+  .walkthrough-completion-content h3 {
+    font-size: 1.6em;
+  }
+
+  .walkthrough-completion-content p {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .walkthrough-trigger-btn {
+    bottom: 15px;
+    right: 15px;
+    padding: 10px 16px;
+    font-size: 0.85em;
+  }
+
+  .walkthrough-tooltip-header {
+    padding: 15px;
+  }
+
+  .walkthrough-tooltip-body {
+    padding: 15px;
+  }
+
+  .walkthrough-tooltip-footer {
+    padding: 12px 15px 15px 15px;
+  }
+}
+
+/* Accessibility improvements */
+.walkthrough-btn:focus,
+.walkthrough-close:focus,
+.walkthrough-trigger-btn:focus {
+  outline: 3px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .walkthrough-overlay,
+  .walkthrough-tooltip,
+  .walkthrough-trigger-btn,
+  .walkthrough-completion-message {
+    display: none !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .walkthrough-overlay,
+  .walkthrough-highlight,
+  .walkthrough-tooltip,
+  .walkthrough-btn,
+  .walkthrough-trigger-btn,
+  .walkthrough-completion-message {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .walkthrough-tooltip {
+    background: #2c3e50;
+  }
+
+  .walkthrough-tooltip-header h3 {
+    color: #ecf0f1;
+  }
+
+  .walkthrough-tooltip-body p {
+    color: #bdc3c7;
+  }
+
+  .walkthrough-tooltip-header,
+  .walkthrough-tooltip-footer {
+    border-color: #34495e;
+  }
+
+  .walkthrough-close {
+    color: #95a5a6;
+  }
+
+  .walkthrough-close:hover {
+    background-color: #34495e;
+    color: #e74c3c;
+  }
+
+  .walkthrough-progress {
+    color: #95a5a6;
+  }
+
+  .walkthrough-completion-message {
+    background: #2c3e50;
+  }
+
+  .walkthrough-completion-content h3 {
+    color: #ecf0f1;
+  }
+
+  .walkthrough-completion-content p {
+    color: #bdc3c7;
+  }
+}
