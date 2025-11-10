@@ -12,6 +12,7 @@ import { upload } from '../middleware/upload.js';
 import { recordInteractionAnalytics } from './interactions.js';
 import webSocketService from '../lib/websocket.js';
 import { join } from 'path';
+import { tagManager } from '../lib/tagging.js';
 
 const router = Router();
 
@@ -205,6 +206,18 @@ router.post('/', upload.array('attachments', 5), async (req, res) => {
       }
     }
     
+    // Process and validate tags
+    let processedTags = [];
+    if (tags) {
+      const tagArray = tags.split(',').map(t => t.trim());
+      const tagResult = tagManager.processTags(tagArray);
+      processedTags = tagResult.valid;
+      
+      if (tagResult.invalid && tagResult.invalid.length > 0) {
+        console.warn('⚠️ Some tags were invalid:', tagResult.invalid);
+      }
+    }
+    
     // Create new post
     const postId = `post-${Date.now()}`;
     const newPost = {
@@ -217,7 +230,7 @@ router.post('/', upload.array('attachments', 5), async (req, res) => {
       summary: summary || null,
       datePublished: new Date().toISOString(),
       dateModified: null,
-      tags: tags ? tags.split(',').map(t => t.trim()) : [],
+      tags: processedTags,
       author: author ? JSON.parse(author) : siteConfig.author,
       attachments: attachments,
       interactions: {

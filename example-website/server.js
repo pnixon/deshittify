@@ -72,9 +72,26 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
+// Import security middleware
+import { 
+  inputValidation, 
+  xssProtection, 
+  sqlInjectionProtection, 
+  sanitizeRequest,
+  securityHeaders,
+  intrusionDetection
+} from './middleware/security.js';
+
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Security middleware
+app.use(securityHeaders());
+app.use(sanitizeRequest());
+app.use(intrusionDetection());
+app.use(inputValidation());
+app.use(sqlInjectionProtection());
 
 // Static files (excluding uploads - handled by secure middleware)
 app.use(express.static(join(__dirname, 'public'), {
@@ -1038,12 +1055,25 @@ import commentsRouter from './api/comments.js';
 import postsRouter from './api/posts.js';
 import interactionsRouter from './api/interactions.js';
 import bridgesRouter from './api/bridges.js';
+import securityRouter from './api/security.js';
+import tagsRouter from './api/tags.js';
+import metadataRouter from './api/metadata.js';
+import discoveryRouter from './api/discovery.js';
+import feedRouter from './api/feed.js';
+import feedDiscoveryRouter from './api/feedDiscovery.js';
+import { xssProtection } from './middleware/security.js';
 
 // Mount the API routes
-app.use('/api/comments', commentsRouter);
-app.use('/api/posts', postsRouter);
+app.use('/api/comments', xssProtection(), commentsRouter);
+app.use('/api/posts', xssProtection(), postsRouter);
 app.use('/api/interactions', interactionsRouter);
 app.use('/api/bridges', bridgesRouter);
+app.use('/api/security', securityRouter);
+app.use('/api/tags', tagsRouter);
+app.use('/api/metadata', metadataRouter);
+app.use('/api/discovery', discoveryRouter);
+app.use('/api/feed', feedRouter);
+app.use('/api/feed-discovery', feedDiscoveryRouter);
 
 // WebSocket connection stats endpoint
 app.get('/api/websocket/stats', (req, res) => {

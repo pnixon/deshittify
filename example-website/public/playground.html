@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ansybl API Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .playground {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .panel {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .panel-left {
+            border-right: 2px solid #e0e0e0;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .section h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            font-family: 'Courier New', monospace;
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: #6c757d;
+        }
+
+        .response {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .response pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .response.success {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .response.error {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .example-btn {
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .example-btn:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.success {
+            background: #28a745;
+        }
+
+        .status-indicator.error {
+            background: #dc3545;
+        }
+
+        .status-indicator.pending {
+            background: #ffc107;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 968px) {
+            .playground {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-left {
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Ansybl API Playground</h1>
+            <p>Test and explore the Ansybl Protocol API interactively</p>
+        </header>
+
+        <div class="playground">
+            <div class="panel panel-left">
+                <div class="tabs">
+                    <button class="tab active" data-tab="validate">Validate</button>
+                    <button class="tab" data-tab="parse">Parse</button>
+                    <button class="tab" data-tab="generate">Generate</button>
+                    <button class="tab" data-tab="search">Search</button>
+                </div>
+
+                <!-- Validate Tab -->
+                <div class="tab-content active" id="validate-tab">
+                    <div class="section">
+                        <h2>Validate Ansybl Document</h2>
+                        <p style="margin-bottom: 20px; color: #666;">
+                            Validate an Ansybl feed document against the JSON schema.
+                        </p>
+
+                        <div class="examples">
+                            <button class="example-btn" onclick="loadExample('validate', 'valid')">
+                                ✅ Valid Feed
+                            </button>
+                            <button class="example-btn" onclick="loadExample('validate', 'invalid')">
+                                ❌ Invalid Feed
+                            </button>
+                            <button class="example-btn" onclick="loadExample('validate', 'minimal')">
+                                📄 Minimal Feed
+                            </button>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <label>
+                                <input type="checkbox" id="validate-warnings" checked> Include Warnings
+                            </label>
+                            <label>
+                                <input type="checkbox" id="validate-strict"> Strict Mode
+                            </label>
+                            <label>
+                                <input type="checkbox" id="validate-extensions" checked> Validate Extensions
+                            </label>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <label for="validate-input">JSON Document:</label>
+                            <textarea id="validate-input" placeholder="Paste your Ansybl feed JSON here..."></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button onclick="executeValidate()">Validate Document</button>
+                            <button class="secondary" onclick="clearInput('validate')">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parse Tab -->
+                <div class="tab-content" id="parse-tab">
+                    <div class="section">
+                        <h2>Parse Ansybl Document</h2>
+                        <p style="margin-bottom: 20px; color: #666;">
+                            Parse and optionally verify signatures in an Ansybl feed.
+                        </p>
+
+                        <div class="examples">
+                            <button class="example-btn" onclick="loadExample('parse', 'signed')">
+                                🔐 Signed Feed
+                            </button>
+                            <button class="example-btn" onclick="loadExample('parse', 'unsigned')">
+                                📝 Unsigned Feed
+                            </button>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <label>
+                                <input type="checkbox" id="parse-verify"> Verify Signatures
+                            </label>
+                            <label>
+                                <input type="checkbox" id="parse-metadata"> Metadata Only
+                            </label>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <label for="parse-input">JSON Document:</label>
+                            <textarea id="parse-input" placeholder="Paste your Ansybl feed JSON here..."></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button onclick="executeParse()">Parse Document</button>
+                            <button class="secondary" onclick="clearInput('parse')">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generate Tab -->
+                <div class="tab-content" id="generate-tab">
+                    <div class="section">
+                        <h2>Generate Ansybl Feed</h2>
+                        <p style="margin-bottom: 20px; color: #666;">
+                            Fetch the current Ansybl feed from the server.
+                        </p>
+
+                        <div class="button-group">
+                            <button onclick="executeGenerate()">Get Feed</button>
+                            <button class="secondary" onclick="executeGenerate('rss')">Get RSS</button>
+                            <button class="secondary" onclick="executeGenerate('json')">Get JSON Feed</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Tab -->
+                <div class="tab-content" id="search-tab">
+                    <div class="section">
+                        <h2>Search Content</h2>
+                        <p style="margin-bottom: 20px; color: #666;">
+                            Search for content using various filters.
+                        </p>
+
+                        <div style="margin-bottom: 15px;">
+                            <label for="search-query">Search Query:</label>
+                            <input type="text" id="search-query" placeholder="Enter search terms...">
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <label for="search-tags">Tags (comma-separated):</label>
+                            <input type="text" id="search-tags" placeholder="e.g., ansybl, protocol">
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <label for="search-sort">Sort By:</label>
+                            <select id="search-sort">
+                                <option value="date">Date</option>
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                <option value="interactions">Interactions</option>
+                            </select>
+                        </div>
+
+                        <div class="button-group">
+                            <button onclick="executeSearch()">Search</button>
+                            <button class="secondary" onclick="clearSearch()">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="section">
+                    <h2>Response</h2>
+                    <div id="response" class="response">
+                        <pre>Response will appear here...</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/playground.js"></script>
+</body>
+</html>

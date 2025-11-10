@@ -1,0 +1,184 @@
+# Kubernetes Deployment Configuration for Ansybl Example Website
+# Provides horizontal scaling and high availability
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ansybl-app
+  labels:
+    app: ansybl
+    component: application
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: ansybl
+      component: application
+  template:
+    metadata:
+      labels:
+        app: ansybl
+        component: application
+    spec:
+      containers:
+      - name: ansybl-app
+        image: ansybl-example:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3000"
+        envFrom:
+        - configMapRef:
+            name: ansybl-config
+        - secretRef:
+            name: ansybl-secrets
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/public/uploads
+        - name: data
+          mountPath: /app/data
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: ansybl-uploads-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: ansybl-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ansybl-service
+  labels:
+    app: ansybl
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  selector:
+    app: ansybl
+    component: application
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ansybl-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ansybl-app
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 30
+      - type: Pods
+        value: 2
+        periodSeconds: 30
+      selectPolicy: Max
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ansybl-uploads-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ansybl-data-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ansybl-config
+data:
+  SITE_TITLE: "Ansybl Example Site"
+  SITE_DESCRIPTION: "A demonstration of the Ansybl social syndication protocol"
+  LOG_LEVEL: "warn"
+  ENABLE_MONITORING: "true"
+  ENABLE_CACHE: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ansybl-secrets
+type: Opaque
+stringData:
+  BASE_URL: "https://example.com"
+  SESSION_SECRET: "change-me-in-production"
+  ANSYBL_PRIVATE_KEY: "change-me-in-production"
