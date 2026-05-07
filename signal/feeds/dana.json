@@ -1,0 +1,66 @@
+{
+  "ansybl": "1.0",
+  "type": "signal-feed",
+  "encrypted": false,
+  "meta": {
+    "author": "Dana Reeves",
+    "handle": "@dana",
+    "bio": "Privacy researcher. Cryptography enthusiast. Building tools for digital sovereignty.",
+    "avatar": null,
+    "feed_url": "https://pub-f1ec6e7db2c84f17afce200743cceef6.r2.dev/feeds/dana.json",
+    "follows": [
+      "https://pub-f1ec6e7db2c84f17afce200743cceef6.r2.dev/feeds/pete.json"
+    ],
+    "keys": null,
+    "streams": [
+      {
+        "id": "inner-circle",
+        "url": "https://pub-f1ec6e7db2c84f17afce200743cceef6.r2.dev/feeds/dana-inner-circle.json",
+        "encrypted": true,
+        "label": "Inner Circle (encrypted)"
+      }
+    ]
+  },
+  "posts": [
+    {
+      "guid": "d1e2f3a4-0001-4000-8000-000000000001",
+      "type": "short_text",
+      "content": "Just set up my Ansybl feed. Finally, a protocol where my words belong to me. No algorithms deciding who sees what, no shadow bans, no engagement farming.",
+      "created_at": "2026-05-05T01:30:00Z",
+      "tags": ["ansybl", "sovereignty", "firstpost"],
+      "reply_to": null,
+      "boost_of": null
+    },
+    {
+      "guid": "d1e2f3a4-0002-4000-8000-000000000002",
+      "type": "boost",
+      "content": null,
+      "created_at": "2026-05-05T01:00:00Z",
+      "tags": null,
+      "reply_to": null,
+      "boost_of": {
+        "guid": "a1b2c3d4-0001-4000-8000-000000000001",
+        "feed_url": "https://pub-f1ec6e7db2c84f17afce200743cceef6.r2.dev/feeds/pete.json"
+      }
+    },
+    {
+      "guid": "d1e2f3a4-0003-4000-8000-000000000003",
+      "type": "reply",
+      "content": "The encrypted streams feature is what sold me. I can share research notes with my team without worrying about leaks. AES-256-GCM with per-subscriber key distribution is chef's kiss.",
+      "created_at": "2026-05-05T00:30:00Z",
+      "tags": ["encryption", "research"],
+      "reply_to": "a1b2c3d4-0004-4000-8000-000000000004",
+      "boost_of": null
+    },
+    {
+      "guid": "d1e2f3a4-0004-4000-8000-000000000004",
+      "type": "link",
+      "content": "Published my analysis of Signal vs Matrix vs Ansybl for group privacy. TL;DR: Ansybl is the only one that lets you self-host without a PhD in distributed systems.",
+      "url": "https://danareeves.dev/posts/protocol-comparison-2026",
+      "created_at": "2026-05-04T23:30:00Z",
+      "tags": ["privacy", "comparison", "analysis"],
+      "reply_to": null,
+      "boost_of": null
+    }
+  ]
+}

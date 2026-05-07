@@ -1,0 +1,63 @@
+{
+  "ansybl": "1.0",
+  "type": "signal-feed",
+  "encrypted": false,
+  "meta": {
+    "author": "Pete Nixon",
+    "handle": "@pete",
+    "bio": "Building the deshittified internet. Co-creator of Ansybl protocol.",
+    "avatar": null,
+    "feed_url": "https://signal-feed-worker.workers.dev/feeds/pete.json",
+    "follows": [],
+    "keys": null,
+    "streams": []
+  },
+  "posts": [
+    {
+      "guid": "a1b2c3d4-0001-4000-8000-000000000001",
+      "type": "short_text",
+      "content": "Signal is live on Cloudflare. No algorithms, no ads, no corporate overlords. Just your words, cryptographically signed, hosted wherever you want. This is what social media should have been from the start.",
+      "created_at": "2026-05-04T23:00:00Z",
+      "tags": ["ansybl", "decentralized", "launch"],
+      "reply_to": null,
+      "boost_of": null
+    },
+    {
+      "guid": "a1b2c3d4-0002-4000-8000-000000000002",
+      "type": "short_text",
+      "content": "The Ansybl protocol is JSON-based, Ed25519-signed, and protocol-agnostic. Think RSS but with replies, boosts, encrypted streams, and real identity. Simple enough to self-host on a static file server.",
+      "created_at": "2026-05-04T22:30:00Z",
+      "tags": ["protocol", "specification"],
+      "reply_to": null,
+      "boost_of": null
+    },
+    {
+      "guid": "a1b2c3d4-0003-4000-8000-000000000003",
+      "type": "link",
+      "content": "The full Ansybl specification and reference implementation. MIT licensed, open to all.",
+      "url": "https://github.com/pnixon/deshittify",
+      "created_at": "2026-05-04T22:00:00Z",
+      "tags": ["opensource", "github"],
+      "reply_to": null,
+      "boost_of": null
+    },
+    {
+      "guid": "a1b2c3d4-0004-4000-8000-000000000004",
+      "type": "short_text",
+      "content": "Encrypted streams use AES-256-GCM with ECIES key distribution. You grant access per-subscriber with their X25519 public key. Revoke anyone, rotate keys, re-encrypt — all from the CLI.",
+      "created_at": "2026-05-04T21:30:00Z",
+      "tags": ["encryption", "privacy"],
+      "reply_to": null,
+      "boost_of": null
+    },
+    {
+      "guid": "a1b2c3d4-0005-4000-8000-000000000005",
+      "type": "reply",
+      "content": "Every post is just a JSON object with a GUID. Feeds are static files. No database required. You can host your entire social presence on a $5/month VPS or a free Cloudflare R2 bucket.",
+      "created_at": "2026-05-04T21:00:00Z",
+      "tags": ["selfhosting"],
+      "reply_to": "a1b2c3d4-0002-4000-8000-000000000002",
+      "boost_of": null
+    }
+  ]
+}

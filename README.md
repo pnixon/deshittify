@@ -160,6 +160,17 @@ This repository is organized into the following main directories:
 - **[deployment-templates/](./deployment-templates/)** - Docker Compose and Kubernetes configurations
 - **[monitoring/](./monitoring/)** - Prometheus and Grafana monitoring setup
 
+## Demo: Multi-Stream Reader
+
+Check out the live Ansybl Signal Reader deployed on Cloudflare R2:
+**[Live Demo](https://pub-f1ec6e7db2c84f17afce200743cceef6.r2.dev/index.html)**
+
+This demo features:
+- **Serverless Hosting:** Fully static files stored on a Cloudflare R2 bucket. No backend databases required.
+- **Multi-Stream Timeline:** Aggregates posts from multiple authors sequentially with highlighting filters.
+- **Source Inspection:** A slide-out panel allowing you to view the raw, protocol-agnostic, cryptographically-signed JSON of both feeds and individual posts.
+- **Encrypted Streams:** End-to-end AES-256-GCM encryption. Use the unlock button and the default key (`Q-OGfI3Z6jEUx423r1Klmjt3cXVcfKoOkoFp4PBsljc`) to decrypt private research notes in real-time within the browser.
+
 ## Quick Start
 
 1. Explore the [examples/](./examples/) to see sample Ansybl feeds

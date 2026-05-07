@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signal Reader</title>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #7c6aff;
+      --boost: #3a9e6e;
+      --locked: #e07b39;
+      --reply-indent: 2rem;
+      --radius: 8px;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(15, 15, 15, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    header h1 { font-size: 18px; font-weight: 700; flex: 0 0 auto; }
+    header h1 span { color: var(--accent); }
+
+    .feed-input-row {
+      display: flex;
+      gap: 8px;
+      flex: 1 1 280px;
+    }
+
+    input[type="url"], input[type="text"], input[type="password"] {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      padding: 6px 10px;
+      font-size: 13px;
+      outline: none;
+    }
+    input:focus { border-color: var(--accent); }
+    input::placeholder { color: var(--muted); }
+
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    button:hover { opacity: 0.85; }
+    button.ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    button.ghost:hover { border-color: var(--accent); color: var(--text); }
+    button.lock-btn {
+      background: transparent;
+      border: 1px solid var(--locked);
+      color: var(--locked);
+      font-size: 12px;
+      padding: 4px 10px;
+    }
+    button.lock-btn:hover { background: var(--locked); color: #fff; }
+    button.lock-btn.unlocked {
+      border-color: var(--boost);
+      color: var(--boost);
+    }
+    button.lock-btn.unlocked:hover { background: var(--boost); color: #fff; }
+
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    #status {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 12px 0;
+      text-align: center;
+    }
+
+    .timeline { display: flex; flex-direction: column; gap: 1px; }
+
+    .post {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      border: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .post:hover { border-color: var(--border); }
+    .post.reply { margin-left: var(--reply-indent); border-left: 2px solid var(--border); }
+    .post.boost { border-left: 2px solid var(--boost); }
+    .post.encrypted-card {
+      border: 1px solid var(--locked);
+      opacity: 0.8;
+    }
+    .post.encrypted-card.unlocked {
+      border-color: var(--boost);
+      opacity: 1;
+    }
+
+    /* Highlight class for feed selection */
+    .post.highlight {
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 10px rgba(124, 106, 255, 0.3);
+    }
+    .post.dimmed {
+      opacity: 0.3;
+    }
+
+    .encrypted-stream-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: rgba(224, 123, 57, 0.06);
+      border-radius: 6px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .encrypted-stream-info.decrypted {
+      background: rgba(58, 158, 110, 0.08);
+    }
+    .encrypted-stream-info .cipher-tag {
+      font-family: monospace;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(224, 123, 57, 0.12);
+      color: var(--locked);
+    }
+    .encrypted-stream-info.decrypted .cipher-tag {
+      background: rgba(58, 158, 110, 0.12);
+      color: var(--boost);
+    }
+    .stream-post-count {
+      margin-left: auto;
+      font-weight: 600;
+      color: var(--boost);
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar.locked-avatar { background: var(--locked); }
+
+    .author-block { flex: 1; min-width: 0; }
+    .author-name  { font-weight: 600; font-size: 14px; }
+    .author-handle { color: var(--muted); font-size: 12px; }
+
+    .post-time { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+    .post-content { font-size: 15px; word-break: break-word; white-space: pre-wrap; }
+
+    .post-link {
+      display: block;
+      margin-top: 8px;
+      color: var(--accent);
+      font-size: 13px;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .post-link:hover { text-decoration: underline; }
+
+    .boost-label {
+      font-size: 12px;
+      color: var(--boost);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .boost-body {
+      background: var(--bg);
+      border-radius: 6px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      margin-top: 6px;
+    }
+    .boost-origin  { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .boost-content { font-size: 14px; }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .tag {
+      background: rgba(124, 106, 255, 0.12);
+      color: var(--accent);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 12px;
+    }
+
+    .feed-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4px;
+    }
+    .feed-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .feed-pill.encrypted-pill { border-color: var(--locked); color: var(--locked); }
+    .feed-pill button.remove {
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: 0;
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .feed-pill button.remove:hover { color: #f66; }
+    .feed-pill.selected {
+      background: rgba(124, 106, 255, 0.2);
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .feed-pill {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .feed-pill:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ─── Unlock modal ──────────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100;
+    }
+    .modal-overlay.hidden { display: none; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      width: min(420px, 92vw);
+    }
+    .modal h2 { font-size: 16px; margin-bottom: 6px; }
+    .modal p  { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+    .modal label { font-size: 13px; display: block; margin-bottom: 6px; }
+    .modal input { width: 100%; font-family: monospace; font-size: 13px; margin-bottom: 4px; }
+    .modal .error { color: #f66; font-size: 12px; min-height: 16px; margin-bottom: 10px; }
+    .modal .row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+
+    /* ─── Source viewer panel ──────────────────────────────────────────────── */
+    .source-panel {
+      position: fixed;
+      top: 0; right: 0;
+      width: min(560px, 100vw);
+      height: 100vh;
+      background: rgba(18, 18, 18, 0.97);
+      backdrop-filter: blur(16px);
+      border-left: 1px solid var(--border);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .source-panel.open { transform: translateX(0); }
+
+    .source-panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .source-panel-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .source-panel-header h2 .proto-badge {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(124, 106, 255, 0.15);
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .source-panel-header button.close-source {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 18px;
+      width: 30px; height: 30px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .source-panel-header button.close-source:hover {
+      border-color: var(--accent); color: var(--text);
+    }
+    .source-copy-btn {
+      font-size: 12px !important;
+      padding: 4px 10px !important;
+    }
+    .source-copy-btn.copied {
+      background: var(--boost) !important;
+    }
+
+    .source-panel-body {
+      flex: 1;
+      overflow: auto;
+      padding: 0;
+    }
+    .source-panel-body pre {
+      margin: 0;
+      padding: 16px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre;
+      overflow-x: auto;
+      color: var(--text);
+      tab-size: 2;
+    }
+
+    /* JSON syntax colors */
+    .json-key    { color: #7c6aff; }
+    .json-string { color: #a8d8a8; }
+    .json-number { color: #e8c07a; }
+    .json-bool   { color: #e07b39; }
+    .json-null   { color: #666; font-style: italic; }
+
+    .source-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 199;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .source-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Source button on posts */
+    .post-source-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 11px;
+      font-family: monospace;
+      padding: 2px 6px;
+      cursor: pointer;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.15s, color 0.15s;
+    }
+    .post:hover .post-source-btn,
+    .post-source-btn:focus { opacity: 1; }
+    .post-source-btn:hover { color: var(--accent); background: rgba(124, 106, 255, 0.08); }
+
+    /* Source button on feed pills */
+    .feed-pill .source-pill-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: monospace;
+      font-size: 12px;
+      padding: 0 2px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .feed-pill .source-pill-btn:hover { color: var(--accent); }
+
+    @media (max-width: 480px) {
+      .post.reply { margin-left: 1rem; }
+      header { padding: 10px 12px; }
+      main { padding: 10px; }
+      .source-panel { width: 100vw; }
+      .post-source-btn { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Signal <span>⚡</span></h1>
+  <div class="feed-input-row">
+    <input type="url" id="feedUrlInput" placeholder="Paste a feed URL…" autocomplete="off" />
+    <button id="addBtn">Add feed</button>
+    <button class="ghost" id="refreshBtn">Refresh</button>
+  </div>
+</header>
+
+<main>
+  <div id="feedList" class="feed-list" style="display:none"></div>
+  <div id="status">No feeds loaded. Add a feed URL above to get started.</div>
+  <div id="timeline" class="timeline"></div>
+</main>
+
+<!-- Unlock modal -->
+<div class="modal-overlay hidden" id="unlockOverlay">
+  <div class="modal">
+    <h2>🔑 Unlock encrypted stream</h2>
+    <p id="unlockDesc">Paste your base64url stream key below. The key is only held in memory for this session.</p>
+    <label for="streamKeyInput">Stream key (base64url)</label>
+    <input type="password" id="streamKeyInput" placeholder="e.g. aGVsbG9fd29ybGQ…" autocomplete="off" spellcheck="false" />
+    <div class="error" id="unlockError"></div>
+    <div class="row">
+      <button class="ghost" id="unlockCancelBtn">Cancel</button>
+      <button id="unlockSubmitBtn">Decrypt</button>
+    </div>
+  </div>
+</div>
+
+<!-- Source viewer panel -->
+<div class="source-overlay" id="sourceOverlay"></div>
+<div class="source-panel" id="sourcePanel">
+  <div class="source-panel-header">
+    <h2><span id="sourcePanelTitle">Source</span> <span class="proto-badge">ANSYBL 1.0</span></h2>
+    <button class="source-copy-btn ghost" id="sourceCopyBtn">Copy</button>
+    <button class="close-source" id="sourceCloseBtn">×</button>
+  </div>
+  <div class="source-panel-body">
+    <pre><code id="sourceCode"></code></pre>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const STORAGE_KEY = 'signal_feeds';
+
+  let feeds    = [];    // { url, data, decryptedPosts? }[]
+  let feedUrls = [];    // string[]
+
+  // Session-only key cache: url → Uint8Array stream key
+  const sessionKeys = new Map();
+
+  // Pending unlock callback
+  let pendingUnlock = null;
+
+  // ─── base64url helpers (browser) ────────────────────────────────────────────
+
+  function b64urlToBytes(str) {
+    // Restore standard base64 padding and alphabet
+    const b64 = str.replace(/-/g, '+').replace(/_/g, '/') +
+                '='.repeat((4 - (str.length % 4)) % 4);
+    const bin = atob(b64);
+    return Uint8Array.from({ length: bin.length }, (_, i) => bin.charCodeAt(i));
+  }
+
+  // ─── WebCrypto AES-256-GCM decrypt ──────────────────────────────────────────
+
+  async function decryptPayload(streamKeyBytes, payload) {
+    const iv         = b64urlToBytes(payload.iv);
+    const ciphertext = b64urlToBytes(payload.ciphertext);
+    const tag        = b64urlToBytes(payload.tag);
+
+    // WebCrypto expects ciphertext || tag
+    const combined = new Uint8Array(ciphertext.length + tag.length);
+    combined.set(ciphertext);
+    combined.set(tag, ciphertext.length);
+
+    const key = await crypto.subtle.importKey(
+      'raw',
+      streamKeyBytes.buffer.slice(streamKeyBytes.byteOffset, streamKeyBytes.byteOffset + streamKeyBytes.byteLength),
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['decrypt']
+    );
+
+    const plainBuf = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv, tagLength: 128 },
+      key,
+      combined
+    );
+    return new TextDecoder().decode(plainBuf);
+  }
+
+  // ─── Persistence ─────────────────────────────────────────────────────────────
+
+  function persist()  { localStorage.setItem(STORAGE_KEY, JSON.stringify(feedUrls)); }
+  function loadUrls() {
+    try { feedUrls = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch { feedUrls = []; }
+  }
+
+  // ─── Time formatting ─────────────────────────────────────────────────────────
+
+  function relTime(iso) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const s = Math.floor(diff / 1000);
+    if (s < 60)  return `${s}s`;
+    const m = Math.floor(s / 60);
+    if (m < 60)  return `${m}m`;
+    const h = Math.floor(m / 60);
+    if (h < 24)  return `${h}h`;
+    const d = Math.floor(h / 24);
+    if (d < 30)  return `${d}d`;
+    return new Date(iso).toLocaleDateString();
+  }
+
+  // ─── DOM helpers ─────────────────────────────────────────────────────────────
+
+  function avatarEl(feed, locked) {
+    const div = document.createElement('div');
+    div.className = 'avatar' + (locked ? ' locked-avatar' : '');
+    if (!locked && feed?.meta?.avatar) {
+      const img = document.createElement('img');
+      img.src = feed.meta.avatar; img.alt = '';
+      img.onerror = () => { img.remove(); div.textContent = initial(feed); };
+      div.appendChild(img);
+    } else {
+      div.textContent = locked ? '🔒' : initial(feed);
+    }
+    return div;
+  }
+
+  function initial(feed) {
+    const h = feed?.meta?.handle ?? feed?.meta?.author ?? '?';
+    return h.replace('@', '').charAt(0).toUpperCase();
+  }
+
+  // ─── Encrypted stream card ───────────────────────────────────────────────────
+
+  function buildEncryptedCard(feedEntry) {
+    const { url, data } = feedEntry;
+    const isUnlocked = feedEntry.decryptedPosts != null;
+
+    const article = document.createElement('article');
+    article.className = 'post encrypted-card' + (isUnlocked ? ' unlocked' : '');
+
+    const hdr = document.createElement('div');
+    hdr.className = 'post-header';
+
+    const av = avatarEl(
+      isUnlocked ? { meta: feedEntry.decryptedMeta } : null,
+      !isUnlocked
+    );
+    hdr.appendChild(av);
+
+    const ab = document.createElement('div');
+    ab.className = 'author-block';
+    const nm = document.createElement('div');
+    nm.className = 'author-name';
+    nm.textContent = isUnlocked
+      ? (feedEntry.decryptedMeta?.author ?? 'Unknown')
+      : `Encrypted stream: ${data.stream_id}`;
+    const hn = document.createElement('div');
+    hn.className = 'author-handle';
+    hn.textContent = isUnlocked
+      ? (feedEntry.decryptedMeta?.handle ?? '')
+      : (data.owner_fingerprint?.slice(0, 22) + '…' ?? '');
+    ab.appendChild(nm); ab.appendChild(hn);
+    hdr.appendChild(ab);
+
+    // Unlock / Lock toggle button
+    const btn = document.createElement('button');
+    btn.className = 'lock-btn' + (isUnlocked ? ' unlocked' : '');
+    btn.textContent = isUnlocked ? '🔓 Unlocked' : '🔑 Unlock';
+    btn.addEventListener('click', () => {
+      if (isUnlocked) {
+        // Re-lock: clear decrypted data and session key
+        feedEntry.decryptedPosts = null;
+        feedEntry.decryptedMeta  = null;
+        sessionKeys.delete(feedEntry.url);
+        renderFeedList();
+        render();
+      } else {
+        openUnlockModal(feedEntry);
+      }
+    });
+    hdr.appendChild(btn);
+
+    // Source view button for encrypted data
+    const srcBtn = document.createElement('button');
+    srcBtn.className = 'post-source-btn';
+    srcBtn.textContent = '{ }';
+    srcBtn.title = isUnlocked ? 'View decrypted source' : 'View encrypted envelope';
+    srcBtn.style.opacity = '1';
+    srcBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isUnlocked) {
+        openSourcePanel(
+          { meta: feedEntry.decryptedMeta, posts: feedEntry.decryptedPosts },
+          `${feedEntry.decryptedMeta?.handle ?? data.stream_id} — Decrypted`
+        );
+      } else {
+        openSourcePanel(data, `Encrypted: ${data.stream_id}`);
+      }
+    });
+    hdr.appendChild(srcBtn);
+    article.appendChild(hdr);
+
+    // Info strip
+    const info = document.createElement('div');
+    info.className = 'encrypted-stream-info' + (isUnlocked ? ' decrypted' : '');
+    const cipher = document.createElement('span');
+    cipher.className = 'cipher-tag';
+    cipher.textContent = `AES-256-GCM v${data.payload?.key_version ?? '?'}`;
+    info.appendChild(cipher);
+
+    if (isUnlocked) {
+      const count = document.createElement('span');
+      count.className = 'stream-post-count';
+      count.textContent = `${feedEntry.decryptedPosts.length} post${feedEntry.decryptedPosts.length !== 1 ? 's' : ''} decrypted`;
+      info.appendChild(count);
+    } else {
+      const hint = document.createElement('span');
+      hint.textContent = `stream: ${data.stream_id} · ${data.owner_fingerprint?.slice(0, 16)}…`;
+      info.appendChild(hint);
+    }
+    article.appendChild(info);
+
+    return article;
+  }
+
+  // ─── Post rendering ──────────────────────────────────────────────────────────
+
+  function buildPost(post, feed, allPosts, feedUrl) {
+    const article = document.createElement('article');
+    article.className = 'post';
+    if (post.type === 'reply') article.classList.add('reply');
+    if (post.type === 'boost') article.classList.add('boost');
+    article.dataset.guid = post.guid;
+    article.dataset.feedUrl = feedUrl;
+
+    if (post.type === 'boost') {
+      const label = document.createElement('div');
+      label.className = 'boost-label';
+      label.innerHTML = `↑ <strong>${feed?.meta?.handle ?? 'someone'}</strong> boosted`;
+      article.appendChild(label);
+
+      const body = document.createElement('div');
+      body.className = 'boost-body';
+      const origin = document.createElement('div');
+      origin.className = 'boost-origin';
+      origin.textContent = `${post.boost_of.feed_url}  #${post.boost_of.guid.slice(0, 8)}`;
+      body.appendChild(origin);
+
+      const resolved = allPosts.find(e => e.post.guid === post.boost_of.guid);
+      if (resolved) {
+        const bc = document.createElement('div');
+        bc.className = 'boost-content';
+        bc.textContent = resolved.post.content ?? '';
+        body.appendChild(bc);
+      }
+      article.appendChild(body);
+    } else {
+      const hdr = document.createElement('div');
+      hdr.className = 'post-header';
+      hdr.appendChild(avatarEl(feed));
+
+      const ab = document.createElement('div');
+      ab.className = 'author-block';
+      const name = document.createElement('div');
+      name.className = 'author-name';
+      name.textContent = feed?.meta?.author ?? 'Unknown';
+      const handle = document.createElement('div');
+      handle.className = 'author-handle';
+      handle.textContent = feed?.meta?.handle ?? '';
+      ab.appendChild(name); ab.appendChild(handle);
+      hdr.appendChild(ab);
+
+      const t = document.createElement('div');
+      t.className = 'post-time';
+      t.textContent = relTime(post.created_at);
+      t.title = post.created_at;
+      hdr.appendChild(t);
+
+      const srcBtn = document.createElement('button');
+      srcBtn.className = 'post-source-btn';
+      srcBtn.textContent = '{ }';
+      srcBtn.title = 'View source JSON';
+      srcBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openSourcePanel(post, `Post ${post.guid.slice(0, 8)}`);
+      });
+      hdr.appendChild(srcBtn);
+      article.appendChild(hdr);
+
+      if (post.content) {
+        const c = document.createElement('div');
+        c.className = 'post-content';
+        c.textContent = post.content;
+        article.appendChild(c);
+      }
+
+      if (post.url) {
+        const a = document.createElement('a');
+        a.className = 'post-link';
+        a.href = post.url; a.textContent = post.url;
+        a.target = '_blank'; a.rel = 'noopener noreferrer';
+        article.appendChild(a);
+      }
+
+      if (post.tags?.length) {
+        const row = document.createElement('div');
+        row.className = 'tags';
+        for (const tag of post.tags) {
+          const chip = document.createElement('span');
+          chip.className = 'tag';
+          chip.textContent = '#' + tag;
+          row.appendChild(chip);
+        }
+        article.appendChild(row);
+      }
+    }
+    return article;
+  }
+
+  // ─── Timeline render ─────────────────────────────────────────────────────────
+
+  function render() {
+    const timeline = document.getElementById('timeline');
+    const status   = document.getElementById('status');
+    timeline.innerHTML = '';
+
+    const allPosts = [];
+
+    // First pass: collect all plaintext posts
+    for (const f of feeds) {
+      if (f.data.encrypted) {
+        // Encrypted feed — inject decrypted posts if available
+        if (f.decryptedPosts) {
+          const meta = f.decryptedMeta ?? f.data;
+          for (const p of f.decryptedPosts) allPosts.push({ post: p, feed: { meta }, feedUrl: f.url });
+        }
+      } else {
+        for (const p of (f.data.posts ?? [])) allPosts.push({ post: p, feed: f.data, feedUrl: f.url });
+      }
+    }
+
+    const hasContent = allPosts.length > 0 || feeds.some(f => f.data.encrypted && !f.decryptedPosts);
+
+    if (!hasContent) {
+      status.style.display = '';
+      status.textContent = feedUrls.length ? 'Feeds loaded but no posts found.' : 'No feeds loaded. Add a feed URL above to get started.';
+      return;
+    }
+
+    status.style.display = 'none';
+
+    // Sort plaintext posts by created_at desc
+    const sorted = [...allPosts].sort(
+      (a, b) => new Date(b.post.created_at) - new Date(a.post.created_at)
+    );
+
+    // Inject encrypted-stream placeholder cards at the top
+    for (const f of feeds) {
+      if (f.data.encrypted) {
+        const card = buildEncryptedCard(f);
+        card.dataset.feedUrl = f.url;
+        timeline.appendChild(card);
+      }
+    }
+
+    // Render sorted plaintext posts with reply threading
+    const rendered = new Set();
+    for (const { post, feed, feedUrl } of sorted) {
+      if (rendered.has(post.guid)) continue;
+      if (post.type !== 'reply') {
+        timeline.appendChild(buildPost(post, feed, sorted, feedUrl));
+        rendered.add(post.guid);
+        for (const r of sorted) {
+          if (r.post.reply_to === post.guid && !rendered.has(r.post.guid)) {
+            timeline.appendChild(buildPost(r.post, r.feed, sorted, r.feedUrl));
+            rendered.add(r.post.guid);
+          }
+        }
+      } else if (!sorted.some(e => e.post.guid === post.reply_to)) {
+        timeline.appendChild(buildPost(post, feed, sorted, feedUrl));
+        rendered.add(post.guid);
+      }
+    }
+  }
+
+  let selectedFeedUrl = null;
+
+  function renderFeedList() {
+    const list = document.getElementById('feedList');
+    list.innerHTML = '';
+    if (!feedUrls.length) { list.style.display = 'none'; return; }
+    list.style.display = 'flex';
+
+    for (const url of feedUrls) {
+      const f         = feeds.find(fe => fe.url === url);
+      const encrypted = f?.data?.encrypted ?? false;
+
+      const pill = document.createElement('div');
+      pill.className = 'feed-pill' + (encrypted ? ' encrypted-pill' : '');
+      if (selectedFeedUrl === url) {
+        pill.classList.add('selected');
+      }
+
+      pill.addEventListener('click', (e) => {
+        // Don't select if clicking a button inside the pill
+        if (e.target.tagName.toLowerCase() === 'button') return;
+        
+        if (selectedFeedUrl === url) {
+          selectedFeedUrl = null; // deselect
+        } else {
+          selectedFeedUrl = url;
+        }
+        renderFeedList();
+        
+        // Highlight logic
+        const posts = document.querySelectorAll('.post');
+        if (selectedFeedUrl) {
+           posts.forEach(p => {
+               if(p.dataset.feedUrl === selectedFeedUrl) {
+                   p.classList.add('highlight');
+                   p.classList.remove('dimmed');
+               } else {
+                   p.classList.remove('highlight');
+                   p.classList.add('dimmed');
+               }
+           });
+        } else {
+            posts.forEach(p => {
+                p.classList.remove('highlight', 'dimmed');
+            });
+        }
+      });
+
+      const label = document.createElement('span');
+      try { label.textContent = (encrypted ? '🔒 ' : '') + new URL(url).hostname; }
+      catch { label.textContent = url; }
+      pill.appendChild(label);
+
+      // Source view button
+      if (f?.data) {
+        const srcBtn = document.createElement('button');
+        srcBtn.className = 'source-pill-btn';
+        srcBtn.textContent = '{ }';
+        srcBtn.title = 'View feed source';
+        srcBtn.addEventListener('click', () => {
+          const feedAuthor = f.data?.meta?.handle || f.data?.meta?.author || 'Feed';
+          openSourcePanel(f.data, `${feedAuthor} — Full Feed`);
+        });
+        pill.appendChild(srcBtn);
+      }
+
+      const rm = document.createElement('button');
+      rm.className = 'remove';
+      rm.textContent = '×'; rm.title = 'Remove';
+      rm.addEventListener('click', () => {
+        feedUrls = feedUrls.filter(u => u !== url);
+        feeds    = feeds.filter(fe => fe.url !== url);
+        sessionKeys.delete(url);
+        persist(); renderFeedList(); render();
+      });
+      pill.appendChild(rm);
+      list.appendChild(pill);
+    }
+  }
+
+  // ─── Unlock modal ────────────────────────────────────────────────────────────
+
+  function openUnlockModal(feedEntry) {
+    const overlay = document.getElementById('unlockOverlay');
+    const desc    = document.getElementById('unlockDesc');
+    const errEl   = document.getElementById('unlockError');
+    const input   = document.getElementById('streamKeyInput');
+
+    desc.textContent = `Stream: ${feedEntry.data.stream_id} · Key version ${feedEntry.data.payload?.key_version ?? '?'}`;
+    errEl.textContent = '';
+    
+    // Auto-fill key if it's the inner-circle feed
+    const DEMO_KEY = 'Q-OGfI3Z6jEUx423r1Klmjt3cXVcfKoOkoFp4PBsljc';
+    
+    input.value = sessionKeys.has(feedEntry.url)
+      ? '[key cached — paste a new one to replace]'
+      : (feedEntry.data.stream_id === 'inner-circle' ? DEMO_KEY : '');
+
+    overlay.classList.remove('hidden');
+    input.focus();
+
+    pendingUnlock = feedEntry;
+  }
+
+  function closeUnlockModal() {
+    document.getElementById('unlockOverlay').classList.add('hidden');
+    document.getElementById('streamKeyInput').value = '';
+    document.getElementById('unlockError').textContent = '';
+    pendingUnlock = null;
+  }
+
+  async function attemptDecrypt() {
+    const feedEntry = pendingUnlock;
+    if (!feedEntry) return;
+
+    const input   = document.getElementById('streamKeyInput');
+    const errEl   = document.getElementById('unlockError');
+    const keyStr  = input.value.trim();
+
+    if (!keyStr || keyStr.startsWith('[')) { errEl.textContent = 'Paste a base64url stream key.'; return; }
+
+    let keyBytes;
+    try { keyBytes = b64urlToBytes(keyStr); }
+    catch { errEl.textContent = 'Invalid base64url.'; return; }
+
+    if (keyBytes.length !== 32) {
+      errEl.textContent = `Expected 32 bytes, got ${keyBytes.length}. Check the key.`;
+      return;
+    }
+
+    errEl.textContent = 'Decrypting…';
+    try {
+      const plaintext = await decryptPayload(keyBytes, feedEntry.data.payload);
+      const parsed    = JSON.parse(plaintext);
+
+      feedEntry.decryptedPosts = parsed.posts ?? [];
+      feedEntry.decryptedMeta  = parsed.meta  ?? null;
+      sessionKeys.set(feedEntry.url, keyBytes);
+
+      closeUnlockModal();
+      renderFeedList();
+      render();
+    } catch (e) {
+      errEl.textContent = 'Decryption failed — wrong key or corrupted data.';
+      console.error('Decrypt error:', e);
+    }
+  }
+
+  document.getElementById('unlockSubmitBtn').addEventListener('click', attemptDecrypt);
+  document.getElementById('unlockCancelBtn').addEventListener('click', closeUnlockModal);
+  document.getElementById('streamKeyInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') attemptDecrypt();
+    if (e.key === 'Escape') closeUnlockModal();
+  });
+  document.getElementById('unlockOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeUnlockModal();
+  });
+
+  // ─── Feed fetching ───────────────────────────────────────────────────────────
+
+  async function fetchFeed(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  async function addFeed(url) {
+    url = url.trim();
+    if (!url) return;
+    if (feedUrls.includes(url)) { setStatus('Already added.'); return; }
+    setStatus(`Fetching ${url}…`);
+    try {
+      const data = await fetchFeed(url);
+      feedUrls.push(url);
+      const entry = { url, data };
+      // If we have a cached key for this URL (shouldn't on first add, but defensive)
+      if (data.encrypted && sessionKeys.has(url)) {
+        const kv = sessionKeys.get(url);
+        try {
+          const plain = await decryptPayload(kv, data.payload);
+          const p = JSON.parse(plain);
+          entry.decryptedPosts = p.posts ?? [];
+          entry.decryptedMeta  = p.meta ?? null;
+        } catch {}
+      }
+      feeds.push(entry);
+      persist();
+      renderFeedList();
+      render();
+      setStatus('');
+    } catch (e) {
+      setStatus(`Failed to fetch feed: ${e.message}`);
+    }
+  }
+
+  async function refresh() {
+    if (!feedUrls.length) return;
+    setStatus('Refreshing…');
+    const newFeeds = [];
+    for (const url of feedUrls) {
+      try {
+        const data  = await fetchFeed(url);
+        const entry = { url, data };
+        if (data.encrypted && sessionKeys.has(url)) {
+          try {
+            const plain = await decryptPayload(sessionKeys.get(url), data.payload);
+            const p = JSON.parse(plain);
+            entry.decryptedPosts = p.posts ?? [];
+            entry.decryptedMeta  = p.meta ?? null;
+          } catch {}
+        }
+        newFeeds.push(entry);
+      } catch (e) {
+        // Keep old data on failure
+        const old = feeds.find(f => f.url === url);
+        if (old) newFeeds.push(old);
+        console.warn('Failed to refresh', url, e.message);
+      }
+    }
+    feeds = newFeeds;
+    renderFeedList();
+    render();
+    setStatus('');
+  }
+
+  function setStatus(msg) {
+    const el = document.getElementById('status');
+    el.style.display = msg ? 'block' : '';
+    el.textContent   = msg;
+  }
+
+  // ─── Source viewer ──────────────────────────────────────────────────────────
+
+  let _rawSourceText = '';
+
+  function syntaxHighlight(json) {
+    const str = typeof json === 'string' ? json : JSON.stringify(json, null, 2);
+    return str
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/("(?:\\.|[^"\\])*")\s*:/g, '<span class="json-key">$1</span>:')
+      .replace(/:\s*("(?:\\.|[^"\\])*")/g, ': <span class="json-string">$1</span>')
+      .replace(/:\s*(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g, ': <span class="json-number">$1</span>')
+      .replace(/:\s*(true|false)/g, ': <span class="json-bool">$1</span>')
+      .replace(/:\s*(null)/g, ': <span class="json-null">$1</span>');
+  }
+
+  function openSourcePanel(data, title) {
+    const panel   = document.getElementById('sourcePanel');
+    const overlay = document.getElementById('sourceOverlay');
+    const code    = document.getElementById('sourceCode');
+    const titleEl = document.getElementById('sourcePanelTitle');
+    const copyBtn = document.getElementById('sourceCopyBtn');
+
+    _rawSourceText = JSON.stringify(data, null, 2);
+    code.innerHTML = syntaxHighlight(_rawSourceText);
+    titleEl.textContent = title || 'Source';
+    copyBtn.textContent = 'Copy';
+    copyBtn.classList.remove('copied');
+
+    panel.classList.add('open');
+    overlay.classList.add('open');
+  }
+
+  function closeSourcePanel() {
+    document.getElementById('sourcePanel').classList.remove('open');
+    document.getElementById('sourceOverlay').classList.remove('open');
+    _rawSourceText = '';
+  }
+
+  document.getElementById('sourceCloseBtn').addEventListener('click', closeSourcePanel);
+  document.getElementById('sourceOverlay').addEventListener('click', closeSourcePanel);
+  document.getElementById('sourceCopyBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText(_rawSourceText).then(() => {
+      const btn = document.getElementById('sourceCopyBtn');
+      btn.textContent = 'Copied ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.getElementById('sourcePanel').classList.contains('open')) {
+      closeSourcePanel();
+    }
+  });
+
+  // ─── Wire up controls ────────────────────────────────────────────────────────
+
+  document.getElementById('addBtn').addEventListener('click', () => {
+    const input = document.getElementById('feedUrlInput');
+    addFeed(input.value);
+    input.value = '';
+  });
+
+  document.getElementById('feedUrlInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('addBtn').click();
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', refresh);
+
+  // ─── Bootstrap ───────────────────────────────────────────────────────────────
+
+  // Auto-detect base URL for relative feed paths
+  const BASE_URL = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+
+  // Default feeds to load on first visit (multi-stream demo)
+  const DEFAULT_FEEDS = [
+    BASE_URL + '/feeds/pete.json',
+    BASE_URL + '/feeds/dana.json',
+    BASE_URL + '/feeds/dana-inner-circle.json'
+  ];
+
+  loadUrls();
+
+  // On first visit (no saved feeds), auto-add all default feeds
+  if (!feedUrls.length) {
+    (async () => {
+      for (const feedUrl of DEFAULT_FEEDS) {
+        await addFeed(feedUrl);
+      }
+    })();
+  } else {
+    renderFeedList();
+    refresh();
+  }
+})();
+</script>
+</body>
+</html>

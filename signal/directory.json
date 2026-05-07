@@ -1,0 +1,33 @@
+{
+  "_comment": "Signal Webring Directory — fork this repo, add your entry, open a PR.",
+  "ansybl": "1.0",
+  "type": "signal-directory",
+  "updated_at": "2026-05-05T02:00:00Z",
+  "feeds": [
+    {
+      "handle": "@pete",
+      "author": "Pete Nixon",
+      "feed_url": "/feeds/pete.json",
+      "bio": "Building deshittified internet",
+      "tags": ["ansybl", "decentralized", "web", "indieweb"],
+      "added": "2026-05-05"
+    },
+    {
+      "handle": "@dana",
+      "author": "Dana Reeves",
+      "feed_url": "/feeds/dana.json",
+      "bio": "Privacy researcher. Cryptography enthusiast.",
+      "tags": ["privacy", "cryptography", "research"],
+      "added": "2026-05-05"
+    },
+    {
+      "handle": "@dana:inner-circle",
+      "author": "Dana Reeves",
+      "feed_url": "/feeds/dana-inner-circle.json",
+      "bio": "Private research feed — subscribers only.",
+      "tags": ["encrypted", "research"],
+      "encrypted": true,
+      "added": "2026-05-05"
+    }
+  ]
+}
