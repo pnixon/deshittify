@@ -1,12 +1,17 @@
-# Documentation
+# Ansybl Documentation
 
-This directory contains comprehensive documentation for the Ansybl protocol implementation.
+## Protocol Specification
 
-## Contents
+- **[Ansybl 1.1 Whitepaper](whitepaper.html)** — The main protocol overview. A static-first, cryptographically signed format for publishing social content you own — public, private, or paid.
 
-- **[deployment-guide.md](./deployment-guide.md)** - Complete guide for deploying Ansybl services, including Docker, Kubernetes, and cloud platform instructions
-- **[troubleshooting.md](./troubleshooting.md)** - Common issues and their solutions, debugging tips, and troubleshooting procedures
+### Sub-specifications
 
-## Additional Resources
+- **[ANSYBL-CHUNK](ANSYBL-CHUNK.md)** — Chunked Feeds. Defines the append-only NDJSON chunk layout, signed head pointers, hash chaining, sealing rules, differential retrieval, and caching semantics.
 
-For more information about the Ansybl protocol, see the main [README](../README.md) in the root directory.
+- **[ANSYBL-PM](ANSYBL-PM.md)** — Private Messaging. Defines sealed-envelope encryption, key bundles, recipient scanning, channel mode with key trees, restricted audiences, cold contact, and retention.
+
+## Operational Guides
+
+- **[Deployment Guide](deployment-guide.md)** — How to deploy and host an Ansybl node, including R2/S3 configuration, DNS, and bridge setup.
+
+- **[Troubleshooting](troubleshooting.md)** — Common issues, error codes, and debugging procedures.

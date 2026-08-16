@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ansybl 1.1 — A Static-First, Signed, Encrypted Format for the Social Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFF1EE;
+    --paper-2:#E5E8E4;
+    --card:#F8F9F7;
+    --ink:#12161A;
+    --ink-soft:#4C555C;
+    --ink-faint:#79838A;
+    --rule:#C6CCC5;
+    --rule-hair:#D8DDD7;
+    --accent:#1B3FD8;
+    --amber:#9C5B08;
+    --verify:#1C6549;
+    --measure:34rem;
+    --margin-col:11rem;
+  }
+
+  *{box-sizing:border-box;}
+
+  html{-webkit-text-size-adjust:100%;}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Serif",Georgia,serif;
+    font-size:17px;
+    line-height:1.62;
+    font-feature-settings:"liga" 1;
+  }
+
+  /* ---------- layout scaffold ---------- */
+
+  .sheet{
+    max-width:64rem;
+    margin:0 auto;
+    padding:0 1.5rem 6rem;
+  }
+
+  .row{
+    display:grid;
+    grid-template-columns:var(--margin-col) minmax(0,var(--measure));
+    gap:2.5rem;
+    align-items:start;
+  }
+
+  .row + .row{margin-top:0;}
+
+  .gutter{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.688rem;
+    line-height:1.5;
+    letter-spacing:.04em;
+    color:var(--ink-faint);
+    text-align:right;
+    padding-top:.55rem;
+    position:sticky;
+    top:1.5rem;
+  }
+
+  .gutter b{
+    display:block;
+    color:var(--accent);
+    font-weight:600;
+    letter-spacing:.08em;
+  }
+
+  .gutter .note{
+    display:block;
+    margin-top:.9rem;
+    font-style:normal;
+    color:var(--ink-faint);
+    border-top:1px solid var(--rule-hair);
+    padding-top:.7rem;
+    text-align:left;
+  }
+
+  .body{min-width:0;}
+
+  /* ---------- masthead ---------- */
+
+  header.masthead{
+    border-bottom:2px solid var(--ink);
+    padding:3.5rem 0 1.25rem;
+    margin-bottom:2.5rem;
+  }
+
+  .kicker{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.7rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 1.6rem;
+  }
+
+  h1{
+    font-family:"IBM Plex Sans Condensed",sans-serif;
+    font-weight:700;
+    font-size:clamp(2.6rem,8vw,4.5rem);
+    line-height:.98;
+    letter-spacing:-.02em;
+    margin:0 0 .6rem;
+  }
+
+  .deck{
+    font-size:1.28rem;
+    line-height:1.42;
+    color:var(--ink-soft);
+    max-width:38rem;
+    margin:0 0 2.2rem;
+  }
+
+  .colophon{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.5rem 2.5rem;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.72rem;
+    letter-spacing:.03em;
+    color:var(--ink-faint);
+    border-top:1px solid var(--rule-hair);
+    padding-top:1rem;
+  }
+
+  .colophon span b{color:var(--ink);font-weight:500;}
+  .colophon a{color:var(--accent);text-decoration:none;}
+  .colophon a:hover{text-decoration:underline;}
+
+  /* ---------- the specimen (signature element) ---------- */
+
+  .specimen{
+    background:var(--ink);
+    color:#DDE3E8;
+    border-radius:2px;
+    padding:1.75rem 1.5rem;
+    margin:0 0 .9rem;
+    overflow-x:auto;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.76rem;
+    line-height:1.85;
+    tab-size:2;
+  }
+
+  .specimen pre{margin:0;white-space:pre;}
+  .specimen .k{color:#8FB4FF;}
+  .specimen .s{color:#C9E5C0;}
+  .specimen .p{color:#69757F;}
+  .specimen .sig{color:#FFC773;}
+
+  .specimen mark{
+    background:rgba(255,199,115,.14);
+    color:inherit;
+    border-left:2px solid #FFC773;
+    padding-left:.45rem;
+    margin-left:-.6rem;
+    display:inline-block;
+    width:calc(100% + .6rem);
+  }
+
+  .specimen-caption{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.688rem;
+    color:var(--ink-faint);
+    letter-spacing:.02em;
+    line-height:1.55;
+    margin:0 0 3rem;
+  }
+
+  /* ---------- typography ---------- */
+
+  h2{
+    font-family:"IBM Plex Sans Condensed",sans-serif;
+    font-weight:700;
+    font-size:1.85rem;
+    line-height:1.12;
+    letter-spacing:-.01em;
+    margin:3.2rem 0 1rem;
+    padding-top:1.1rem;
+    border-top:1px solid var(--rule);
+  }
+
+  .row:first-of-type h2{margin-top:0;}
+
+  h3{
+    font-family:"IBM Plex Sans Condensed",sans-serif;
+    font-weight:600;
+    font-size:1.12rem;
+    letter-spacing:.005em;
+    margin:2rem 0 .5rem;
+  }
+
+  p{margin:0 0 1.05rem;}
+
+  .lede{font-size:1.1rem;color:var(--ink-soft);}
+
+  a{color:var(--accent);}
+
+  ul,ol{margin:0 0 1.05rem;padding-left:1.15rem;}
+  li{margin-bottom:.5rem;}
+  li::marker{color:var(--ink-faint);}
+
+  strong{font-weight:600;}
+
+  code{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.82em;
+    background:var(--paper-2);
+    padding:.08em .32em;
+    border-radius:2px;
+  }
+
+  /* ---------- devices ---------- */
+
+  .callout{
+    background:var(--card);
+    border:1px solid var(--rule-hair);
+    border-left:3px solid var(--accent);
+    padding:1.1rem 1.2rem;
+    margin:1.6rem 0;
+    font-size:.95rem;
+  }
+
+  .callout p:last-child{margin-bottom:0;}
+
+  .callout .tag{
+    display:block;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.66rem;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:.5rem;
+  }
+
+  .callout.caution{border-left-color:var(--amber);}
+  .callout.caution .tag{color:var(--amber);}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-family:"IBM Plex Sans Condensed",sans-serif;
+    font-size:.9rem;
+    margin:1.4rem 0 1.8rem;
+  }
+
+  th{
+    text-align:left;
+    font-weight:600;
+    font-size:.68rem;
+    font-family:"IBM Plex Mono",monospace;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    border-bottom:1.5px solid var(--ink);
+    padding:0 .7rem .5rem 0;
+    vertical-align:bottom;
+  }
+
+  td{
+    padding:.62rem .7rem .62rem 0;
+    border-bottom:1px solid var(--rule-hair);
+    vertical-align:top;
+    line-height:1.42;
+  }
+
+  td:first-child{font-weight:600;white-space:nowrap;}
+
+  .yes{color:var(--verify);font-weight:600;}
+  .no{color:var(--ink-faint);}
+  .part{color:var(--amber);font-weight:600;}
+
+  .fieldlist{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.8rem;
+    line-height:1.7;
+    background:var(--card);
+    border:1px solid var(--rule-hair);
+    padding:1rem 1.2rem;
+    margin:1.4rem 0;
+    list-style:none;
+  }
+  .fieldlist li{margin-bottom:.4rem;}
+  .fieldlist li:last-child{margin-bottom:0;}
+  .fieldlist b{color:var(--accent);font-weight:600;}
+  .fieldlist span{
+    font-family:"IBM Plex Serif",serif;
+    font-size:.92rem;
+    color:var(--ink-soft);
+  }
+
+  .refs{font-size:.9rem;line-height:1.5;}
+  .refs li{margin-bottom:.7rem;}
+
+  footer.end{
+    margin-top:4rem;
+    padding-top:1.2rem;
+    border-top:2px solid var(--ink);
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.7rem;
+    letter-spacing:.03em;
+    color:var(--ink-faint);
+  }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width:820px){
+    body{font-size:16px;}
+    .row{grid-template-columns:1fr;gap:0;}
+    .gutter{
+      position:static;
+      text-align:left;
+      padding:0 0 .4rem;
+      display:flex;
+      flex-wrap:wrap;
+      gap:0 .9rem;
+    }
+    .gutter b{display:inline;}
+    .gutter .note{
+      flex-basis:100%;
+      border-top:none;
+      padding-top:0;
+      margin-top:.2rem;
+    }
+    h2{margin-top:2.4rem;}
+    .specimen{font-size:.68rem;padding:1.2rem 1rem;}
+    table{font-size:.85rem;}
+    td:first-child{white-space:normal;}
+  }
+
+  @media (prefers-reduced-motion:no-preference){
+    .masthead h1,.masthead .deck{animation:rise .7s cubic-bezier(.2,.7,.3,1) both;}
+    .masthead .deck{animation-delay:.08s;}
+    @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  }
+
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;font-size:10.5pt;}
+    .gutter{position:static;}
+    .row{grid-template-columns:8rem minmax(0,1fr);gap:1.5rem;}
+    .specimen{background:#fff;color:#12161A;border:1px solid #999;}
+    .specimen .k,.specimen .s,.specimen .sig,.specimen .p{color:#12161A;}
+    .specimen mark{background:#eee;border-left-color:#666;}
+    h2{break-after:avoid;}
+    table,.callout,.specimen{break-inside:avoid;}
+    .sheet{padding-bottom:0;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header class="masthead">
+  <p class="kicker">Protocol white paper · version 1.1 · draft for review</p>
+  <h1>Ansybl</h1>
+  <p class="deck">A static-first, cryptographically signed format for publishing social content you actually own — public, private, or paid — and a bridge to the networks you already use.</p>
+  <div class="colophon">
+    <span><b>Version</b> 1.1 draft</span>
+    <span><b>Supersedes</b> 1.0, August 2026</span>
+    <span><b>Authors</b> Pete Nixon, Matt</span>
+    <span><b>License</b> MIT</span>
+    <span><b>Repository</b> <a href="https://github.com/pnixon/deshittify">github.com/pnixon/deshittify</a></span>
+  </div>
+</header>
+
+<div class="row">
+  <div class="gutter">
+    <b>Specimen</b>
+    head + chunk
+    <span class="note">Two artifacts. A signed pointer a few hundred bytes long, and an append-only log of signed lines.</span>
+  </div>
+  <div class="body">
+    <div class="specimen" role="img" aria-label="An Ansybl feed head document and two lines of a chunk file, showing the hash chain and signatures.">
+<pre><span class="p">// posts/head.ansybl — polled, ~250 bytes, TTL 60s</span>
+<span class="p">{</span> <span class="k">"seq"</span>: <span class="sig">2</span>, <span class="k">"open_bytes"</span>: <span class="sig">11482</span>, <span class="k">"total_count"</span>: <span class="sig">1007</span>,
+<mark>  <span class="k">"tip"</span>: <span class="sig">"b3:7c1d9a4f…"</span>,   <span class="p">// vouches for the whole chain</span></mark>
+  <span class="k">"signature"</span>: <span class="sig">"ed25519:91ba…"</span> <span class="p">}</span>
+
+<span class="p">// posts/chunk/000002.ansybl — NDJSON, append-only</span>
+<span class="p">{</span><span class="k">"guid"</span>:<span class="s">"01J8XP…"</span>,<span class="k">"content_text"</span>:<span class="s">"No server required."</span>,
+<mark> <span class="k">"prev"</span>:<span class="sig">"b3:2f81ac…"</span>,<span class="k">"signature"</span>:<span class="sig">"ed25519:d4f1…"</span><span class="p">}</span></mark>
+<span class="p">{</span><span class="k">"guid"</span>:<span class="s">"01J8XQ…"</span>,<span class="k">"type"</span>:<span class="s">"envelope"</span>,<span class="k">"epk"</span>:<span class="sig">"x25519:Ap9K…"</span>,
+ <span class="k">"recipients"</span>:<span class="p">[{</span><span class="k">"tag"</span>:<span class="s">"9f2a4c1e…"</span>,<span class="k">"wk"</span>:<span class="s">"…"</span><span class="p">}],</span>
+ <span class="k">"ct"</span>:<span class="s">"…"</span>,<span class="k">"prev"</span>:<span class="sig">"b3:a03e11…"</span>,<span class="k">"signature"</span>:<span class="sig">"ed25519:5c72…"</span><span class="p">}</span></pre>
+    </div>
+    <p class="specimen-caption">Public and encrypted entries share one format, one chain, one retrieval path. Sealed chunks are immutable and cached forever; only the open chunk moves.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter"><b>§ 01</b> Abstract</div>
+  <div class="body">
+    <h2>Abstract</h2>
+    <p class="lede">Ansybl is a format for publishing social content — posts, replies, private messages, subscriber-only work — as ordinary static files served over HTTPS, signed with Ed25519 and, where confidentiality is wanted, encrypted client-side.</p>
+    <p>It occupies a deliberate middle ground. RSS proved syndication does not need a platform, but carries no identity, authenticity, or conversation. ActivityPub delivers a genuine social graph but requires every participant to operate a live, stateful server. Ansybl keeps RSS's operational floor — a file, a web server, nothing else — and adds verifiable authorship, encrypted messaging, restricted audiences, and a defined path into existing federated networks through bridges rather than replacement.</p>
+    <p>Version 1.1 revises the on-disk format substantially. Feeds become append-only chunked logs with a signed head, which makes polling cost constant, history immutable and permanently cacheable, and omission detectable. It adds signed key bundles, sealed-envelope encryption for private and restricted content, and a normative requirement that private keys are generated and held client-side.</p>
+    <p>The result is a system where reading scales without limit because readers are served entirely from cache, and where a publisher can leave their host without losing their identity, their audience, or their archive.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 02</b> Problem
+    <span class="note">Platform decay is structural, not accidental.</span>
+  </div>
+  <div class="body">
+    <h2>The problem</h2>
+    <p>Centralized social platforms follow a predictable arc. They are good to users to build an audience, then good to business customers to monetize that audience, then good to neither in order to extract the remaining value. Cory Doctorow named this pattern "enshittification," and its engine is not malice but lock-in: when your audience, your archive, and your identity live on someone else's server, the cost of leaving is the cost of starting over. The platform's incentive to degrade the product is bounded only by how much you are willing to lose.</p>
+    <p>The decentralized response has been real but fragmented. ActivityPub anchors the Fediverse, the AT Protocol anchors Bluesky, Nostr has its own relay ecosystem, and RSS quietly persists underneath all of it. These systems do not interoperate meaningfully. A creator wanting reach across them maintains parallel accounts and posts the same thing several times — reintroducing the platform problem at the level of effort rather than ownership.</p>
+
+    <h3>What each existing option costs</h3>
+    <ul>
+      <li><strong>Running a server.</strong> ActivityPub instances need a database, background workers, inbox and outbox delivery, moderation tooling, and continuous uptime. Federation is a distributed systems problem with real failure modes.</li>
+      <li><strong>Trusting an intermediary.</strong> AT Protocol's architecture is more static-friendly, but discovery and moderation route in practice through relay and app-view infrastructure that few individuals operate.</li>
+      <li><strong>Accepting one-way syndication.</strong> RSS asks almost nothing and gives almost nothing back — no identity, no threading, no privacy, no way to detect a feed was altered.</li>
+    </ul>
+    <p>Ansybl attacks the third. Keep RSS's near-zero operational cost, and buy back identity, integrity, and confidentiality with cryptography instead of infrastructure.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter"><b>§ 03</b> Goals</div>
+  <div class="body">
+    <h2>Design goals and non-goals</h2>
+
+    <h3>Goals</h3>
+    <ul>
+      <li><strong>Static-first.</strong> A conforming feed is a set of static files. It can be served from object storage, a CDN, or a directory on a laptop. No server-side processing is required to publish, retrieve, or verify — including for private and paid content.</li>
+      <li><strong>Verifiable authorship.</strong> Readers confirm content was signed by the key the publisher claims, without contacting any third party.</li>
+      <li><strong>Confidentiality without custody.</strong> Encrypted content is readable only by key-holders. No server — including the publisher's host — can read it or control who does.</li>
+      <li><strong>Constant polling cost.</strong> Checking a feed costs the same whether it holds ten entries or ten million.</li>
+      <li><strong>Portability as a first-class operation.</strong> A publisher can move hosts without breaking identity, post IDs, threads, or followers.</li>
+      <li><strong>Protocol-agnostic.</strong> Bridges to ActivityPub, RSS, and JSON Feed rather than competing for their users.</li>
+      <li><strong>Boring primitives.</strong> JSON, NDJSON, HTTPS, Ed25519, X25519, HKDF, AES-GCM, RFC 8785. Everything is widely implemented and available in WebCrypto.</li>
+    </ul>
+
+    <h3>Non-goals</h3>
+    <ul>
+      <li><strong>Not a network.</strong> No relays, no required servers, no consensus.</li>
+      <li><strong>Not a replacement for ActivityPub or AT Protocol.</strong> Interoperation, not displacement.</li>
+      <li><strong>Not a real-time transport.</strong> Delivery is pull-based; push is a layer above.</li>
+      <li><strong>Not an identity system.</strong> Ansybl binds content to a key. Binding a key to a person is left to domains, TLS, and cross-linked profiles.</li>
+      <li><strong>Not metadata-private.</strong> §11 states precisely what is exposed.</li>
+    </ul>
+    <div class="callout">
+      <span class="tag">One qualification</span>
+      <p>The "no server" claim holds for everything except unsolicited first contact from a stranger, which by definition cannot be delivered by a publisher the recipient does not yet follow. An optional drop endpoint covers this case; a publisher who omits it is simply unreachable by strangers, and everything else continues to work.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 04</b> Document model
+    <span class="note">Revised in 1.1. Replaces the monolithic <code>items</code> array.</span>
+  </div>
+  <div class="body">
+    <h2>The document model</h2>
+    <p>Ansybl 1.0 defined a feed as one JSON document with an <code>items</code> array. That shape has a cost growing with the feed: a reader checking for new content retrieves everything, and a reader scrolling back retrieves what it already holds. Version 1.1 replaces it with an append-only chunked log.</p>
+
+    <ul class="fieldlist">
+      <li><b>feed.ansybl</b> — <span>manifest: title, home page, icon, language. Rarely changes.</span></li>
+      <li><b>keys.ansybl</b> — <span>signed key bundle (§05)</span></li>
+      <li><b>{type}/head.ansybl</b> — <span>signed tip pointer, a few hundred bytes</span></li>
+      <li><b>{type}/index.ansybl</b> — <span>chunk directory for historical navigation</span></li>
+      <li><b>{type}/chunk/NNNNNN.ansybl</b> — <span>NDJSON, one signed entry per line</span></li>
+    </ul>
+
+    <p>Feed types are <code>posts</code>, <code>replies</code>, <code>likes</code>, <code>boosts</code>, and <code>private</code>. All use the identical layout, so one retrieval implementation serves every type.</p>
+
+    <h3>The head</h3>
+    <p>The head is the only object a reader must fetch to learn whether anything changed. It carries the open chunk's sequence number and exact byte length, a running total, and <code>tip</code> — the hash of the most recent entry. It is signed, so it cannot be forged into concealing entries, and its sequence and total counters must never decrease.</p>
+
+    <h3>Chunks and sealing</h3>
+    <p>A chunk opens with a fixed header line, accumulates entry lines, and closes with an appended seal line. Fixing the header at creation and appending the seal rather than inserting it is what keeps every byte offset stable for the lifetime of the chunk.</p>
+    <p>Chunks seal at 64 KB or 500 entries, whichever comes first. Sealing on size rather than calendar period is deliberate: monthly bucketing produces multi-megabyte chunks for prolific publishers and near-empty ones for dormant publishers, and both defeat caching. Date-range navigation is served by the index, which decouples addressing from time.</p>
+    <p>Sealed chunks are immutable and served with a one-year immutable cache directive. They are fetched from origin once per cache node and served from the edge indefinitely.</p>
+
+    <h3>The hash chain</h3>
+    <p>Each entry carries <code>prev</code>, the hash of the preceding line — spanning chunk boundaries, so the chain covers the entire feed history, with the head's <code>tip</code> vouching for it. A dropped, reordered, or altered entry is detectable anywhere, including one removed by a hosting provider. Readers verify forward from the signed head rather than from genesis.</p>
+
+    <div class="callout caution">
+      <span class="tag">Breaking changes from 1.0</span>
+      <p>Entries are now oldest-first, since append-only storage cannot prepend. Feed paths are anchored to key fingerprint rather than handle. The <code>author.public_key</code> field is deprecated in favor of the key bundle. Existing 1.0 signatures remain valid — <code>prev</code> is additive and excluded from the 1.0 canonical signing form — so migration does not require re-signing content.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 05</b> Keys
+    <span class="note">Ed25519 for signing, X25519 for agreement, both published in a signed bundle.</span>
+  </div>
+  <div class="body">
+    <h2>Signatures, canonicalization, and keys</h2>
+    <p>Signing JSON is harder than signing bytes: the same logical document has many valid serializations, and a signature computed over one fails against another in a way indistinguishable from tampering. Ansybl canonicalizes with RFC 8785 before signing or verifying — keys sorted, whitespace eliminated, numbers and strings normalized — then signs with Ed25519. Keys and signatures are carried as prefixed base64, which keeps the format self-describing.</p>
+
+    <h3>Key bundles</h3>
+    <p>Version 1.0 placed a single <code>public_key</code> in the author object, which was insufficient in three ways: signature and key-agreement keys are different algorithms, there was no way to express validity windows, and there was no way to publish encryption material at all. Rotation therefore destroyed the verifiability of everything previously signed.</p>
+    <p>A signed key bundle at <code>keys.ansybl</code> replaces it, carrying a long-lived Ed25519 identity key, a set of X25519 key-agreement keys with validity windows, and an optional drop declaration. Because the bundle is signed by the identity key, it is self-authenticating.</p>
+    <p>Signature and encryption keys are separate. Ed25519 keys can be converted to X25519, but using one keypair across a signature scheme and a key-agreement scheme invalidates the security proofs of both. A second key costs a few dozen bytes in a document fetched rarely and cached.</p>
+
+    <h3>Rotation without loss</h3>
+    <p>Key-agreement keys are medium-term, rotating on a schedule rather than being consumed as one-time prekeys. One-time prekeys require handing each key to exactly one sender, which a static file cannot enforce — two senders fetching the same bundle would take the same key, silently losing the property the prekey existed to provide. Scheduled rotation gives coarse forward secrecy with no consumption semantics and no state.</p>
+    <p>At rotation, a client re-encrypts its retained history to the new key and deletes the old private key, achieving genuine forward secrecy for prior windows while keeping history readable. Identity keys carry supersession pointers so content signed under a previous key remains verifiable.</p>
+
+    <h3>What a signature proves</h3>
+    <p>A valid signature proves the holder of a specific private key produced this exact content. It does not prove who that person is. Ansybl relies on the web's existing trust surface — a key published at a domain the reader already associates with an author, over TLS, cross-referenced from profiles they already trust. This is trust-on-first-use, with the properties and weaknesses of SSH host keys.</p>
+
+    <div class="callout">
+      <span class="tag">Normative in 1.1</span>
+      <p>Identity and key-agreement private keys MUST be generated on the client and MUST NOT be transmitted to any server in a form that server can decrypt. All signing and decryption occur client-side. A signature proves authorship only if the author is the sole party able to produce it; where a server holds the key, the guarantee collapses into a promise, and a user who wishes to leave cannot take their identity with them. Servers may store a passphrase-wrapped key for multi-device sync, provided they cannot derive the wrapping key.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 06</b> Sync
+    <span class="note">Where the scaling claim is actually cashed out.</span>
+  </div>
+  <div class="body">
+    <h2>Differential retrieval</h2>
+    <p>The chunked layout exists to make reading cheap. Four mechanisms compound.</p>
+    <ul>
+      <li><strong>Conditional requests.</strong> Polling fetches only the head, with <code>If-None-Match</code>. Unchanged feeds cost a 304 — roughly 200 bytes — regardless of feed size.</li>
+      <li><strong>Immutable history.</strong> Sealed chunks carry a one-year immutable directive and are fetched once, ever, by any reader. Scrolling back does not re-download.</li>
+      <li><strong>Byte-range deltas.</strong> NDJSON framing lets a reader store its offset and request only the bytes appended since. Transfer approaches the actual size of new content.</li>
+      <li><strong>Aggregate change detection.</strong> A changelog or digest identifies which followed feeds changed in one request rather than N conditional requests — significant on mobile, where each request costs a radio wake regardless of response size.</li>
+    </ul>
+
+    <p>For a reader following 500 feeds, refreshing 20 times daily, where each feed posts once a day:</p>
+
+    <table>
+      <thead><tr><th>Stage</th><th>Requests/day</th><th>Bytes/day</th></tr></thead>
+      <tbody>
+        <tr><td>1.0 monolithic</td><td>10,000</td><td>~160 MB</td></tr>
+        <tr><td>+ conditional GET</td><td>10,000</td><td>~11 MB</td></tr>
+        <tr><td>+ head/chunk split</td><td>10,000</td><td>~2.4 MB</td></tr>
+        <tr><td>+ range deltas</td><td>10,000</td><td>~900 KB</td></tr>
+        <tr><td>+ changelog</td><td>~20</td><td>~500 KB</td></tr>
+      </tbody>
+    </table>
+
+    <p>Actual new content is around 400 KB, so the final row is close to the theoretical floor.</p>
+
+    <h3>Why reader count does not appear</h3>
+    <p>The origin-side property matters more than the client-side one. Sealed chunks are immutable, so each is retrieved from origin once per cache node and served from the edge thereafter. The head is one small object revalidated at its TTL. <strong>Origin cost is proportional to how much publishers write, not to how many people read.</strong> An author with a hundred million followers and one with three impose the same origin load.</p>
+    <p>This is why Ansybl does not need the fan-out-on-write architecture that platform timelines require. That architecture exists because posts are private mutable rows in a database. Signed public files do not have the problem.</p>
+
+    <div class="callout">
+      <span class="tag">Untrusted by construction</span>
+      <p>A digest service can be as centralized and fast as its operator likes, because readers verify every signature against the publisher's key. It can omit entries; it cannot forge them. A reader that finds it unavailable falls back to direct polling. This is the structural difference between an index and a platform, and it is what allows aggregation without recreating a gatekeeper.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 07</b> Private messaging
+    <span class="note">New in 1.1. One mechanism serves DMs and encrypted broadcast.</span>
+  </div>
+  <div class="body">
+    <h2>Encrypted messaging</h2>
+    <p>Publishing is static because the author is the only writer. Messaging appears to invert this — someone else must write to you — and the conventional answer is a server that accepts writes. Ansybl declines that answer.</p>
+    <p><strong>Envelopes are published by the sender, in the sender's own feed.</strong> Recipients retrieve them by polling feeds they already follow. A direct message is an envelope with one recipient; a subscriber-only post is an envelope with many. There is no separate messaging subsystem, and no participant is required to run anything.</p>
+
+    <h3>Sealed envelopes</h3>
+    <p>Per envelope, the sender generates an ephemeral X25519 keypair and a random content key, encrypts the body once, then wraps that content key separately for each recipient via key agreement against their published X25519 key. The ephemeral private key is discarded. The body is encrypted once regardless of recipient count; only the 48-byte wrapped key is per-recipient.</p>
+
+    <h3>Unlinkable recipient tags</h3>
+    <p>A recipient must locate its own wrapped key without trial-decrypting every entry. Both the lookup tag and the wrapping key derive from the same shared secret, so a recipient performs one key-agreement operation per envelope — around 60 microseconds — followed by a hash-map lookup.</p>
+    <p>Because the ephemeral key is fresh per envelope, a given recipient's tag is different every time. An observer holding the complete feed cannot determine whether two envelopes share a recipient, cannot identify recipients, and cannot reconstruct the social graph. Recipient tables are padded with computationally indistinguishable decoys and randomly ordered, so neither count nor position leaks.</p>
+
+    <h3>Signature placement</h3>
+    <p>In the normal case the envelope sits in the sender's own feed, where sender identity is already public, and carries an outer signature so private feeds verify with exactly the same machinery as public ones. For optional cold contact through a drop endpoint, an outer signature would disclose the sender to the drop operator, so it is omitted and the sender's signature moves inside the ciphertext. The operator then learns nothing about who sent what.</p>
+
+    <h3>Retention belongs to both parties</h3>
+    <p>Senders manage their own outbox and may withdraw a message with a signed tombstone, which conforming clients honor without confusing withdrawal for tampering. Recipients archive decrypted messages to their own storage, sealed to their own key. This is required rather than optional: without it, a sender could silently erase the recipient's side of a conversation, reintroducing exactly the asymmetry the protocol exists to remove.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 08</b> Restricted audiences
+    <span class="note">Subscription without a paywall server.</span>
+  </div>
+  <div class="body">
+    <h2>Restricted audiences</h2>
+    <p>A restricted-audience feed is readable only by a membership set the publisher maintains: paid subscribers, a patronage tier, an invite list, a circle of friends. It requires no new cryptography — it is an encrypted channel whose membership changes over time.</p>
+
+    <h3>No retrieval handshake</h3>
+    <p>Restricted content is published in ordinary public chunks, fetched by anyone, and cached at the edge like everything else. Retrieval is never gated on authentication or entitlement.</p>
+    <p>Gating would require an origin observing every read, which identifies readers, destroys the cacheability of sealed chunks, and makes the publisher's audience dependent on that origin staying available and honest. Since the content is already encrypted, gating buys no confidentiality it does not already have. Access control is possession of a key.</p>
+
+    <h3>Membership as a key tree</h3>
+    <p>Members occupy the leaves of a binary tree in which every node holds a key; a member holds only the keys along the path from its leaf to the root, and the root key encrypts the content. Removing a member replaces the keys on their path and republishes each under the sibling subtree's key, so everyone else derives the new root and the departed member learns nothing.</p>
+    <p>This makes rotation logarithmic rather than linear, which is the difference between viable and impossible at scale:</p>
+
+    <table>
+      <thead><tr><th>Members</th><th>Per-member wrapping</th><th>Key tree</th></tr></thead>
+      <tbody>
+        <tr><td>1,000</td><td>48 KB</td><td>~1.0 KB</td></tr>
+        <tr><td>10,000</td><td>480 KB</td><td>~1.3 KB</td></tr>
+        <tr><td>100,000</td><td>4.8 MB</td><td>~1.6 KB</td></tr>
+        <tr><td>1,000,000</td><td>48 MB</td><td>~1.9 KB</td></tr>
+      </tbody>
+    </table>
+
+    <p>Enrollment requires no rotation at all — the publisher sends the new member their path keys in a single envelope. Departures are batched into one rekey, and because paths converge near the root, a batch costs less than the sum of its parts. Publishers align rotation to a billing period, which produces a stated grace period as a side effect.</p>
+    <p>The construction is classical Logical Key Hierarchy rather than the TreeKEM of RFC 9420. Ansybl channels are publisher-controlled broadcast — one writer determines membership, members are passive — which needs no ordered group state, no commit sequencing, and no member participation in rekey. All three suit static hosting, where members may be offline for arbitrary periods and retrieve out of order.</p>
+
+    <h3>Payment stays outside the protocol</h3>
+    <p>The protocol consumes exactly one input: the publisher's current membership set. How that set is computed — payment processor, patronage platform, invitation, manual list — is an application concern. Paid subscription and a private friends list are the same mechanism with different membership logic.</p>
+
+    <div class="callout caution">
+      <span class="tag">Revocation is forward-only</span>
+      <p>A member who decrypted content while enrolled retains it permanently. No mechanism recovers content already delivered, and implementations are forbidden from describing rotation as revoking past access. This differs from a hosted paywall, which can withhold retroactively precisely because it never delivered the content, only a rented view of it. The protocol trades that capability for the property that a member genuinely holds what they paid for.</p>
+    </div>
+
+    <h3>Sharing, and the honest limit</h3>
+    <p>Because restricted content is fetched from public objects with no per-reader identity, the telemetry conventional platforms use to detect credential sharing — concurrent sessions, address geography, device fingerprints — does not exist. This follows directly from readers not being surveilled, and implementations are forbidden from reintroducing per-reader logging to recover it.</p>
+    <p>The design assumes good actors and handles the exception proportionately. Channel keys must be wrapped to the member's own identity key rather than a disposable subscription key, so sharing a subscription means sharing the key that controls the member's posting identity, private messages, and account — a structural disincentive that costs nothing to implement. Regular rotation bounds a shared key's value to one window. Per-recipient watermarking is available for small high-value audiences, with the caveat that it defeats encrypt-once and that two colluding members can strip naive marks. Some residual leakage is accepted as a cost of operation.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter"><b>§ 09</b> Discovery</div>
+  <div class="body">
+    <h2>Discovery and the social layer</h2>
+    <p>Static files solve publishing and destroy discovery. Ansybl treats discovery as an explicitly optional layer with several independent mechanisms, so no single one becomes a chokepoint.</p>
+
+    <h3>The social graph is a feed</h3>
+    <p>Following lists live in the publisher's own signed <code>follows.ansybl</code>, not in a service's database. Any index's copy is a cache, rebuildable and discardable. This is what allows the graph to travel with a user during migration, and it removes the last irreplaceable social data from any central store.</p>
+
+    <h3>Tags, webrings, and IndieWeb primitives</h3>
+    <p>Items carry ordered tags, where the first is weighted far above the second, so a publisher declares what a post <em>is</em> before what it merely touches — resisting the tag-stuffing that degrades discovery where all tags count equally. A registry component implements webrings with health monitoring and tag search: modest, curated, human-scale, cheap to run and hard to spam at small scale. Rather than inventing notification and identity resolution, Ansybl adopts Webmention and WebFinger, both of which have deployed implementations, and the latter of which is what makes ActivityPub interoperation tractable.</p>
+
+    <h3>Bridges</h3>
+    <p>The bridge layer is the adoption strategy. Reference bridges translate Ansybl to and from RSS and JSON Feed, and to ActivityPub for Fediverse delivery. A creator publishes one signed document; the bridge presents it to networks whose users never need to know Ansybl exists. This inverts the bootstrap problem — a publisher gets value on day one, with an audience of zero Ansybl readers. Bridges are the one non-static component, and are strictly optional: a bridge that disappears takes nothing with it, because the signed source remains valid at its original URL.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 10</b> Portability
+    <span class="note">The claim, made operational.</span>
+  </div>
+  <div class="body">
+    <h2>Ownership and portability</h2>
+    <p>Every argument in this paper reduces to one test: can a publisher leave without losing anything? Version 1.1 makes that mechanical rather than aspirational.</p>
+
+    <h3>Everything is a file the user holds</h3>
+    <p>Manifest, key bundle, posts, replies, likes, boosts, follows, blocks, private feeds, and DM archives are all signed files under one prefix. Export is a copy of that prefix plus the wrapped private key. There is no export job, no queue, no server-side assembly — the layout <em>is</em> the archive.</p>
+
+    <h3>Identity survives the move</h3>
+    <p>Feed paths are anchored to key fingerprint, not handle. This matters more than it sounds: handle-anchored paths mean post IDs, reply pointers, and like targets embed a name, so changing the name breaks every reference to that content in every other publisher's feed. Fingerprint anchoring makes the handle a mutable display attribute with no structural role.</p>
+    <p>To move, a publisher uploads the same files to new hosting, publishes a discovery record at their domain, and leaves a signed move record at the old location. Readers follow it because it is signed by the same key they were already trusting. Followers do not break, post IDs do not break, threads do not break — and the previous host cannot prevent it, because it was never the identity. It was a filesystem with a nice interface.</p>
+
+    <h3>Key custody, honestly</h3>
+    <p>Client-held keys mean a lost key is a lost identity, and people lose things. The workable compromise: generate in-browser, keep the working copy in non-extractable storage, and wrap the private key under a passphrase-derived key for multi-device sync, so a server holds ciphertext it cannot open. Recovery phrases serve users wanting no server involvement at all. What implementations must not do is quietly hold the key themselves and describe the result as ownership.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 11</b> Threat model
+    <span class="note">Stated so readers can evaluate rather than trust.</span>
+  </div>
+  <div class="body">
+    <h2>Threat model</h2>
+
+    <table>
+      <thead><tr><th>Adversary</th><th>Outcome</th></tr></thead>
+      <tbody>
+        <tr><td>Hosting provider</td><td class="yes">Cannot read content or identify recipients</td></tr>
+        <tr><td>Network observer</td><td class="yes">Sees TLS-protected static fetches</td></tr>
+        <tr><td>Other subscribers</td><td class="yes">Cannot link recipients across envelopes</td></tr>
+        <tr><td>Malicious index</td><td class="yes">Can omit, cannot forge</td></tr>
+        <tr><td>Feed tampering</td><td class="yes">Detectable via chain and head</td></tr>
+        <tr><td>Sender key compromise, later</td><td class="yes">Past envelopes stay sealed</td></tr>
+        <tr><td>Departed member</td><td class="part">Retains content decrypted while enrolled</td></tr>
+        <tr><td>Credential sharing</td><td class="part">Not detectable; mitigated structurally</td></tr>
+        <tr><td>Sender identity</td><td class="no">Public — the feed owner is the sender</td></tr>
+        <tr><td>Timing and volume</td><td class="no">Public</td></tr>
+        <tr><td>Endpoint compromise</td><td class="no">Full plaintext access</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout caution">
+      <span class="tag">The metadata trade</span>
+      <p>Sender-published delivery reveals to anyone that a given identity published fourteen encrypted envelopes on Tuesday. A relay-based design hides this from the public but discloses it to a relay operator — a single subpoenable party and a single point of correlation. Ansybl takes the first trade deliberately: the leak is symmetric and known to everyone, with no privileged observer, and it requires no participant to run infrastructure. Implementations must not describe this protocol as metadata-private. Users whose threat model includes exposure of <em>who they talk to, when</em> are well served; users whose threat model includes exposure of <em>that they sent anything at all</em> are not.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter"><b>§ 12</b> Comparison</div>
+  <div class="body">
+    <h2>Relation to prior art</h2>
+
+    <table>
+      <thead>
+        <tr><th>System</th><th>Publisher burden</th><th>Signed</th><th>Encrypted DMs</th><th>Graph</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>RSS / Atom</td><td>Static file</td><td class="no">No</td><td class="no">No</td><td class="no">None</td></tr>
+        <tr><td>JSON Feed</td><td>Static file</td><td class="no">No</td><td class="no">No</td><td class="no">None</td></tr>
+        <tr><td>ActivityPub</td><td>Live server</td><td class="part">Transport</td><td class="part">Instance-trusted</td><td class="yes">Full</td></tr>
+        <tr><td>AT Protocol</td><td>PDS + relays</td><td class="yes">Yes</td><td class="part">Service-held</td><td class="yes">Full</td></tr>
+        <tr><td>Nostr</td><td>Relay access</td><td class="yes">Yes</td><td class="yes">NIP-17</td><td class="yes">Full</td></tr>
+        <tr><td><strong>Ansybl</strong></td><td>Static file</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">In-protocol</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Against RSS and JSON Feed</h3>
+    <p>Ansybl's entry shape stays recognizably close to JSON Feed, which keeps bridges thin and the learning curve near zero. The additions are signatures, keyed identity, threading, structured media metadata, encryption, and discovery hooks.</p>
+
+    <h3>Against ActivityPub</h3>
+    <p>ActivityPub gives real-time delivery and a live social graph Ansybl does not attempt to match. Ansybl gives an operational floor ActivityPub cannot reach: publishing without running anything. Their direct messages are transport-encrypted but readable by both parties' instance operators; Ansybl's are readable only by key-holders. The bridge is the honest resolution — Ansybl as source of truth, ActivityPub as one delivery channel.</p>
+
+    <h3>Against Nostr</h3>
+    <p>Nostr is the closest neighbor and deserves direct comparison. Both sign with Ed25519 and make the keypair the unit of identity; NIP-17 provides gift-wrapped private messages with metadata protection comparable in ambition to §07. They diverge on transport. Nostr distributes signed events through relays; Ansybl publishes signed documents at stable HTTPS URLs.</p>
+    <p>This is a genuine trade. Relays give push delivery and censorship resistance that static hosting does not. Static hosting gives archival stability, ordinary web addressing, unbounded cacheability, and independence from any relay's continued existence. A Nostr note is an event in flight; an Ansybl entry is a document at a location. The metadata profiles differ correspondingly: NIP-17 hides sender identity from relays at the cost of requiring them, while Ansybl exposes sender identity publicly and requires no one.</p>
+    <p>Whether that difference justifies a separate format rather than a Nostr event kind is a fair challenge, and one better answered with running code and adopters than with argument.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter">
+    <b>§ 13</b> Status
+    <span class="note">Adoption depends on maintainers assessing their own work accurately.</span>
+  </div>
+  <div class="body">
+    <h2>Implementation status</h2>
+    <p>The specification and reference code are substantially ahead of deployment and ecosystem. Stating that plainly costs little and buys the credibility a protocol needs from implementers.</p>
+
+    <h3>Built and working</h3>
+    <ul>
+      <li>Versioned JSON Schema with validation</li>
+      <li>RFC 8785 canonicalization with distinct feed and item signing paths</li>
+      <li>Ed25519 key generation, signing, and verification</li>
+      <li>Bridges for RSS, JSON Feed, and ActivityPub</li>
+      <li>Webring registry, WebFinger resolution, Webmention endpoint</li>
+      <li>Reference clients: CLI, browser extension, React reader, PHP reader, Android demo</li>
+      <li>A multi-stream reader deployed on static object storage, with AES-256-GCM encrypted streams decrypted entirely in the browser</li>
+    </ul>
+
+    <h3>Specified in 1.1, not yet implemented</h3>
+    <ul>
+      <li>Chunked feeds: head, index, NDJSON chunks, hash chaining, sealing</li>
+      <li>Key bundles with validity windows and supersession</li>
+      <li>Sealed envelopes, recipient tags, padding</li>
+      <li>Key trees for large channels</li>
+      <li>Move records and fingerprint-anchored paths</li>
+    </ul>
+
+    <h3>The gap that matters</h3>
+    <ul>
+      <li>No published packages — the tooling cannot be installed from a registry</li>
+      <li>No hosted validator or documentation portal</li>
+      <li>No CI, and a test suite not yet run to green against installed dependencies</li>
+      <li>No community of publishers, and therefore no network effect</li>
+    </ul>
+
+    <div class="callout">
+      <span class="tag">What closes it</span>
+      <p>The distance between "the design is sound" and "someone other than the authors publishes a feed" is the distance most protocols fail to cross, and it is not closed by more specification work. It is closed by installable packages, a hosted validator, one-click publishing for tools people already use, and a small number of real publishers whose feeds others can point at.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter"><b>§ 14</b> Open problems</div>
+  <div class="body">
+    <h2>Open problems</h2>
+
+    <h3>Closed since 1.0</h3>
+    <p>Version 1.0 listed six. Three are resolved: <strong>key lifecycle</strong>, by signed bundles with validity windows and supersession; <strong>unbounded feed size</strong>, by chunking and sealing; and <strong>formal specification</strong>, by ANSYBL-CHUNK and ANSYBL-PM as normative documents. <strong>Deletion</strong> is narrowed — senders can withdraw private content, and tombstones give a defined semantics for public content — but true erasure remains bounded by what readers already hold.</p>
+
+    <h3>Still open</h3>
+    <ol>
+      <li><strong>Per-message forward secrecy.</strong> Medium-term keys bound exposure to a rotation window; a ratchet would bound it per message, but per-conversation state fits poorly with static hosting and multi-device fan-out. The envelope reserves space for a ratchet header.</li>
+      <li><strong>Deniability.</strong> Inner signatures make messages non-repudiable. An HMAC-based alternative would authenticate to the recipient without proving anything to third parties.</li>
+      <li><strong>Padding versus delta efficiency.</strong> Privacy padding costs bandwidth that byte-range retrieval would otherwise save. Current size classes are estimates, not measurements.</li>
+      <li><strong>Concurrent writers.</strong> One publisher writing from two devices can fork the chain. Requires compare-and-swap on the head or an explicit single-writer constraint.</li>
+      <li><strong>Multi-device history convergence.</strong> Wrapped-key sync moves keys between devices but does not reconcile divergent retrieval histories.</li>
+      <li><strong>Tree rebalancing.</strong> A key tree accumulating blank leaves through churn degrades toward linear rekey cost; no compaction procedure is specified.</li>
+      <li><strong>Collusion-resistant fingerprinting.</strong> Watermarking is permitted but no code construction is specified, so naive implementations fall to two colluders.</li>
+      <li><strong>Spam and moderation at the discovery layer.</strong> Cheap keys mean cheap identities. Reputation or curation will be needed before discovery is worth attacking.</li>
+      <li><strong>Cold contact without a drop.</strong> The drop is the one write-accepting component; a fully drop-free first-contact mechanism remains unsolved.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter"><b>§ 15</b> Adoption</div>
+  <div class="body">
+    <h2>Path to adoption</h2>
+    <p>Sequencing follows from the gap: reduce installation friction, then publishing friction, then discovery friction — in that order, because each is worthless without the one before it.</p>
+    <ul>
+      <li><strong>Make it installable.</strong> Publish core, crypto, CLI, and bridge packages. Green CI. A hosted validator that accepts a URL and returns actionable errors.</li>
+      <li><strong>Make it publishable.</strong> Integrations for WordPress, Ghost, and the static site generators, so a signed feed is a plugin install rather than a project. Target under five minutes from zero to a valid signed feed.</li>
+      <li><strong>Make it readable.</strong> A hosted reader and a browser extension in the public stores.</li>
+      <li><strong>Make it findable.</strong> Webring, Fediverse bridges, documented federation workflows.</li>
+      <li><strong>Make it earn.</strong> Restricted audiences are the clearest reason for a creator to adopt: a subscription business with no platform taking a cut and no platform able to deplatform them.</li>
+      <li><strong>Make it credible.</strong> Publishers other than the authors, and independent implementations.</li>
+    </ul>
+    <p>The bridge strategy makes this survivable. Because an Ansybl feed renders as RSS and delivers over ActivityPub, an early publisher is not betting on Ansybl's success — they are getting standard syndication with signatures attached, and keeping the option open.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter"><b>§ 16</b> Conclusion</div>
+  <div class="body">
+    <h2>Conclusion</h2>
+    <p>The failure mode of centralized platforms is not that they are centralized. It is that leaving costs you everything you built. Any design that lowers the cost of leaving weakens the mechanism, and the cheapest possible version is a file you control, at an address you control, signed by a key you hold.</p>
+    <p>Version 1.1 extends that from public posting to the whole surface. Private messages are files in your outbox that only their recipients can open. Paid subscriptions are files anyone can fetch and only members can read, with no paywall server and no intermediary taking a cut. Your follow list is your file. Your archive is your directory. Your identity is your key, and moving hosts is uploading the same files somewhere else and signing a note that says so.</p>
+    <p>What remains is not a design problem. It is the ordinary, unglamorous work of shipping, and the harder work of persuading other people to publish.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="gutter"><b>§ 17</b> References</div>
+  <div class="body">
+    <h2>References</h2>
+    <ol class="refs">
+      <li>Rescorla, E. <em>RFC 8785: JSON Canonicalization Scheme</em>. IETF, 2020.</li>
+      <li>Josefsson, S. and Liusvaara, I. <em>RFC 8032: Edwards-Curve Digital Signature Algorithm (EdDSA)</em>. IETF, 2017.</li>
+      <li>Langley, A., Hamburg, M., Turner, S. <em>RFC 7748: Elliptic Curves for Security</em>. IETF, 2016.</li>
+      <li>Krawczyk, H. and Eronen, P. <em>RFC 5869: HMAC-based Extract-and-Expand Key Derivation Function</em>. IETF, 2010.</li>
+      <li>Wallner, D., Harder, E., Agee, R. <em>RFC 2627: Key Management for Multicast</em>. IETF, 1999.</li>
+      <li>Barnes, R., et al. <em>RFC 9420: The Messaging Layer Security (MLS) Protocol</em>. IETF, 2023.</li>
+      <li>Barnes, R., et al. <em>RFC 9180: Hybrid Public Key Encryption</em>. IETF, 2022.</li>
+      <li>W3C. <em>ActivityPub Recommendation</em>, 2018.</li>
+      <li>W3C. <em>Webmention Recommendation</em>, 2017.</li>
+      <li>Jones, P., Salgueiro, G., et al. <em>RFC 7033: WebFinger</em>. IETF, 2013.</li>
+      <li>Nostr. <em>NIP-17: Private Direct Messages</em>.</li>
+      <li>Bluesky. <em>AT Protocol Specification</em>.</li>
+      <li>Doctorow, C. Writing on platform decay, 2022–.</li>
+      <li>Ansybl. <em>ANSYBL-CHUNK: Chunked Feeds</em>, 1.0-draft.</li>
+      <li>Ansybl. <em>ANSYBL-PM: Private Messaging</em>, 1.0-draft.</li>
+      <li>Ansybl reference implementation. <a href="https://github.com/pnixon/deshittify">github.com/pnixon/deshittify</a></li>
+    </ol>
+  </div>
+</div>
+
+<footer class="end">
+  Ansybl white paper · version 1.1 draft · supersedes 1.0 · MIT licensed · Comments and corrections via the repository issue tracker.
+</footer>
+
+</div>
+</body>
+</html>
